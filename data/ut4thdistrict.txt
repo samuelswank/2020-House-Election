@@ -1,0 +1,146 @@
+$stateCode
+[1] "UT"
+
+$districtNumber
+[1] 4
+
+$precinctsReporting
+[1] 100
+
+$raceType
+[1] "General"
+
+$results
+$results[[1]]
+$results[[1]]$candidate
+$results[[1]]$candidate$firstName
+[1] "Burgess"
+
+$results[[1]]$candidate$lastName
+[1] "Owens"
+
+$results[[1]]$candidate$npid
+[1] 68823
+
+
+$results[[1]]$partyCode
+[1] "R"
+
+$results[[1]]$partyName
+[1] "Republican"
+
+$results[[1]]$isWinner
+[1] TRUE
+
+$results[[1]]$isIncumbent
+[1] FALSE
+
+$results[[1]]$votes
+$results[[1]]$votes$count
+[1] 179688
+
+$results[[1]]$votes$percentage
+[1] 47.7
+
+
+
+$results[[2]]
+$results[[2]]$candidate
+$results[[2]]$candidate$firstName
+[1] "Ben"
+
+$results[[2]]$candidate$lastName
+[1] "McAdams"
+
+$results[[2]]$candidate$npid
+[1] 67074
+
+
+$results[[2]]$partyCode
+[1] "D"
+
+$results[[2]]$partyName
+[1] "Democrat"
+
+$results[[2]]$isWinner
+[1] FALSE
+
+$results[[2]]$isIncumbent
+[1] TRUE
+
+$results[[2]]$votes
+$results[[2]]$votes$count
+[1] 175923
+
+$results[[2]]$votes$percentage
+[1] 46.7
+
+
+
+$results[[3]]
+$results[[3]]$candidate
+$results[[3]]$candidate$firstName
+[1] "John"
+
+$results[[3]]$candidate$lastName
+[1] "Molnar"
+
+$results[[3]]$candidate$npid
+[1] 68826
+
+
+$results[[3]]$partyCode
+[1] "LB"
+
+$results[[3]]$partyName
+[1] "Libertarian"
+
+$results[[3]]$isWinner
+[1] FALSE
+
+$results[[3]]$isIncumbent
+[1] FALSE
+
+$results[[3]]$votes
+$results[[3]]$votes$count
+[1] 13053
+
+$results[[3]]$votes$percentage
+[1] 3.47
+
+
+
+$results[[4]]
+$results[[4]]$candidate
+$results[[4]]$candidate$firstName
+[1] "Jonia"
+
+$results[[4]]$candidate$lastName
+[1] "Broderick"
+
+$results[[4]]$candidate$npid
+[1] 68822
+
+
+$results[[4]]$partyCode
+[1] "UUT"
+
+$results[[4]]$partyName
+[1] "UUT"
+
+$results[[4]]$isWinner
+[1] FALSE
+
+$results[[4]]$isIncumbent
+[1] FALSE
+
+$results[[4]]$votes
+$results[[4]]$votes$count
+[1] 8037
+
+$results[[4]]$votes$percentage
+[1] 2.13
+
+
+
+
