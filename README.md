@@ -9,7 +9,6 @@
 - Ashley Hinson (R) vs. Abby Finkenauer (D) - Iowa District 1
 - Young Kim (R) vs. Gil Cisneros (D) - California District 39
 - Nancy Mace (R) vs. Joe Cunningham (D) - South Carolina District 1
-- Nicole Malliotakis (R) vs. Max Rose (D) - New York District 11 <- *Still Counting*
 - Maria Elvira Salazar (R) vs. Donna Shalala (D) - Flordia District 27
 - Michelle Steel (R) vs. Harley Rouda (D) - California District 48
 - Stephanie Bice (R) vs. Kendra Horn (D) - Oklahoma District 5 <- *Fletcher B. Swank's (D) District*
@@ -21,7 +20,7 @@
 - Carolyn Bourdeaux (D) vs. Rich McCormick (R) - Georgia District 7
 
 **Still Counting **
-
+- Nicole Malliotakis (R) vs. Max Rose (D) - New York District 11
 - David G. Valadao (R) vs. TJ Cox (D) - California District 21
 - Mariannette Miller-Meeks (R) vs. Rita Hart (D) - Iowa District 2
 
@@ -37,11 +36,3 @@ List of States:
 - New York
 - Florida
 - Utah
-   
-**Presidentially Contested States**
-- Nevada
-- Arizona
-- Wisconisin
-- Michigan 
-- Pennsylvannia
-- Georgia
