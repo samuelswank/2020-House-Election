@@ -99,7 +99,7 @@ flippedWinners <- c(
   "Michelle Steel",
   "Stephanie Bice",
   "Burgess Owens",
-  "Carlos Giminez",
+  "Carlos Gimenez",
   "Carolyn Bourdeaux"
   )
 
