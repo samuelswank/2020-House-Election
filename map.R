@@ -1,49 +1,9 @@
 library(tigris)
 library(tidyverse)
 source("houseResults.R")
+source("stringManipulator.R")
 
-cd116 <- congressional_districts(year = 2019)
-
-stateString <- function(selectedDistrict) {
-  # Edge cases for multi-word state name
-  # District of Columbia
-  if (strsplit(selectedDistrict, " ")[[1]][1] == "District") {
-    stateName <- "District of Columbia"
-    
-    # New
-    # North / South
-  } else if (
-    strsplit(selectedDistrict, " ")[[1]][1] == "New" |
-    strsplit(selectedDistrict, " ")[[1]][1] == "North" |
-    strsplit(selectedDistrict, " ")[[1]][1] == "South"
-  ) {
-    stateName <- paste(
-      strsplit(
-        selectedDistrict, " ")[[1]][1], strsplit(selectedDistrict, " ")[[1]][2]
-    )
-  } else {stateName <- strsplit(selectedDistrict, " ")[[1]][1]}
-  
-  return (stateName)
-}
-
-districtString <- function(selectedDistrict) {
-  # Edge cases for multi-word state name
-  # District of Columbia
-  if (strsplit(selectedDistrict, " ")[[1]][1] == "District") {
-    districtNumber <- strsplit(selectedDistrict, " ")[[1]][5]
-    
-    # New
-    # North / South
-  } else if (
-    strsplit(selectedDistrict, " ")[[1]][1] == "New" |
-    strsplit(selectedDistrict, " ")[[1]][1] == "North" |
-    strsplit(selectedDistrict, " ")[[1]][1] == "South"
-  ) {districtNumber <- strsplit(selectedDistrict, " ")[[1]][4]}
-  
-  else {districtNumber <- strsplit(selectedDistrict, " ")[[1]][3]}
-  
-  return(districtNumber)
-}
+cd117 <- congressional_districts(year = 2019)
 
 stateData <- function(selectedDistrict, stateString) {
   stateName <- stateString(selectedDistrict)
@@ -52,7 +12,7 @@ stateData <- function(selectedDistrict, stateString) {
   colnames(stateParty)[3] <- "STATEFP"
   colnames(stateParty)[4] <- "NAMELSAD"
 
-  shapeFile <- cd116  %>%
+  shapeFile <- cd117  %>%
     filter(STATEFP == fipsList[[stateName]]$st) %>%
     merge(stateParty, by = c("STATEFP", "NAMELSAD"))
   
