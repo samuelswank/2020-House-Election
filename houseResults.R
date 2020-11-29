@@ -100,7 +100,8 @@ flippedWinners <- c(
   "Stephanie Bice",
   "Burgess Owens",
   "Carlos Gimenez",
-  "Carolyn Bourdeaux"
+  "Carolyn Bourdeaux",
+  "David Valadao"
   )
 
 flippedDistricts <- filter(

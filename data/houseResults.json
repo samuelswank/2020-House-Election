@@ -1465,11 +1465,11 @@
             },
             "partyCode":"R",
             "partyName":"Republican",
-            "isWinner":false,
-            "isIncumbent":false,
+            "isWinner":true,
+            "isIncumbent":true,
             "votes":{
-               "count":82331,
-               "percentage":50.55
+               "count":85373,
+               "percentage":50.52
             }
          },
          {
@@ -1483,8 +1483,8 @@
             "isWinner":false,
             "isIncumbent":true,
             "votes":{
-               "count":80535,
-               "percentage":49.45
+               "count":83619,
+               "percentage":49.48
             }
          }
       ]
