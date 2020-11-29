@@ -1,30 +1,28 @@
 library(tidyverse)
 library(tidycensus)
+library(usdata)
 source("houseResults.R")
 source("stringManipulator.R")
 
-tractTable <- read_csv("data/TRACT2CD115_table.csv", col_names = F)
+tractTable <- read_csv("data/TRACT2CD115_table.csv", col_names = F)[
+  , c(1, 2, 6, 9, 10, 11)
+  ]
 
 colnames(tractTable) <- c(
   "Tract GeoID",
   "St",
-  "StAbCD",
-  "StCty",
-  "Tract Code",
   "CD115",
-  "ZIP",
-  "Pop 2010",
   "TractPart",
   "Land SqMi",
-  "Water SqMi",
-  "Pop ACS 2016",
-  "$MHI ACS 2016"
+  "Water SqMi"
   )
 
 flippedTable <- tractTable %>% filter(St %in% flippedStates)
 flippedTracts <- flippedTable %>%
   subset(
-    (St == "CA" & CD115 == "39") | (St == "CA" & CD115 == "48") |
+    (St == "CA" & CD115 == "21") | 
+    (St == "CA" & CD115 == "39") | 
+    (St == "CA" & CD115 == "48") |
     (St == "FL" & CD115 == "26") | (St == "FL" & CD115 == "27") |
     (St == "IA" & CD115 == "1") |
     (St == "MN" & CD115 == "7") |
@@ -35,18 +33,18 @@ flippedTracts <- flippedTable %>%
     (St == "GA" & CD115 == "7")
   )
 
-demog_vars <- c(
-  Total = "B01003_001",
+demographic_vars <- c(
+  Total = "B00001_001",
   Male = "B01001_002",
   Female = "B01001_026",
-  White = "B03002_003",
-  Black = "B03002_004",
-  Native = "B03002_005",
-  Asian = "B03002_006",
-  Islander = "B03002_007",
-  Other = "B03002_008",
-  Multiple = "B03002_009",
-  Hispanic = "B03002_012"
+  White = "B02001_002",
+  Black = "B02001_003",
+  Native = "B02001_004",
+  Asian = "B02001_005",
+  Islander = "B02001_006",
+  Other = "B02001_007",
+  Multiple = "B02001_008",
+  Hispanic = "B03001_003"
 )
 
 vap_vars <- c(
@@ -79,6 +77,56 @@ labor_vars <- c(
 
 health_vars = c(
   NativeBorn = "B27020_002",
-  ForeignBorn = "B27020_008"
+  NBHealthInsurance = "B27020_003",
+  NBPrivateHealthInsurance = "B27020_004",
+  NBPublicHealthInsurance = "B27020_005",
+  NBNoHealthInsurance = "B27020_06",
+  ForeignBorn = "B27020_008",
+  FBHealthInsurance = "B27020_009",
+  FBPrivateHealthInsurance = "B27020_010",
+  FBPublicHealthInsurance = "B27020_011",
+  FBNoHealthInsurance = "B27020_012"
 )
+
+demographicData <- function(selectedDistrict) {
+  demographics <- get_acs(
+    geography = "tract",
+    variables = demographic_vars,
+    year = 2018,
+    survey = "acs5",
+    state = selectedDistrict %>% stateString() %>% state2abbr()
+  )
+  
+  flippedDemographics <- demographics[, c(1:4)] %>% 
+    filter(
+      GEOID %in% filter(flippedTracts, CD115 == districtString(selectedDistrict)
+                        )$`Tract GeoID`
+  )
+  
+  flippedDemographics <- (flippedDemographics %>% spread(variable, estimate))
+  colnames(flippedDemographics)[9] <- "Multiple Races"
+  colnames(flippedDemographics)[11] <- "Other Race"
+  
+  return(flippedDemographics[, c(1, 2, 8, 5, 6, 13, 4, 10, 7, 3, 9, 11, 12)])
+}
+
+demographicTable <- function(selectedDistrict, demographicData) {
+  sumsDemographics <- colSums(demographicData[, 5:13])
+  percentDemographics <- c()
+  
+  for (attr in attributes(sumsDemographics)$names) {
+    if (attr != "Total") {
+      percentDemographics[attr] <- round(
+        (100 * sumsDemographics[attr] / sumsDemographics["Total"]), 2
+      )
+    } else {percentDemographics[attr] <- ""}
+  }
+  
+  return(
+    data.frame(Population = sumsDemographics, Percentage = percentDemographics)
+    )
+}
+
+
+
 
