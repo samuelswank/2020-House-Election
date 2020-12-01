@@ -1,8 +1,12 @@
+library(dotenv)
 library(tidyverse)
 library(tidycensus)
 library(usdata)
 source("houseResults.R")
 source("stringManipulator.R")
+
+load_dot_env(".env")
+census_api_key(Sys.getenv("CENSUS_KEY"))
 
 tractTable <- read_csv("data/TRACT2CD115_table.csv", col_names = F)[
   , c(1, 2, 6, 9, 10, 11)
@@ -24,17 +28,16 @@ flippedTracts <- flippedTable %>%
     (St == "CA" & CD115 == "39") | 
     (St == "CA" & CD115 == "48") |
     (St == "FL" & CD115 == "26") | (St == "FL" & CD115 == "27") |
-    (St == "IA" & CD115 == "1") |
-    (St == "MN" & CD115 == "7") |
-    (St == "NM" & CD115 == "2") |
-    (St == "SC" & CD115 == "1") |
-    (St == "OK" & CD115 == "5") |
-    (St == "UT" & CD115 == "4") |
-    (St == "GA" & CD115 == "7")
+    (St == "IA" & CD115 == "01") |
+    (St == "MN" & CD115 == "07") |
+    (St == "NM" & CD115 == "02") |
+    (St == "SC" & CD115 == "01") |
+    (St == "OK" & CD115 == "05") |
+    (St == "UT" & CD115 == "04") |
+    (St == "GA" & CD115 == "07")
   )
 
 demographic_vars <- c(
-  Total = "B00001_001",
   Male = "B01001_002",
   Female = "B01001_026",
   White = "B02001_002",
@@ -89,9 +92,14 @@ health_vars = c(
 )
 
 demographicData <- function(selectedDistrict) {
+  
+  zero <- FALSE
+  if (selectedDistrict %in% districtChoices[6:12]) {zero <- TRUE}
+  
   demographics <- get_acs(
     geography = "tract",
     variables = demographic_vars,
+    cache_table = TRUE,
     year = 2018,
     survey = "acs5",
     state = selectedDistrict %>% stateString() %>% state2abbr()
@@ -99,32 +107,27 @@ demographicData <- function(selectedDistrict) {
   
   flippedDemographics <- demographics[, c(1:4)] %>% 
     filter(
-      GEOID %in% filter(flippedTracts, CD115 == districtString(selectedDistrict)
-                        )$`Tract GeoID`
-  )
+      GEOID %in% filter(
+        flippedTracts, CD115 == districtString(selectedDistrict, zero = zero)
+        )$`Tract GeoID`
+      )
   
   flippedDemographics <- (flippedDemographics %>% spread(variable, estimate))
   colnames(flippedDemographics)[9] <- "Multiple Races"
   colnames(flippedDemographics)[11] <- "Other Race"
   
-  return(flippedDemographics[, c(1, 2, 8, 5, 6, 13, 4, 10, 7, 3, 9, 11, 12)])
+  return(flippedDemographics[, c(1, 2, 8, 5, 6, 12, 4, 10, 7, 3, 9, 11)])
 }
 
 demographicTable <- function(selectedDistrict, demographicData) {
-  sumsDemographics <- colSums(demographicData[, 5:13])
-  percentDemographics <- c()
+  sumsDemographics <- colSums(demographicData[, 5:12])
   
-  for (attr in attributes(sumsDemographics)$names) {
-    if (attr != "Total") {
-      percentDemographics[attr] <- round(
-        (100 * sumsDemographics[attr] / sumsDemographics["Total"]), 2
-      )
-    } else {percentDemographics[attr] <- ""}
-  }
-  
-  return(
-    data.frame(Population = sumsDemographics, Percentage = percentDemographics)
-    )
+  return(data.frame(Population = sumsDemographics))
+}
+
+sexRatio <- function(selectedDistrict, demographicData) {
+  sumsDemographics <- colSums(demographicData[, 3:4])
+  return(round(100 *(sumsDemographics["Male"] / sumsDemographics["Female"]), 2))
 }
 
 
