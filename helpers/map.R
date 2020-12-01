@@ -2,8 +2,8 @@ library(dotenv)
 library(tigris)
 library(tidyverse)
 library(gridExtra)   
-source("houseResults.R")
-source("stringManipulator.R")
+source("helpers/houseResults.R")
+source("helpers/stringManipulator.R")
 
 cd117 <- congressional_districts(year = 2019)
 

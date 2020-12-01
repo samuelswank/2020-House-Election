@@ -3,9 +3,9 @@ library(dotenv)
 library(tidycensus)
 library(tigris)
 library(tidyverse)
-source("houseResults.R")
-source("map.R")
-source("censusTracts.R")
+source("helpers/houseResults.R")
+source("helpers/map.R")
+source("helpers/censusTracts.R")
 
 ui <- fluidPage(
   fluidRow(
