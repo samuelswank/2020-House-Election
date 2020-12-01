@@ -22,7 +22,7 @@ stateString <- function(selectedDistrict) {
   return (stateName)
 }
 
-districtString <- function(selectedDistrict) {
+districtString <- function(selectedDistrict, zero = FALSE) {
   # Edge cases for multi-word state name
   # District of Columbia
   if (strsplit(selectedDistrict, " ")[[1]][1] == "District") {
@@ -37,6 +37,8 @@ districtString <- function(selectedDistrict) {
   ) {districtNumber <- strsplit(selectedDistrict, " ")[[1]][4]}
   
   else {districtNumber <- strsplit(selectedDistrict, " ")[[1]][3]}
+  
+  if (zero == TRUE) {districtNumber <- paste("0", districtNumber, sep = "")}
   
   return(districtNumber)
 }
