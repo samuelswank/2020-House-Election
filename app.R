@@ -27,7 +27,8 @@ ui <- fluidPage(
       tableOutput("demographicTable"),
       h4("Sex Ratio"),
       textOutput("sexRatio")
-      )
+      ),
+    column(3, h4("Voting Age Population Statistics"), tableOutput("vaTable"))
   )
 )
 
@@ -71,6 +72,11 @@ server <- function(input, output, session) {
     output$sexRatio <- renderText({
       sexRatio(input$selectedDistrict, demographicData(input$selectedDistrict))
       })
+    
+    output$vaTable <- renderTable(
+      rownames = TRUE, digits = 0, bordered = TRUE, hover = TRUE, na = "",
+      {vaTable(input$selectedDistrict)}
+      )
 }
 
 shinyApp(ui, server)

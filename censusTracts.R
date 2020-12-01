@@ -60,13 +60,14 @@ vap_vars <- c(
   VotingAgeHighschool = "B29002_004",
   VotingAgeSomecollege = "B29002_005",
   VotingAgeAssociates = "B29002_006",
-  VotingAgeAssociates = "B29002_007",
-  VotingAgeBachelors = "B29002_008",
-  VotingAgeGradorProf = "B29002_009",
+  VotingAgeBachelors = "B29002_007",
+  VotingAgeGradorProf = "B29002_008",
   BelowPoverty = "B29003_002",
   AbovePoverty = "B29003_003",
   MedianIncome = "B29004_001"
 )
+
+# Unused
 
 labor_vars <- c(
   WorkingAgePop = "B23025_001",
@@ -92,7 +93,6 @@ health_vars = c(
 )
 
 demographicData <- function(selectedDistrict) {
-  
   zero <- FALSE
   if (selectedDistrict %in% districtChoices[6:12]) {zero <- TRUE}
   
@@ -112,7 +112,7 @@ demographicData <- function(selectedDistrict) {
         )$`Tract GeoID`
       )
   
-  flippedDemographics <- (flippedDemographics %>% spread(variable, estimate))
+  flippedDemographics <- flippedDemographics %>% spread(variable, estimate)
   colnames(flippedDemographics)[9] <- "Multiple Races"
   colnames(flippedDemographics)[11] <- "Other Race"
   
@@ -131,5 +131,52 @@ sexRatio <- function(selectedDistrict, demographicData) {
 }
 
 
+vaTable <- function(selectedDistrict) {
+  zero <- FALSE
+  if (selectedDistrict %in% districtChoices[6:12]) {zero <- TRUE}
+  
+  va <- get_acs(
+    geography = "tract",
+    variables = vap_vars,
+    cache_table = TRUE,
+    year = 2018,
+    survey = "acs5",
+    state = selectedDistrict %>% stateString() %>% state2abbr()
+  )
+  
+  flippedVA <- va[, c(1:4)] %>% 
+    filter(
+      GEOID %in% filter(
+        flippedTracts, CD115 == districtString(selectedDistrict, zero = zero)
+      )$`Tract GeoID`
+    )
+  
+  flippedVA <- (flippedVA %>% spread(variable, estimate))
+  flippedVA <- flippedVA[, 3:16]
+  colnames(flippedVA) <- c(
+    "Above Poverty",
+    "Below Poverty",
+    "Median Income",
+    "Some High School No Diploma or Equivalent",
+    "Associates Degree",
+    "Bachelors Degree",
+    "Graduate or Professional Degree",
+    "High School Diploma or Equivalent",
+    "Voting Age Population",
+    "Population Age 18 to 29",
+    "Population Age 30 to 44",
+    "Population Age 45 to 64",
+    "Population Age 65 and Older",
+    "Some College"
+    )
+  
+  flippedVA <- flippedVA[, c(9, 10, 11, 12, 13, 3, 2, 1, 4, 8, 14, 5, 6, 7)]
+  
+  statsVA <- colSums(flippedVA[, -6])
+  mi <- median(flippedVA$`Median Income`, na.rm = TRUE)
+  statsVA <- append(statsVA, mi, 5)
 
-
+  df <- data.frame(Statistic = statsVA)
+  rownames(df)[6] <- "Median Income"
+  return(df)
+}
