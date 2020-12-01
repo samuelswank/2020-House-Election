@@ -3,5 +3,9 @@
 .RData
 .Ruserdata
 
-README.html
+.env
+.html
+
+rsconnect/
 tidycensus-course/
+
