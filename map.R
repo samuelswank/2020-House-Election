@@ -1,5 +1,7 @@
+library(dotenv)
 library(tigris)
 library(tidyverse)
+library(gridExtra)   
 source("houseResults.R")
 source("stringManipulator.R")
 
@@ -63,4 +65,12 @@ plotDistrict <- function(stateData, selectedDistrict) {
       axis.ticks = element_blank(),
       legend.position = "none"
       )
+}
+
+dualPlot <- function(plotState, plotDistrict) {
+  grid.arrange(
+    plotState + theme(plot.margin = unit(c(0, 0, 0, 0), "cm")),
+    plotDistrict + theme(plot.margin = unit(c(0, 0, 0, 0), "cm")),
+    ncol = 2
+    )  
 }
