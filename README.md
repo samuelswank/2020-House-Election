@@ -21,6 +21,7 @@
 - Ashley Hinson (R) vs. Abby Finkenauer (D) - Iowa District 1
 - Michelle Fischbach (R) vs. Collin Peterson (D) - Minnesota District 7
 - Yvette Herrell (R) vs. Xochitl Torres Small (D) - New Mexico District 2
+- Nicole Malliotakis (R) vs. Max Rose (D) - New York District 11
 - Stephanie Bice (R) vs. Kendra Horn (D) - Oklahoma District 5 <- *[Fletcher B. Swank](https://en.wikipedia.org/wiki/Fletcher_B._Swank)'s (D) District*
 - Nancy Mace (R) vs. Joe Cunningham (D) - South Carolina District 1
 - Burgess Owens (R) vs. Ben MacAdamas (D) - Utah District 4
@@ -33,5 +34,4 @@
 ## Still Counting
 
 - David G. Valadao (R) vs. TJ Cox (D) - California District 21 <- *Fox called for David G. Valadao*
-- Nicole Malliotakis (R) vs. Max Rose (D) - New York District 11
 - Mariannette Miller-Meeks (R) vs. Rita Hart (D) - Iowa District 2

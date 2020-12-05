@@ -1,8 +1,6 @@
-library(rjson)
 library(tidyverse)
-library(usdata)
 
-houseResults <- fromJSON(file = "data/houseResults.json")
+houseResults <- rjson::fromJSON(file = "data/houseResults.json")
 
 stateAbb           <- c()
 district           <- c()
@@ -74,7 +72,7 @@ for (i in 1:nrow(hr)) {
 
 hr <- cbind(hr, uncontested)
 
-hr <- hr %>% mutate(state = abbr2state(state_abb))
+hr <- hr %>% mutate(state = usdata::abbr2state(state_abb))
 fips <- read_csv("data/stfipsab.csv") %>% select(stname, st)
 fipsList <- split(fips, seq(nrow(fips)))
 fipsList <- setNames(fipsList, fips$stname)
@@ -101,7 +99,8 @@ flippedWinners <- c(
   "Burgess Owens",
   "Carlos Gimenez",
   "Carolyn Bourdeaux",
-  "David Valadao"
+  "David Valadao",
+  "Nicole"
   )
 
 flippedDistricts <- filter(

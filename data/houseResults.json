@@ -1468,8 +1468,8 @@
             "isWinner":true,
             "isIncumbent":true,
             "votes":{
-               "count":85373,
-               "percentage":50.52
+               "count":85928,
+               "percentage":50.45
             }
          },
          {
@@ -1483,8 +1483,8 @@
             "isWinner":false,
             "isIncumbent":true,
             "votes":{
-               "count":83619,
-               "percentage":49.48
+               "count":84406,
+               "percentage":49.55
             }
          }
       ]
@@ -1617,11 +1617,11 @@
             },
             "partyCode":"R",
             "partyName":"Republican",
-            "isWinner":false,
+            "isWinner":true,
             "isIncumbent":true,
             "votes":{
-               "count":168067,
-               "percentage":50.07
+               "count":169638,
+               "percentage":50.05
             }
          },
          {
@@ -1635,8 +1635,8 @@
             "isWinner":false,
             "isIncumbent":false,
             "votes":{
-               "count":167621,
-               "percentage":49.93
+               "count":169305,
+               "percentage":49.95
             }
          }
       ]
@@ -12276,11 +12276,11 @@
             },
             "partyCode":"R",
             "partyName":"Republican",
-            "isWinner":false,
+            "isWinner":true,
             "isIncumbent":true,
             "votes":{
-               "count":176323,
-               "percentage":61.32
+               "count":205715,
+               "percentage":54.86
             }
          },
          {
@@ -12294,8 +12294,8 @@
             "isWinner":false,
             "isIncumbent":false,
             "votes":{
-               "count":111203,
-               "percentage":38.68
+               "count":169294,
+               "percentage":45.14
             }
          }
       ]
@@ -12314,11 +12314,11 @@
             },
             "partyCode":"R",
             "partyName":"Republican",
-            "isWinner":false,
+            "isWinner":true,
             "isIncumbent":false,
             "votes":{
-               "count":164367,
-               "percentage":56.43
+               "count":177379,
+               "percentage":52.94
             }
          },
          {
@@ -12332,8 +12332,8 @@
             "isWinner":false,
             "isIncumbent":false,
             "votes":{
-               "count":124153,
-               "percentage":42.62
+               "count":154246,
+               "percentage":46.03
             }
          },
          {
@@ -12347,8 +12347,8 @@
             "isWinner":false,
             "isIncumbent":false,
             "votes":{
-               "count":2772,
-               "percentage":0.95
+               "count":3448,
+               "percentage":1.03
             }
          }
       ]
@@ -12678,11 +12678,11 @@
             },
             "partyCode":"R",
             "partyName":"Republican",
-            "isWinner":false,
+            "isWinner":true,
             "isIncumbent":false,
             "votes":{
-               "count":136382,
-               "percentage":57.89
+               "count":155608,
+               "percentage":53.14
             }
          },
          {
@@ -12696,8 +12696,8 @@
             "isWinner":false,
             "isIncumbent":true,
             "votes":{
-               "count":99224,
-               "percentage":42.11
+               "count":137198,
+               "percentage":46.86
             }
          }
       ]
@@ -13337,11 +13337,11 @@
             },
             "partyCode":"R",
             "partyName":"Republican",
-            "isWinner":false,
+            "isWinner":true,
             "isIncumbent":true,
             "votes":{
-               "count":168670,
-               "percentage":55.11
+               "count":182567,
+               "percentage":53.16
             }
          },
          {
@@ -13355,8 +13355,8 @@
             "isWinner":false,
             "isIncumbent":false,
             "votes":{
-               "count":125615,
-               "percentage":41.04
+               "count":147638,
+               "percentage":42.99
             }
          },
          {
@@ -13370,7 +13370,7 @@
             "isWinner":false,
             "isIncumbent":false,
             "votes":{
-               "count":11769,
+               "count":13232,
                "percentage":3.85
             }
          }
