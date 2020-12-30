@@ -137,6 +137,14 @@ combinedData <- combinedData[
 
 district1 <- combinedData %>% subset(district == 1)
 
+randomEstimate <- c()
+
+for (i in 1:length(district1$Estimate)) {
+  randomEstimate[i] <- runif(1, district1$Low[i], district1$High[i])
+}
+
+district1$REstimate <- randomEstimate
+
 # Models
 
 # Predict Democrat or Republican 
@@ -158,8 +166,8 @@ district1 <- combinedData %>% subset(district == 1)
 
 # - Whites (White / Total population)
 # - Blacks (Black or African American / Total population)
-# - American Indian (American Indian and Alaska Native / Total population)
-# - Pacific Islander (Native Hawaiian and Other Pacific Islander / Total population)
+# - American Indians (American Indian and Alaska Native / Total population)
+# - Pacific Islanders (Native Hawaiian and Other Pacific Islander / Total population)
 # - Other (Some other race / Total population)
 # - Multiple Races (Two or more races / Total population)
 
@@ -179,8 +187,6 @@ district1 <- combinedData %>% subset(district == 1)
 # Born in US Territory, or born abroat to American parent(s)
 #   (Born in Puerto Rico, U.S. Island areas, or born abroad to American parent(s) / Native)
 # Naturalized Citizen (Foreign born / Total Population)
-
-# Ancestry
 
 # Disability Status of the Civilian Noninstitutionalized Population
 
@@ -218,3 +224,76 @@ district1 <- combinedData %>% subset(district == 1)
 # - Public sector (Government workers / Civilian employed population 16 years and over)
 # - Self-employed (Self-employed in own not incorporated business workers / Civilian employed population 16 years and over)
 
+# Housing Occupancy 
+
+# Housing unit density (Total housing units / Land Area)
+
+# - Homeowner vacancy rate
+# - Rental vacancy rate
+
+# Housing Tenure
+
+# - Owner occupation rate (Owner-occupied / Occupied housing units)
+# - Rental occupation rate (Renter-occupied / Occupied housing units)
+
+# Year Householder Moved into Unit
+
+# - 2 or less Years (Moved in 2017 or later / Occupied housing units)
+# - 3-4 Years (Moved in 2015 to 2016 / Occupied housing units)
+# - 5-9 Years (Moved in 2014 to 2014  / Occupied housing units)
+# - 10-19 Years (Moved in 2000 to 2009 / Occupied housing units)
+# - 20-29 Years (Moved in 1990 to 1999 / Occupied housing units)
+# - 30 or more Years (Moved in 1989 and earlier / Occupied housing units)
+
+# [Owner-occupied Home] Value
+
+# Median home value (Median (dollars))
+
+# Selected Monthly Owner Costs(SMOC)
+
+# - Median SMOC Mortgage (Median (dollars))
+# - Median SMOC no Mortgage (Median (dollars))
+
+# Gross Rent
+
+# - Median Rent (Median (dollars))
+
+# Income and Benefits (In 2019 inflation-adjusted dollars)
+
+# - Median household income (dollars)
+# - Mean household income (dollars)
+
+# Health Insurance Coverage
+
+# - Insured
+#    (Civilian noninstitutionalized population With health insurance coverage /
+#     Civilian noninstitutionalized population)
+
+# - Private Health Insurance 
+#    (Civilian noninstitutionalized population With private health insurance /
+#     Civilian noninstitutionalized population With health insurance coverage)
+
+# - Public Health Insurance
+#    (Civilian noninstitutionalized population With public coverage /
+#     Civilian noninstitutionalized population With health insurance coverage)
+
+# - Uninsured
+#    (Civilian noninstitutionalized population No health insurance coverage /
+#     Civilian noninstitutionalized population)
+
+# Percentage of Families and People Whose Income in the Past 12 Months is Below the Poverty Level
+
+# - Families in Poverty (All Families)
+# - Married Couple Families in Poverty (Married couple families)
+# - Single Mother Families (Families with female householder, no spouse present)
+# - People in Poverty (All people)
+
+# Educational Attainment
+
+# - No high school diploma
+#    ((Less than 9th grade + 9th to 12th grade, no diploma) / Population 25 years and over)
+# - High School Diploma (High school graduate (includes equivalency) / Population 25 years and over)
+# - Some college, no degree (Some college, no degree / Population 25 years and over)
+# - Associates (Associate's degree / Population 25 years and over)
+# - Bachelors (Bachelor's degree / Population 25 years and over)
+# - Graduate or professional degree (Graduate or professional degree / Population 25 years and over)
