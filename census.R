@@ -137,14 +137,6 @@ combinedData <- combinedData[
 
 district1 <- combinedData %>% subset(district == 1)
 
-randomEstimate <- c()
-
-for (i in 1:length(district1$Estimate)) {
-  randomEstimate[i] <- runif(1, district1$Low[i], district1$High[i])
-}
-
-district1$REstimate <- randomEstimate
-
 # Models
 
 # Predict Democrat or Republican 
@@ -166,8 +158,8 @@ district1$REstimate <- randomEstimate
 
 # - Whites (White / Total population)
 # - Blacks (Black or African American / Total population)
-# - American Indians (American Indian and Alaska Native / Total population)
-# - Pacific Islanders (Native Hawaiian and Other Pacific Islander / Total population)
+# - American Indian (American Indian and Alaska Native / Total population)
+# - Pacific Islander (Native Hawaiian and Other Pacific Islander / Total population)
 # - Other (Some other race / Total population)
 # - Multiple Races (Two or more races / Total population)
 
@@ -187,6 +179,8 @@ district1$REstimate <- randomEstimate
 # Born in US Territory, or born abroat to American parent(s)
 #   (Born in Puerto Rico, U.S. Island areas, or born abroad to American parent(s) / Native)
 # Naturalized Citizen (Foreign born / Total Population)
+
+# Ancestry
 
 # Disability Status of the Civilian Noninstitutionalized Population
 
