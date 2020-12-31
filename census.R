@@ -1,5 +1,63 @@
 library(tidyverse)
 
+substrRight <- function(x, n){
+  substr(x, nchar(x)-n+1, nchar(x))
+}
+
+# Accounting for single district states
+
+atLarge <- character()
+
+for (f in list.files("data/census/")) {
+  if (substrRight(f, 9) == "Large.csv") {
+    # Accounting for North and South Dakota
+    if (
+      strsplit(f, split = "_")[[1]][1] == "North" |
+      strsplit(f, split = "_")[[1]][1] == "South"
+      ) {
+      atLarge <- atLarge %>% append(
+        paste(
+          strsplit(f, split = "_")[[1]][1], strsplit(f, split = "_")[[1]][2]
+          )
+        )
+    # Accounting for Washington DC
+    } else if (strsplit(f, split = "_")[[1]][1] == "District") {
+      atLarge <- atLarge %>% append(
+        paste(
+          strsplit(f, split = "_")[[1]][1],
+          strsplit(f, split = "_")[[1]][2],
+          strsplit(f, split = "_")[[1]][3]
+        )
+      )
+    } else {atLarge <- atLarge %>% append(strsplit(f, split = "_")[[1]][1])}
+  }
+}
+
+stateData <- function(state) {
+  if (length(strsplit(state, split = " ")[[1]]) == 2) {
+    state = paste(
+      strsplit(state, split = " ")[[1]][1],
+      strsplit(state, split = " ")[[1]][2],
+      sep = "_"
+    )
+  } else if (length(strsplit(state, split = " ")[[1]]) == 3) {
+    state = paste(
+      strsplit(state, split = " ")[[1]][1],
+      strsplit(state, split = " ")[[1]][2],
+      strsplit(state, split = " ")[[1]][3],
+      sep = "_"
+    )
+  }
+  
+  if (state %in% atLarge) {
+    wholeState <- read_csv(paste(paste("data/census/", state, sep = ""), "District", "At", "Large.csv", sep = "_"))
+  } else {
+    wholeState <- read_csv(paste(paste("data/census/", state, sep = ""), "District", "all.csv", sep = "_"))
+  }
+  
+  return(wholeState)
+}
+
 wholeState <- read_csv("data/census/Alabama_District_all.csv")[
   , 2:length(colnames(read_csv("data/census/Alabama_District_all.csv")))
   ]
