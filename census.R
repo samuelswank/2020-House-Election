@@ -33,7 +33,9 @@ for (f in list.files("data/census/")) {
   }
 }
 
-stateData <- function(state) {
+
+
+stateDemographics <- function(state) {
   if (length(strsplit(state, split = " ")[[1]]) == 2) {
     state = paste(
       strsplit(state, split = " ")[[1]][1],
@@ -50,150 +52,54 @@ stateData <- function(state) {
   }
   
   if (state %in% atLarge) {
-    wholeState <- read_csv(paste(paste("data/census/", state, sep = ""), "District", "At", "Large.csv", sep = "_"))
+    wholeState <- read_csv(
+      paste(
+        paste("data/census/", state, sep = ""),
+        "District", "At", "Large.csv", sep = "_"
+        )
+      )
   } else {
-    wholeState <- read_csv(paste(paste("data/census/", state, sep = ""), "District", "all.csv", sep = "_"))
+    wholeState <- read_csv(
+      paste(
+        paste("data/census/", state, sep = ""),
+        "District", "all.csv", sep = "_"
+        )
+      )
   }
+  
+  wholeState <- wholeState[, 2:length(colnames(wholeState))]
+  
+  for (col in wholeState %>% select(ends_with("Estimate")) %>% colnames()) {
+    wholeState[, col] <- wholeState[, col] %>%
+      lapply(function(x) as.numeric(as.character(x)))
+  }
+  
+  for (col in wholeState %>% select(ends_with("MOE")) %>% colnames()) {
+    wholeState[, col] <- wholeState[, col] %>% 
+      lapply(function(x) abs(as.numeric(gsub("[^0-9.-]", "", x))))
+  }
+  
+  wholeState <- wholeState %>% 
+    gather(district, statistic, 3:length(colnames(wholeState)))
+  
+  if (state %in% atLarge) {
+    wholeState <- wholeState %>%
+      separate(district, c("state", "district1", "district2", "type"))
+    
+    wholeState$district <- paste(wholeState$district1, wholeState$district2)
+    
+    wholeState <- wholeState[, c(1, 2, 3, 8, 6, 7)]
+  } else {
+    wholeState <- wholeState %>%
+      separate(district, c("state", "district", "type"))
+    
+    wholeState$district <- as.numeric(wholeState$district)
+  }
+  
+  for (i in 1:length(wholeState$state)) {wholeState[i, "state"] <- state}
   
   return(wholeState)
 }
-
-wholeState <- read_csv("data/census/Alabama_District_all.csv")[
-  , 2:length(colnames(read_csv("data/census/Alabama_District_all.csv")))
-  ]
-
-for (col in wholeState %>% select(ends_with("Estimate")) %>% colnames()) {
-  wholeState[, col] <- wholeState[, col] %>% lapply(function(x) as.numeric(as.character(x)))
-} 
-
-for (col in wholeState %>% select(ends_with("MOE")) %>% colnames()) {
-  wholeState[, col] <- wholeState[, col] %>% 
-    lapply(function(x) abs(as.numeric(gsub("[^0-9.-]", "", x))))
-}
-
-wholeState <- wholeState %>% 
-  gather(district, statistic, 3:length(colnames(wholeState)))
-
-wholeState <- wholeState %>% separate(district, c("state", "district", "type"))
-
-for (i in 1:length(wholeState$state)) {wholeState[i, "state"] <- "Alabama"}
-
-wholeState$district <- as.numeric(wholeState$district)
-
-categories <- list()
-
-for (category in unique(wholeState$Subject)) {
-  subjectSubset <- wholeState %>% filter(Subject == category)
-  categories[[category]] <- subjectSubset
-}
-
-# subsets outputting list columns from pivot_wider
-  # Disability Status of the Civilian Noninstitutionalized Population <- cdTopic: People
-  # Employment Status <- cdTopic: Workers
-  # Selected Monthly Owner Costs(SMOC) <- cdTopic: Housing
-  # Health Insurance Coverage <- cdTopic: Socioeconomic
-  # Percentage of Families and People Whose Income in the Past 12 Months is Below the Poverty Level <- cdTopic: Socioeconomic
-
-# Adressing Duplicate Titles
-
-# Disability Status of the Civilian Noninstitutionalized Population
-for (i in 1:length(categories$`Disability Status of the Civilian Noninstitutionalized Population`$Title)) {
-  if (categories$`Disability Status of the Civilian Noninstitutionalized Population`$Title[i] == "With a disability") {
-    categories$`Disability Status of the Civilian Noninstitutionalized Population`$Title[i] <- paste(
-      categories$`Disability Status of the Civilian Noninstitutionalized Population`$Title[i - 1],
-      categories$`Disability Status of the Civilian Noninstitutionalized Population`$Title[i]
-    )
-  }
-}
-
-# Employment Status
-# Rows containing superfluous data to be removed
-tbr <- c()
-for (i in 1:length(categories$`Employment Status`$Title)) {
-  if (
-    categories$`Employment Status`$Title[i] == "Civilian labor force" &
-    categories$`Employment Status`$Title[i + 1] == "Unemployment Rate"
-  ) {tbr <- tbr %>% append(i)}
-}
-
-categories$`Employment Status` <- categories$`Employment Status`[-tbr, ]
-
-# Selected Monthly Owner Costs(SMOC)
-
-huwom <- categories$`Selected Monthly Owner Costs(SMOC)`$Title[2:8]
-huwm  <- categories$`Selected Monthly Owner Costs(SMOC)`$Title[11:16]
-
-for (i in 2:length(categories$`Selected Monthly Owner Costs(SMOC)`$Title)) {
-  if (
-    categories$`Selected Monthly Owner Costs(SMOC)`$Title[i] %in% huwom |
-    categories$`Selected Monthly Owner Costs(SMOC)`$Title[i - 1] == "Housing units with a mortgage $3,000 or more" 
-    ) {
-    categories$`Selected Monthly Owner Costs(SMOC)`$Title[i] <- paste(
-      categories$`Selected Monthly Owner Costs(SMOC)`$Title[1],
-      categories$`Selected Monthly Owner Costs(SMOC)`$Title[i]
-    )
-  } else if (
-    categories$`Selected Monthly Owner Costs(SMOC)`$Title[i] %in% huwm |
-    categories$`Selected Monthly Owner Costs(SMOC)`$Title[i - 1] == "Housing units without a mortgage $1,000 or more" 
-  ) {
-    categories$`Selected Monthly Owner Costs(SMOC)`$Title[i] <- paste(
-      categories$`Selected Monthly Owner Costs(SMOC)`$Title[10],
-      categories$`Selected Monthly Owner Costs(SMOC)`$Title[i]
-    )
-  }
-}
-
-# Health Insurance Coverage
-
-cnip <- categories$`Health Insurance Coverage`$Title[2:5]
-
-for (i in 2:length(categories$`Health Insurance Coverage`$Title)) {
-  if (
-    categories$`Health Insurance Coverage`$Title[i] %in% cnip &
-    categories$`Health Insurance Coverage`$Title[i - 1] != "Civilian noninstitutionalized population under 19 years"
-    ) {
-    categories$`Health Insurance Coverage`$Title[i] <- paste(
-      categories$`Health Insurance Coverage`$Title[1],
-      categories$`Health Insurance Coverage`$Title[i]
-    )
-  } else if (categories$`Health Insurance Coverage`$Title[i - 1] == "Civilian noninstitutionalized population under 19 years") {
-    categories$`Health Insurance Coverage`$Title[i] <- paste(
-      categories$`Health Insurance Coverage`$Title[i - 1],
-      categories$`Health Insurance Coverage`$Title[i]
-    )
-  }
-}
-
-# Percentage of Families and People Whose Income in the Past 12 Months is Below the Poverty Level
-
-for (i in 1:length(categories[[23]]$Title)) {
-  if (categories[[23]]$Title[i] == "With related children of the householder under 18 years") {
-    categories[[23]]$Title[i] <- paste(
-      categories[[23]]$Title[i - 1], categories[[23]]$Title[i]
-      )
-  } else if (categories[[23]]$Title[i] == "With related children of the householder under 5 years only") {
-    categories[[23]]$Title[i] <- paste(
-      categories[[23]]$Title[i - 2], categories[[23]]$Title[i]
-    )
-  }
-}
-
-for (category in unique(wholeState$Subject)) {
-  categories[[category]] <- categories[[category]] %>%
-    pivot_wider(names_from = type, values_from = statistic)
-}
-
-combinedData <- do.call(rbind, categories)
-
-combinedData <- combinedData %>%
-  mutate(Low = Estimate - MOE) %>%
-  mutate(High = Estimate + MOE)
-
-combinedData <- combinedData[
-  , c("Title", "state", "district", "Low", "Estimate", "High")
-  ]
-
-district1 <- combinedData %>% subset(district == 1)
 
 # Models
 
@@ -349,3 +255,119 @@ district1 <- combinedData %>% subset(district == 1)
 # - Associates (Associate's degree / Population 25 years and over)
 # - Bachelors (Bachelor's degree / Population 25 years and over)
 # - Graduate or professional degree (Graduate or professional degree / Population 25 years and over)
+
+categories <- list()
+
+for (category in unique(wholeState$Subject)) {
+  subjectSubset <- wholeState %>% filter(Subject == category)
+  categories[[category]] <- subjectSubset
+}
+
+# subsets outputting list columns from pivot_wider
+  # Disability Status of the Civilian Noninstitutionalized Population <- cdTopic: People
+  # Employment Status <- cdTopic: Workers
+  # Selected Monthly Owner Costs(SMOC) <- cdTopic: Housing
+  # Health Insurance Coverage <- cdTopic: Socioeconomic
+  # Percentage of Families and People Whose Income in the Past 12 Months is Below the Poverty Level <- cdTopic: Socioeconomic
+
+# Adressing Duplicate Titles
+
+# Disability Status of the Civilian Noninstitutionalized Population
+for (i in 1:length(categories$`Disability Status of the Civilian Noninstitutionalized Population`$Title)) {
+  if (categories$`Disability Status of the Civilian Noninstitutionalized Population`$Title[i] == "With a disability") {
+    categories$`Disability Status of the Civilian Noninstitutionalized Population`$Title[i] <- paste(
+      categories$`Disability Status of the Civilian Noninstitutionalized Population`$Title[i - 1],
+      categories$`Disability Status of the Civilian Noninstitutionalized Population`$Title[i]
+    )
+  }
+}
+
+# Employment Status
+# Rows containing superfluous data to be removed
+tbr <- c()
+for (i in 1:length(categories$`Employment Status`$Title)) {
+  if (
+    categories$`Employment Status`$Title[i] == "Civilian labor force" &
+    categories$`Employment Status`$Title[i + 1] == "Unemployment Rate"
+  ) {tbr <- tbr %>% append(i)}
+}
+
+categories$`Employment Status` <- categories$`Employment Status`[-tbr, ]
+
+# Selected Monthly Owner Costs(SMOC)
+
+huwom <- categories$`Selected Monthly Owner Costs(SMOC)`$Title[2:8]
+huwm  <- categories$`Selected Monthly Owner Costs(SMOC)`$Title[11:16]
+
+for (i in 2:length(categories$`Selected Monthly Owner Costs(SMOC)`$Title)) {
+  if (
+    categories$`Selected Monthly Owner Costs(SMOC)`$Title[i] %in% huwom |
+    categories$`Selected Monthly Owner Costs(SMOC)`$Title[i - 1] == "Housing units with a mortgage $3,000 or more" 
+    ) {
+    categories$`Selected Monthly Owner Costs(SMOC)`$Title[i] <- paste(
+      categories$`Selected Monthly Owner Costs(SMOC)`$Title[1],
+      categories$`Selected Monthly Owner Costs(SMOC)`$Title[i]
+    )
+  } else if (
+    categories$`Selected Monthly Owner Costs(SMOC)`$Title[i] %in% huwm |
+    categories$`Selected Monthly Owner Costs(SMOC)`$Title[i - 1] == "Housing units without a mortgage $1,000 or more" 
+  ) {
+    categories$`Selected Monthly Owner Costs(SMOC)`$Title[i] <- paste(
+      categories$`Selected Monthly Owner Costs(SMOC)`$Title[10],
+      categories$`Selected Monthly Owner Costs(SMOC)`$Title[i]
+    )
+  }
+}
+
+# Health Insurance Coverage
+
+cnip <- categories$`Health Insurance Coverage`$Title[2:5]
+
+for (i in 2:length(categories$`Health Insurance Coverage`$Title)) {
+  if (
+    categories$`Health Insurance Coverage`$Title[i] %in% cnip &
+    categories$`Health Insurance Coverage`$Title[i - 1] != "Civilian noninstitutionalized population under 19 years"
+    ) {
+    categories$`Health Insurance Coverage`$Title[i] <- paste(
+      categories$`Health Insurance Coverage`$Title[1],
+      categories$`Health Insurance Coverage`$Title[i]
+    )
+  } else if (categories$`Health Insurance Coverage`$Title[i - 1] == "Civilian noninstitutionalized population under 19 years") {
+    categories$`Health Insurance Coverage`$Title[i] <- paste(
+      categories$`Health Insurance Coverage`$Title[i - 1],
+      categories$`Health Insurance Coverage`$Title[i]
+    )
+  }
+}
+
+# Percentage of Families and People Whose Income in the Past 12 Months is Below the Poverty Level
+
+for (i in 1:length(categories[[23]]$Title)) {
+  if (categories[[23]]$Title[i] == "With related children of the householder under 18 years") {
+    categories[[23]]$Title[i] <- paste(
+      categories[[23]]$Title[i - 1], categories[[23]]$Title[i]
+      )
+  } else if (categories[[23]]$Title[i] == "With related children of the householder under 5 years only") {
+    categories[[23]]$Title[i] <- paste(
+      categories[[23]]$Title[i - 2], categories[[23]]$Title[i]
+    )
+  }
+}
+
+for (category in unique(wholeState$Subject)) {
+  categories[[category]] <- categories[[category]] %>%
+    pivot_wider(names_from = type, values_from = statistic)
+}
+
+combinedData <- do.call(rbind, categories)
+
+combinedData <- combinedData %>%
+  mutate(Low = Estimate - MOE) %>%
+  mutate(High = Estimate + MOE)
+
+combinedData <- combinedData[
+  , c("Title", "state", "district", "Low", "Estimate", "High")
+  ]
+
+district1 <- combinedData %>% subset(district == 1)
+
