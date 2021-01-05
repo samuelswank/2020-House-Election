@@ -148,6 +148,7 @@ wholeCountry <- wholeCountry[, c(6, 3, 4, 5)]
 colnames(wholeCountry)[1] <- "district"
 
 n <- 436
+# 66 variables 
 
 districtDemographics <- data.frame(
   district = rep(NA, n),
@@ -290,6 +291,77 @@ districtDemographics <- data.frame(
   # 30 or more Years (Moved in 1989 and earlier / Occupied housing units)
   thirty_or_more = rep(NA, n),
   
+  # Selected Monthly Owner Costs(SMOC)
+  
+  # Median SMOC Mortgage (Median (dollars))
+  med_smoc_mort = rep(NA, n),
+  # Median SMOC no Mortgage (Median (dollars))
+  med_smoc_no_mort = rep(NA, n),
+  
+  # Gross Rent
+  
+  # Median Rent (Median (dollars))
+  med_rent = rep(NA, n),
+  
+  # Income and Benefits (In 2019 inflation-adjusted dollars)
+  
+  # Median household income (dollars)
+  med_hincome = rep(NA, n),
+  # Mean household income (dollars)
+  mean_hincome = rep(NA, n),
+  
+  # Health Insurance Coverage
+  
+  # - Insured
+  #    (Civilian noninstitutionalized population With health insurance coverage /
+  #     Civilian noninstitutionalized population) * 100
+  insured = rep(NA, n),
+  
+  # - Private Health Insurance 
+  #    (Civilian noninstitutionalized population With private health insurance /
+  #     Civilian noninstitutionalized population With health insurance coverage) * 100
+  private_coverage = rep(NA, n),
+  
+  # - Public Health Insurance
+  #    (Civilian noninstitutionalized population With public coverage /
+  #     Civilian noninstitutionalized population With health insurance coverage) * 100
+  
+  # - Uninsured
+  #    (Civilian noninstitutionalized population No health insurance coverage /
+  #     Civilian noninstitutionalized population) * 100
+  
+  public_coverage = rep(NA, n),
+  
+  # Percentage of Families and People Whose Income in the Past 12 Months is Below the Poverty Level
+  
+  # Families in Poverty (All Families)
+  pov_families = rep(NA, n),
+  # Married Couple Families in Poverty (Married couple families)
+  pov_mcouples = rep(NA, n),
+  # Single Mother Families (Families with female householder, no spouse present)
+  pov_single_mothers = rep(NA, n),
+  # People in Poverty (All people)
+  pov = rep(NA, n),
+  
+  # Educational Attainment
+  
+  # - No high school diploma
+  #    ((Less than 9th grade + 9th to 12th grade, no diploma) / Population 25 years and over) * 100
+  no_hsdiploma = rep(NA, n),
+  # - High School Diploma (High school graduate (includes equivalency) / Population 25 years and over) * 100
+  high_school = rep(NA, n),
+  # - Some college, no degree (Some college, no degree / Population 25 years and over) * 100
+  some_college = rep(NA, n),
+  # - Associates (Associate's degree / Population 25 years and over) * 100
+  associates = rep(NA, n),
+  # - Bachelors (Bachelor's degree / Population 25 years and over) * 100
+  bachelors = rep(NA, n),
+  # - Graduate or professional degree (Graduate or professional degree / Population 25 years and over) * 100
+  graduate = rep(NA, n),
+  
+  party = rep(NA, n),
+  flipped = rep(NA, n),
+  
   stringsAsFactors = FALSE
   )
 
@@ -297,69 +369,7 @@ rowMaker <- function(dataframe) {
   demographicRow <- data.frame()
 }
 
-# Models
 
-# Predict Democrat or Republican 
-# Predict Flipped Districts
-
-# Selected Monthly Owner Costs(SMOC)
-
-# - Median SMOC Mortgage (Median (dollars))
-# - Median SMOC no Mortgage (Median (dollars))
-
-# Gross Rent
-
-# - Median Rent (Median (dollars))
-
-# Income and Benefits (In 2019 inflation-adjusted dollars)
-
-# - Median household income (dollars)
-# - Mean household income (dollars)
-
-# Health Insurance Coverage
-
-# - Insured
-#    (Civilian noninstitutionalized population With health insurance coverage /
-#     Civilian noninstitutionalized population)
-
-# - Private Health Insurance 
-#    (Civilian noninstitutionalized population With private health insurance /
-#     Civilian noninstitutionalized population With health insurance coverage)
-
-# - Public Health Insurance
-#    (Civilian noninstitutionalized population With public coverage /
-#     Civilian noninstitutionalized population With health insurance coverage)
-
-# - Uninsured
-#    (Civilian noninstitutionalized population No health insurance coverage /
-#     Civilian noninstitutionalized population)
-
-# Percentage of Families and People Whose Income in the Past 12 Months is Below the Poverty Level
-
-# - Families in Poverty (All Families)
-# - Married Couple Families in Poverty (Married couple families)
-# - Single Mother Families (Families with female householder, no spouse present)
-# - People in Poverty (All people)
-
-# Educational Attainment
-
-# - No high school diploma
-#    ((Less than 9th grade + 9th to 12th grade, no diploma) / Population 25 years and over)
-# - High School Diploma (High school graduate (includes equivalency) / Population 25 years and over)
-# - Some college, no degree (Some college, no degree / Population 25 years and over)
-# - Associates (Associate's degree / Population 25 years and over)
-# - Bachelors (Bachelor's degree / Population 25 years and over)
-# - Graduate or professional degree (Graduate or professional degree / Population 25 years and over)
-
-
-# subsets outputting list columns from pivot_wider
-  # Disability Status of the Civilian Noninstitutionalized Population <- cdTopic: People
-  # Employment Status <- cdTopic: Workers
-  # Selected Monthly Owner Costs(SMOC) <- cdTopic: Housing
-  # Health Insurance Coverage <- cdTopic: Socioeconomic
-  # Percentage of Families and People Whose Income in the Past 12 Months is Below the Poverty Level <- cdTopic: Socioeconomic
-
-# Adressing Duplicate Titles
 
 
 
