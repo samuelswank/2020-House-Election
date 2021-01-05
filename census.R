@@ -1,0 +1,366 @@
+library(tidyverse)
+
+substrRight <- function(x, n){
+  substr(x, nchar(x)-n+1, nchar(x))
+}
+
+# Accounting for single district states
+
+atLarge <- character()
+
+for (f in list.files("data/census/demographics/raw/")) {
+  if (substrRight(f, 9) == "Large.csv") {
+    # Accounting for North and South Dakota
+    if (
+      strsplit(f, split = "_")[[1]][1] == "North" |
+      strsplit(f, split = "_")[[1]][1] == "South"
+      ) {
+      atLarge <- atLarge %>% append(
+        paste(
+          strsplit(f, split = "_")[[1]][1], strsplit(f, split = "_")[[1]][2]
+          )
+        )
+    # Accounting for Washington DC
+    } else if (strsplit(f, split = "_")[[1]][1] == "District") {
+      atLarge <- atLarge %>% append(
+        paste(
+          strsplit(f, split = "_")[[1]][1],
+          strsplit(f, split = "_")[[1]][2],
+          strsplit(f, split = "_")[[1]][3]
+        )
+      )
+    } else {atLarge <- atLarge %>% append(strsplit(f, split = "_")[[1]][1])}
+  }
+}
+
+
+
+stateDemographics <- function(state) {
+  if (state %in% atLarge) {
+    if (length(strsplit(state, split = " ")[[1]]) == 2) {
+      state <- paste(
+        strsplit(state, split = " ")[[1]][1],
+        strsplit(state, split = " ")[[1]][2],
+        sep = "_"
+      )
+    } else if (length(strsplit(state, split = " ")[[1]]) == 3) {
+      state <- paste(
+        strsplit(state, split = " ")[[1]][1],
+        strsplit(state, split = " ")[[1]][2],
+        strsplit(state, split = " ")[[1]][3],
+        sep = "_"
+      )
+    }
+    wholeState <- read_csv(
+      paste(
+        paste("data/census/demographics/raw/", state, sep = ""),
+        "District", "At", "Large.csv", sep = "_"
+        )
+      )
+  } else {
+    if (length(strsplit(state, split = " ")[[1]]) == 2) {
+      state = paste(
+        strsplit(state, split = " ")[[1]][1],
+        strsplit(state, split = " ")[[1]][2],
+        sep = "_"
+      )
+    } else if (length(strsplit(state, split = " ")[[1]]) == 3) {
+      state <- paste(
+        strsplit(state, split = " ")[[1]][1],
+        strsplit(state, split = " ")[[1]][2],
+        strsplit(state, split = " ")[[1]][3],
+        sep = "_"
+      )
+    }
+    wholeState <- read_csv(
+      paste(
+        paste("data/census/demographics/raw/", state, sep = ""),
+        "District", "all.csv", sep = "_"
+        )
+      )
+  }
+  
+  if (state %>% sjmisc::str_contains("_") == TRUE) {
+    if (length(strsplit(state, split = "_")[[1]]) == 3) {
+      state <- paste(
+        strsplit(state, split = "_")[[1]][1],
+        strsplit(state, split = "_")[[1]][2],
+        strsplit(state, split = "_")[[1]][3]
+      )
+    } else {
+      state <- paste(
+        strsplit(state, split = "_")[[1]][1],
+        strsplit(state, split = "_")[[1]][2]
+      )
+    }
+  }
+  
+  wholeState <- wholeState[, 2:length(colnames(wholeState))]
+  
+  for (col in wholeState %>% select(ends_with("Estimate")) %>% colnames()) {
+    wholeState[, col] <- wholeState[, col] %>%
+      lapply(function(x) as.numeric(as.character(x)))
+  }
+  
+  for (col in wholeState %>% select(ends_with("MOE")) %>% colnames()) {
+    wholeState[, col] <- wholeState[, col] %>% 
+      lapply(function(x) abs(as.numeric(gsub("[^0-9.-]", "", x))))
+  }
+  
+  wholeState <- wholeState %>% 
+    gather(district, statistic, 3:length(colnames(wholeState)))
+  
+  # For first pass solution,
+  # MOE will simply be dropped
+  wholeState <- wholeState %>% subset(type = "Estimate")
+  
+  if (state %in% atLarge) {
+    wholeState <- wholeState %>%
+      separate(district, c("state", "district1", "district2", "type"))
+    
+    wholeState$district <- paste(wholeState$district1, wholeState$district2)
+    wholeState <- wholeState[, c(3, 8, 1, 2, 6, 7)]
+    } else {
+    wholeState <- wholeState %>%
+      separate(district, c("state", "district", "type"))
+    
+    wholeState$district <- as.numeric(wholeState$district)
+    wholeState <- wholeState[, c(3, 4, 1, 2, 5, 6)]
+    }
+  
+  wholeState <- wholeState[, !(names(wholeState) %in% c("type"))]
+  
+  for (i in 1:length(wholeState$state)) {wholeState[i, "state"] <- state}
+  
+  return(wholeState)
+}
+
+statesDC <- state.name %>% append("District of Columbia")
+demographics <- list()
+
+for (state in statesDC) {
+  demographics[[state]] <- stateDemographics(state)
+}
+
+wholeCountry <- do.call("rbind", demographics)
+wholeCountry$district1 <- paste0(wholeCountry$state, " ", wholeCountry$district)
+wholeCountry <- wholeCountry[, c(6, 3, 4, 5)]
+colnames(wholeCountry)[1] <- "district"
+
+n <- 436
+
+districtDemographics <- data.frame(
+  district = rep(NA, n),
+  # Population Density (Total population / Land Area)
+  pop_density = rep(NA, n),
+  
+  # Sex and Age
+  
+  # Sex Ratio (Male / Female) * 1000
+  sex_ratio = rep(NA, n),
+  # Minors (Total population - 18 years and over) * 100 / (Total population)
+  minors = rep(NA, n),
+  # Voting Age Population (18 years and over)
+  voting_age_pop = rep(NA, n),
+  # Seniors (65 years and older / Voting Age Population) * 100
+  seniors = rep(NA, n),
+  # Median age (years)
+  med_age = rep(NA, n),
+  
+  # Race
+  
+  # Whites (White / Total population) * 100
+  white = rep(NA, n),
+  # Blacks (Black or African American / Total population) * 100
+  black = rep(NA, n),
+  # American Indian (American Indian and Alaska Native / Total population) * 100
+  amerindian = rep(NA, n),
+  # Pacific Islander (Native Hawaiian and Other Pacific Islander / Total population) * 100
+  islander = rep(NA, n), 
+  # Other (Some other race / Total population) * 100
+  other_race = rep(NA, n), 
+  # Multiple Races (Two or more races / Total population) * 100
+  multiracial = rep(NA, n),
+  
+  # Hispanic or Latino and Race
+  
+  # Hispanic (Hispanic or Latino (of any race) / Total population) * 100
+  hispanic = rep(NA, n),
+  # Mexican (Mexican / Hispanic or Latino (of any race)) * 100
+  mexican = rep(NA, n),
+  # Puerto Rican (Puerto Rican / Hispanic or Latino (of any race)) * 100
+  puerto_rican = rep(NA, n),
+  # Cuban (Cuban / Hispanic or Latino (of any race)) * 100
+  cuban = rep(NA, n),
+  # Other Hispanic (Other Hispanic or Latino / Hispanic or Latino (of any race)) * 100
+  other_hispanic = rep(NA, n),
+  # Natural born citizen (Native / Total Population) * 100
+  
+  # Place of Birth
+  
+  natural_born_citizen = rep(NA, n),
+  # Born in State of residence (State of residence / Native) * 100
+  born_in_state = rep(NA, n),
+  # Born in Different state (Different state / Native) * 100
+  born_out_of_state = rep(NA, n),
+  # Born in US Territory, or born abroat to American parent(s)
+  #   (Born in Puerto Rico, U.S. Island areas, or born abroad to American parent(s) / Native) * 100
+  born_abroad = rep(NA, n),
+  # Naturalized Citizen (Foreign born / Total Population)
+  naturalized = rep(NA, n),
+  # (Voting Age) Disabled Population 
+  #   (Total civilian noninstitutionalized population With a disability - Under 18 years With a disability) * 100 /
+  #   (Total civilian noninstitutionalized population)
+  
+  # Disability Status of the Civilian Noninstitutionalized Population
+  
+  disabled = rep(NA, n),
+
+  # Residence 1 Year Ago
+  
+  # Same house (Same house / Population 1 year and over) * 100
+  same_house = rep(NA, n),
+  # Different county in same state (Different County / Population 1 year and over) * 100
+  diff_county = rep(NA, n),
+  # Different state (Different state / Population 1 year and over) * 100
+  diff_state = rep(NA, n),
+  # Abroad (Abroad / Population 1 year and over) * 100
+  abroad = rep(NA, n),
+  
+  # Employment Status
+  
+  # Labor force participation (In labor force / Population 16 years and over) * 100
+  labor_force_participation = rep(NA, n),
+  # Unemployment Rate
+  unemployment = rep(NA, n),
+  # Servicemen (Armed Forces / Population 16 years and over) * 100
+  servicemen = rep(NA, n),
+  
+  # Commuting to Work
+  
+  # Car
+  #  (Car, truck, or van -- drove alone + Car, truck, or van -- carpooled) * 100 /
+  #    Workers 16 years and over
+  car = rep(NA, n),
+  # Walking or Public Transit 
+  #  (Public transportation (excluding taxicab) + Walked) * 100 / Workers 16 years and over
+  walking_public_transit = rep(NA, n),
+  # Worked from home (Worked from home / Workers 16 years and over) * 100
+  worked_from_home = rep(NA, n),
+  # Mean travel time to work (minutes)
+  commute = rep(NA, n),
+  
+  # Class of Worker 
+  
+  # Private sector (Private wage and salary worker / Civilian employed population 16 years and over) * 100
+  private_sector = rep(NA, n),
+  # Public sector (Government workers / Civilian employed population 16 years and over) * 100
+  public_sector = rep(NA, n),
+  # Self-employed (Self-employed in own not incorporated business workers / Civilian employed population 16 years and over) * 100
+  self_employed = rep(NA, n),
+  
+  # Housing Occupancy 
+  
+  # Housing unit density (Total housing units / Land Area)
+  housing_density = rep(NA, n),
+  # Homeowner vacancy rate
+  homeowner_vacancy = rep(NA, n),
+  # Rental vacancy rate
+  rental_vacancy = rep(NA, n),
+  
+  # Housing Tenure
+  
+  # Owner occupation rate (Owner-occupied / Occupied housing units) * 100
+  owner_occupied = rep(NA, n),
+  # Rental occupation rate (Renter-occupied / Occupied housing units) * 100
+  renter_occupied = rep(NA, n),
+  
+  # Year Householder Moved into Unit
+  
+  # 2 or less Years (Moved in 2017 or later / Occupied housing units)
+  two_or_less = rep(NA, n),
+  # 3-4 Years (Moved in 2015 to 2016 / Occupied housing units)
+  three_to_four = rep(NA, n),
+  # 5-9 Years (Moved in 2014 to 2014  / Occupied housing units)
+  five_to_nine = rep(NA, n),
+  # 10-19 Years (Moved in 2000 to 2009 / Occupied housing units)
+  ten_to_nineteen = rep(NA, n),
+  # 20-29 Years (Moved in 1990 to 1999 / Occupied housing units)
+  twenty_to_twenty_nine = rep(NA, n),
+  # 30 or more Years (Moved in 1989 and earlier / Occupied housing units)
+  thirty_or_more = rep(NA, n),
+  
+  stringsAsFactors = FALSE
+  )
+
+rowMaker <- function(dataframe) {
+  demographicRow <- data.frame()
+}
+
+# Models
+
+# Predict Democrat or Republican 
+# Predict Flipped Districts
+
+# Selected Monthly Owner Costs(SMOC)
+
+# - Median SMOC Mortgage (Median (dollars))
+# - Median SMOC no Mortgage (Median (dollars))
+
+# Gross Rent
+
+# - Median Rent (Median (dollars))
+
+# Income and Benefits (In 2019 inflation-adjusted dollars)
+
+# - Median household income (dollars)
+# - Mean household income (dollars)
+
+# Health Insurance Coverage
+
+# - Insured
+#    (Civilian noninstitutionalized population With health insurance coverage /
+#     Civilian noninstitutionalized population)
+
+# - Private Health Insurance 
+#    (Civilian noninstitutionalized population With private health insurance /
+#     Civilian noninstitutionalized population With health insurance coverage)
+
+# - Public Health Insurance
+#    (Civilian noninstitutionalized population With public coverage /
+#     Civilian noninstitutionalized population With health insurance coverage)
+
+# - Uninsured
+#    (Civilian noninstitutionalized population No health insurance coverage /
+#     Civilian noninstitutionalized population)
+
+# Percentage of Families and People Whose Income in the Past 12 Months is Below the Poverty Level
+
+# - Families in Poverty (All Families)
+# - Married Couple Families in Poverty (Married couple families)
+# - Single Mother Families (Families with female householder, no spouse present)
+# - People in Poverty (All people)
+
+# Educational Attainment
+
+# - No high school diploma
+#    ((Less than 9th grade + 9th to 12th grade, no diploma) / Population 25 years and over)
+# - High School Diploma (High school graduate (includes equivalency) / Population 25 years and over)
+# - Some college, no degree (Some college, no degree / Population 25 years and over)
+# - Associates (Associate's degree / Population 25 years and over)
+# - Bachelors (Bachelor's degree / Population 25 years and over)
+# - Graduate or professional degree (Graduate or professional degree / Population 25 years and over)
+
+
+# subsets outputting list columns from pivot_wider
+  # Disability Status of the Civilian Noninstitutionalized Population <- cdTopic: People
+  # Employment Status <- cdTopic: Workers
+  # Selected Monthly Owner Costs(SMOC) <- cdTopic: Housing
+  # Health Insurance Coverage <- cdTopic: Socioeconomic
+  # Percentage of Families and People Whose Income in the Past 12 Months is Below the Poverty Level <- cdTopic: Socioeconomic
+
+# Adressing Duplicate Titles
+
+
+
+
