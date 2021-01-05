@@ -102,9 +102,18 @@ stateDemographics <- function(state) {
   }
   
   if (state %>% sjmisc::str_contains("_") == TRUE) {
-    state <- paste(
-      strsplit(state, split = "_")[[1]][1], strsplit(state, split = "_")[[1]][2]
-    )
+    if (length(strsplit(state, split = "_")[[1]]) == 3) {
+      state <- paste(
+        strsplit(state, split = "_")[[1]][1],
+        strsplit(state, split = "_")[[1]][2],
+        strsplit(state, split = "_")[[1]][3]
+      )
+    } else {
+      state <- paste(
+        strsplit(state, split = "_")[[1]][1],
+        strsplit(state, split = "_")[[1]][2]
+      )
+    }
   }
   
   wholeState <- wholeState[, 2:length(colnames(wholeState))]
@@ -127,9 +136,8 @@ stateDemographics <- function(state) {
       separate(district, c("state", "district1", "district2", "type"))
     
     wholeState$district <- paste(wholeState$district1, wholeState$district2)
-    
     wholeState <- wholeState[, c(1, 2, 3, 8, 6, 7)]
-  } else {
+    } else {
     wholeState <- wholeState %>%
       separate(district, c("state", "district", "type"))
     
