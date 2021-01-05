@@ -36,22 +36,42 @@ for (f in list.files("data/census/")) {
 
 
 stateDemographics <- function(state) {
-  if (length(strsplit(state, split = " ")[[1]]) == 2) {
-    state = paste(
-      strsplit(state, split = " ")[[1]][1],
-      strsplit(state, split = " ")[[1]][2],
-      sep = "_"
-    )
-  } else if (length(strsplit(state, split = " ")[[1]]) == 3) {
-    state = paste(
-      strsplit(state, split = " ")[[1]][1],
-      strsplit(state, split = " ")[[1]][2],
-      strsplit(state, split = " ")[[1]][3],
-      sep = "_"
-    )
-  }
+  # if (length(strsplit(state, split = " ")[[1]]) == 2) {
+  #   state = paste(
+  #     strsplit(state, split = " ")[[1]][1],
+  #     strsplit(state, split = " ")[[1]][2],
+  #     sep = "_"
+  #   )
+  # } else if (length(strsplit(state, split = " ")[[1]]) == 3) {
+  #   state = paste(
+  #     strsplit(state, split = " ")[[1]][1],
+  #     strsplit(state, split = " ")[[1]][2],
+  #     strsplit(state, split = " ")[[1]][3],
+  #     sep = "_"
+  #   )
+  # }
+  
+  # if (state %>% sjmisc::str_contains("_") == TRUE) {
+  #   state <- paste(
+  #     strsplit(state, split = "_")[[1]][1], strsplit(state, split = "_")[[1]][2]
+  #     )
+  # }
   
   if (state %in% atLarge) {
+    if (length(strsplit(state, split = " ")[[1]]) == 2) {
+      state = paste(
+        strsplit(state, split = " ")[[1]][1],
+        strsplit(state, split = " ")[[1]][2],
+        sep = "_"
+      )
+    } else if (length(strsplit(state, split = " ")[[1]]) == 3) {
+      state = paste(
+        strsplit(state, split = " ")[[1]][1],
+        strsplit(state, split = " ")[[1]][2],
+        strsplit(state, split = " ")[[1]][3],
+        sep = "_"
+      )
+    }
     wholeState <- read_csv(
       paste(
         paste("data/census/", state, sep = ""),
@@ -59,12 +79,32 @@ stateDemographics <- function(state) {
         )
       )
   } else {
+    if (length(strsplit(state, split = " ")[[1]]) == 2) {
+      state = paste(
+        strsplit(state, split = " ")[[1]][1],
+        strsplit(state, split = " ")[[1]][2],
+        sep = "_"
+      )
+    } else if (length(strsplit(state, split = " ")[[1]]) == 3) {
+      state = paste(
+        strsplit(state, split = " ")[[1]][1],
+        strsplit(state, split = " ")[[1]][2],
+        strsplit(state, split = " ")[[1]][3],
+        sep = "_"
+      )
+    }
     wholeState <- read_csv(
       paste(
         paste("data/census/", state, sep = ""),
         "District", "all.csv", sep = "_"
         )
       )
+  }
+  
+  if (state %>% sjmisc::str_contains("_") == TRUE) {
+    state <- paste(
+      strsplit(state, split = "_")[[1]][1], strsplit(state, split = "_")[[1]][2]
+    )
   }
   
   wholeState <- wholeState[, 2:length(colnames(wholeState))]
