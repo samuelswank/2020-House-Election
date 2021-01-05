@@ -8,7 +8,7 @@ substrRight <- function(x, n){
 
 atLarge <- character()
 
-for (f in list.files("data/census/")) {
+for (f in list.files("data/census/demographics/raw/")) {
   if (substrRight(f, 9) == "Large.csv") {
     # Accounting for North and South Dakota
     if (
@@ -36,27 +36,6 @@ for (f in list.files("data/census/")) {
 
 
 stateDemographics <- function(state) {
-  # if (length(strsplit(state, split = " ")[[1]]) == 2) {
-  #   state = paste(
-  #     strsplit(state, split = " ")[[1]][1],
-  #     strsplit(state, split = " ")[[1]][2],
-  #     sep = "_"
-  #   )
-  # } else if (length(strsplit(state, split = " ")[[1]]) == 3) {
-  #   state = paste(
-  #     strsplit(state, split = " ")[[1]][1],
-  #     strsplit(state, split = " ")[[1]][2],
-  #     strsplit(state, split = " ")[[1]][3],
-  #     sep = "_"
-  #   )
-  # }
-  
-  # if (state %>% sjmisc::str_contains("_") == TRUE) {
-  #   state <- paste(
-  #     strsplit(state, split = "_")[[1]][1], strsplit(state, split = "_")[[1]][2]
-  #     )
-  # }
-  
   if (state %in% atLarge) {
     if (length(strsplit(state, split = " ")[[1]]) == 2) {
       state = paste(
@@ -74,7 +53,7 @@ stateDemographics <- function(state) {
     }
     wholeState <- read_csv(
       paste(
-        paste("data/census/", state, sep = ""),
+        paste("data/census/demographics/raw/", state, sep = ""),
         "District", "At", "Large.csv", sep = "_"
         )
       )
@@ -95,7 +74,7 @@ stateDemographics <- function(state) {
     }
     wholeState <- read_csv(
       paste(
-        paste("data/census/", state, sep = ""),
+        paste("data/census/demographics/raw/", state, sep = ""),
         "District", "all.csv", sep = "_"
         )
       )
@@ -131,6 +110,10 @@ stateDemographics <- function(state) {
   wholeState <- wholeState %>% 
     gather(district, statistic, 3:length(colnames(wholeState)))
   
+  # For first pass solution,
+  # MOE will simply be dropped
+  wholeState <- wholeState %>% subset(type = "Estimate")
+  
   if (state %in% atLarge) {
     wholeState <- wholeState %>%
       separate(district, c("state", "district1", "district2", "type"))
@@ -147,6 +130,13 @@ stateDemographics <- function(state) {
   for (i in 1:length(wholeState$state)) {wholeState[i, "state"] <- state}
   
   return(wholeState)
+}
+
+statesDC <- state.name %>% append("District of Columbia")
+demographics <- list()
+
+for (state in statesDC) {
+  demographics[[state]] <- stateDemographics(state)
 }
 
 # Models
