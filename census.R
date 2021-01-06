@@ -153,7 +153,7 @@ n <- 436
 districtDemographics <- data.frame(
   district = rep(NA, n),
   # Population Density (Total population / Land Area)
-  pop_density = rep(NA, n),
+  # pop_density = rep(NA, n),
   
   # Sex and Age
   
@@ -263,7 +263,7 @@ districtDemographics <- data.frame(
   # Housing Occupancy 
   
   # Housing unit density (Total housing units / Land Area)
-  housing_density = rep(NA, n),
+  # housing_density = rep(NA, n),
   # Homeowner vacancy rate
   homeowner_vacancy = rep(NA, n),
   # Rental vacancy rate
@@ -365,8 +365,36 @@ districtDemographics <- data.frame(
   stringsAsFactors = FALSE
   )
 
-rowMaker <- function(dataframe) {
-  demographicRow <- data.frame()
+rowMaker <- function(congressionalDistrict) {
+  varRow <- list()
+  for (
+    v in colnames(districtDemographics)[1:length(colnames(districtDemographics))]
+  ) {varRow[[v]] <- NA}
+  
+  singleDistrict <- wholeCountry %>% subset(district == congressionalDistrict)
+  
+  varRow$district <- singleDistrict %>% .$district %>% .[1]
+  
+  # Sex and Age
+  
+  # sex_ratio
+  varRow$sex_ratio <- ((singleDistrict %>% subset(Title == "Male") %>% .$statistic %>% .[1]) /
+    (singleDistrict %>% subset(Title == "Female") %>% .$statistic %>% .[1])) * 100
+  
+  # voting_age_pop
+  varRow$voting_age_pop <- singleDistrict %>% filter(Subject == "Sex and Age", Title == "18 years and over") %>% .$statistic %>% .[1]
+  
+  # minors
+  varRow$minors <- (
+    (singleDistrict %>% subset(Subject = "Sex and Age", Title = "Total Population") %>% .$statistic %>% .[1]) -
+      varRow$voting_age_pop) /
+    (singleDistrict %>% subset(Subject = "Sex and Age", Title = "Total Population") %>% .$statistic %>% .[1]
+  ) * 100
+  
+  varRow$seniors <- ((singleDistrict %>% filter(Subject == "Sex and Age", Title == "65 years and over") %>% .$statistic %>% .[1]) /
+    varRow$voting_age_pop) * 100
+  
+  return(varRow$seniors)
 }
 
 
