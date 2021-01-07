@@ -199,6 +199,7 @@ districtDemographics <- data.frame(
   
   # Place of Birth
   
+  # Natural Born Citizen
   natural_born_citizen = rep(NA, n),
   # Born in State of residence (State of residence / Native) * 100
   born_in_state = rep(NA, n),
@@ -207,14 +208,13 @@ districtDemographics <- data.frame(
   # Born in US Territory, or born abroat to American parent(s)
   #   (Born in Puerto Rico, U.S. Island areas, or born abroad to American parent(s) / Native) * 100
   born_abroad = rep(NA, n),
-  # Naturalized Citizen (Foreign born / Total Population)
-  naturalized = rep(NA, n),
+  # Foreign Born (Foreign born / Total Population)
+  foreign_born = rep(NA, n),
+  # Disability Status of the Civilian Noninstitutionalized Population
+  
   # (Voting Age) Disabled Population 
   #   (Total civilian noninstitutionalized population With a disability - Under 18 years With a disability) * 100 /
   #   (Total civilian noninstitutionalized population)
-  
-  # Disability Status of the Civilian Noninstitutionalized Population
-  
   disabled = rep(NA, n),
 
   # Residence 1 Year Ago
@@ -378,23 +378,241 @@ rowMaker <- function(congressionalDistrict) {
   # Sex and Age
   
   # sex_ratio
-  varRow$sex_ratio <- ((singleDistrict %>% subset(Title == "Male") %>% .$statistic %>% .[1]) /
-    (singleDistrict %>% subset(Title == "Female") %>% .$statistic %>% .[1])) * 100
+  # Sex Ratio (Male / Female) * 100
+  varRow$sex_ratio <- (
+    (singleDistrict %>% subset(Title == "Male") %>% .$statistic %>% .[1]) /
+    (singleDistrict %>% subset(Title == "Female") %>% .$statistic %>% .[1])
+    ) * 100
   
   # voting_age_pop
-  varRow$voting_age_pop <- singleDistrict %>% filter(Subject == "Sex and Age", Title == "18 years and over") %>% .$statistic %>% .[1]
+  # Voting Age Population (18 years and over)
+  varRow$voting_age_pop <- singleDistrict %>%
+    filter(Subject == "Sex and Age", Title == "18 years and over") %>%
+    .$statistic %>% .[1]
   
   # minors
+  # Minors (Total population - 18 years and over) * 100 / (Total population)
   varRow$minors <- (
-    (singleDistrict %>% subset(Subject = "Sex and Age", Title = "Total Population") %>% .$statistic %>% .[1]) -
+    (singleDistrict %>%
+       subset(Subject = "Sex and Age", Title = "Total Population") %>%
+       .$statistic %>% .[1]) -
       varRow$voting_age_pop) /
-    (singleDistrict %>% subset(Subject = "Sex and Age", Title = "Total Population") %>% .$statistic %>% .[1]
+    (singleDistrict %>%
+       subset(Subject = "Sex and Age", Title = "Total Population") %>%
+       .$statistic %>% .[1]) * 100
+  
+  # seniors
+  # Seniors (65 years and older / Voting Age Population) * 100
+  varRow$seniors <- (
+    (singleDistrict %>%
+       filter(Subject == "Sex and Age", Title == "65 years and over") %>%
+       .$statistic %>% .[1]) /
+    varRow$voting_age_pop
+    ) * 100
+  
+  # med_age
+  # Median age (years)
+  varRow$med_age <- singleDistrict %>% filter(Title == "Median age (years)") %>%
+    .$statistic %>%
+    .[1] 
+  
+  # Race
+  
+  # white
+  # Whites (White / Total population) * 100
+  varRow$white <- (
+    (singleDistrict %>% filter(Title == "White") %>% .$statistic %>% .[1]) /
+      (singleDistrict %>% filter(Subject == "Race", Title == "Total population")
+       %>% .$statistic %>% .[1])
+    ) * 100
+  
+  # black
+  # Blacks (Black or African American / Total population) * 100
+  varRow$black <- (
+    (singleDistrict %>%
+       filter(Title == "Black or African American") %>%
+       .$statistic %>% .[1]) /
+      (singleDistrict %>% filter(Subject == "Race", Title == "Total population")
+       %>% .$statistic %>% .[1])
+    ) * 100
+  
+  # amerindian
+  # American Indian (American Indian and Alaska Native / Total population) * 100
+  varRow$amerindian <- (
+    (singleDistrict %>%
+       filter(Title == "American Indian and Alaska Native") %>%
+       .$statistic %>% .[1]) /
+      (singleDistrict %>%
+         filter(Subject == "Race", Title == "Total population") %>%
+         .$statistic %>% .[1])
+    ) * 100 
+  
+  # islander
+  # Pacific Islander (Native Hawaiian and Other Pacific Islander / Total population) * 100
+  varRow$islander <- (
+    (singleDistrict %>%
+       filter(Title == "Native Hawaiian and Other Pacific Islander") %>%
+       .$statistic %>% .[1]) /
+      (singleDistrict %>% filter(Subject == "Race", Title == "Total population") %>%
+         .$statistic %>% .[1])
+    ) * 100 
+  
+  # other_race
+  # Other (Some other race / Total population) * 100
+  varRow$other_race <- (
+    (singleDistrict %>%
+       filter(Title == "Some other race") %>%
+       .$statistic %>% .[1]) /
+      (singleDistrict %>%
+         filter(Subject == "Race", Title == "Total population") %>%
+         .$statistic %>% .[1])
+    ) * 100 
+  
+  # multiracial
+  # Multiple Races (Two or more races / Total population) * 100
+  varRow$multiracial <- (
+    (singleDistrict %>%
+       filter(Title == "Two or more races") %>%
+       .$statistic %>% .[1]) /
+      (singleDistrict %>%
+         filter(Subject == "Race", Title == "Total population") %>%
+         .$statistic %>% .[1])
+    ) * 100 
+  
+  # Hispanic or Latino and Race
+  
+  # hispanic
+  # Hispanic (Hispanic or Latino (of any race) / Total population) * 100
+  varRow$hispanic <- (
+    (singleDistrict %>%
+       filter(Title == "Hispanic or Latino (of any race)") %>%
+       .$statistic %>% .[1]) /
+      (singleDistrict %>%
+         filter(Subject == "Hispanic or Latino and Race", Title == "Total population") %>%
+         .$statistic %>% .[1])
+    ) * 100
+  
+  # mexican
+  # Mexican (Mexican / Hispanic or Latino (of any race)) * 100
+  varRow$mexican <- (
+    (singleDistrict %>%
+       filter(Subject == "Hispanic or Latino and Race", Title == "Mexican") %>%
+       .$statistic %>% .[1]) /
+      (singleDistrict %>%
+         filter(Title == "Hispanic or Latino (of any race)") %>%
+         .$statistic %>% .[1])) * 100
+  
+  # puerto_rican
+  # Puerto Rican (Puerto Rican / Hispanic or Latino (of any race)) * 100
+  varRow$puerto_rican <- (
+    (singleDistrict %>%
+       filter(Subject == "Hispanic or Latino and Race", Title == "Puerto Rican") %>%
+       .$statistic %>% .[1]) /
+      (singleDistrict %>%
+         filter(Title == "Hispanic or Latino (of any race)") %>%
+         .$statistic %>% .[1])
+    ) * 100
+  
+  # cuban
+  # Cuban (Cuban / Hispanic or Latino (of any race)) * 100
+  varRow$cuban <- (
+    (singleDistrict %>%
+       filter(Subject == "Hispanic or Latino and Race", Title == "Cuban") %>%
+       .$statistic %>% .[1]) /
+      (singleDistrict %>%
+         filter(Title == "Hispanic or Latino (of any race)") %>%
+         .$statistic %>% .[1])
+    ) * 100
+  
+  # other_hispanic
+  # Other Hispanic (Other Hispanic or Latino / Hispanic or Latino (of any race)) * 100
+  varRow$other_hispanic <- (
+    (singleDistrict %>%
+       filter(Subject == "Hispanic or Latino and Race", Title == "Other Hispanic or Latino") %>%
+       .$statistic %>% .[1]) /
+      (singleDistrict %>%
+         filter(Title == "Hispanic or Latino (of any race)") %>%
+         .$statistic %>% .[1])) * 100
+  
+  # natural_born_citizen
+  # Natural Born Citizen (Native / Total Population) * 100
+  varRow$natural_born_citizen <- (
+    (singleDistrict %>%
+       filter(Subject == "Place of Birth", Title == "Native") %>%
+       .$statistic %>% .[1]) /
+      (singleDistrict %>%
+         filter(Subject == "Place of Birth", Title == "Total population") %>%
+         .$statistic %>% .[1])
   ) * 100
   
-  varRow$seniors <- ((singleDistrict %>% filter(Subject == "Sex and Age", Title == "65 years and over") %>% .$statistic %>% .[1]) /
-    varRow$voting_age_pop) * 100
+  # born_in_state
+  # Born in State of residence (State of residence / Native) * 100
+  varRow$born_in_state <- (
+    (singleDistrict %>%
+       filter(Subject == "Place of Birth", Title == "State of residence") %>%
+       .$statistic %>% .[1]) /
+      (singleDistrict %>%
+         filter(Subject == "Place of Birth", Title == "Total population") %>%
+         .$statistic %>% .[1])
+  ) * 100
   
-  return(varRow$seniors)
+  # born_out_of_state
+  # Born in Different state (Different state / Native) * 100
+  varRow$born_out_of_state <- (
+    (singleDistrict %>%
+       filter(Subject == "Place of Birth", Title == "Different state") %>%
+       .$statistic %>% .[1]) /
+      (singleDistrict %>%
+         filter(Subject == "Place of Birth", Title == "Total population") %>%
+         .$statistic %>% .[1])
+  ) * 100
+  
+  # born_abroad
+  # Born in US Territory, or born abroad to American parent(s)
+  #   (Born in Puerto Rico, U.S. Island areas, or born abroad to American parent(s) / Native) * 100
+  varRow$born_abroad <- (
+    (singleDistrict %>%
+       filter(Subject == "Place of Birth", Title == "Born in Puerto Rico, U.S. Island areas, or born abroad to American parent(s)") %>%
+       .$statistic %>% .[1]) /
+      (singleDistrict %>%
+         filter(Subject == "Place of Birth", Title == "Total population") %>%
+         .$statistic %>% .[1])
+  ) * 100
+  
+  # foreign_born
+  # Foreign born (Foreign born / Total Population)
+  varRow$foreign_born <- (
+    (singleDistrict %>%
+       filter(Subject == "Place of Birth", Title == "Foreign born") %>%
+       .$statistic %>% .[1]) /
+      (singleDistrict %>%
+         filter(Subject == "Place of Birth", Title == "Total population") %>%
+         .$statistic %>% .[1])
+  ) * 100
+  
+  # disabled
+  # (Voting Age) Disabled Population 
+  #   (Total civilian noninstitutionalized population With a disability - Under 18 years With a disability) * 100 /
+  #   (Total civilian noninstitutionalized population)
+  varRow$disabled <- (
+    ((singleDistrict %>%
+       filter(
+         Subject == "Disability Status of the Civilian Noninstitutionalized Population",
+         Title == "With a disability"
+         ) %>% .$statistic %>% .[1]) -
+      (singleDistrict %>%
+         filter(
+           Subject == "Disability Status of the Civilian Noninstitutionalized Population",
+           Title == "With a disability"
+         ) %>% .$statistic %>% .[2])) /
+      (singleDistrict %>%
+         filter(
+           Subject == "Disability Status of the Civilian Noninstitutionalized Population",
+           Title == "Total civilian noninstitutionalized population"
+         ) %>% .$statistic %>% .[1])
+  ) * 100
+  
+  return(varRow)
 }
 
 
