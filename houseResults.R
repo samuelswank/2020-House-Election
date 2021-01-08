@@ -100,8 +100,16 @@ flippedWinners <- c(
   "Carlos Gimenez",
   "Carolyn Bourdeaux",
   "David Valadao",
-  "Nicole"
+  "Nicole Malliotakis",
+  "Mariannette Miller-Meeks"
   )
+
+hr <- hr %>% add_column(flipped = NA)
+for (i in 1:length(district)) {
+  if(hr$winning_candidate[i] %in% flippedWinners) {
+    hr$flipped[i] <- TRUE
+  } else {hr$flipped == FALSE}
+}
 
 flippedDistricts <- filter(
   flippedResults, winning_candidate %in% flippedWinners

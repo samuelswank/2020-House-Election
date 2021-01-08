@@ -1,4 +1,5 @@
 library(tidyverse)
+source("houseResults.R")
 
 substrRight <- function(x, n){
   substr(x, nchar(x)-n+1, nchar(x))
@@ -1010,9 +1011,25 @@ for (i in 1:length(unique(wholeCountry$district))) {
   for (
     v in colnames(districtDemographics)[1:(length(colnames(districtDemographics)) - 2)]
   ) {
-    newRow <- rowMaker(unique(wholeCountry$ddistrict)[i])
+    print(glue::glue("{unique(wholeCountry$district)[i]}: {v}"))
+    newRow <- rowMaker(unique(wholeCountry$district)[i])
     districtDemographics[i, v] <- newRow[[v]]
   }
 }
 
-varRows <- list()
+hr$districtDemographics <- paste(hr$state, hr$district)
+
+for (i in 1:length(hr$districtDemographics)) {
+  hr$districtDemographics[i] <- gsub(
+    "Congressional District ", "", hr$districtDemographics[i]
+    )
+  if (hr$state[i] %in% atLarge) {
+    hr$districtDemographics[i] <- gsub(
+      "1", "At Large", hr$districtDemographics[i]
+    )
+  }
+}
+
+for (congressionalDistrict in hr$districtDemographics) {
+  
+}
