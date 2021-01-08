@@ -2,16 +2,17 @@ library(shiny)
 library(tidycensus)
 library(tigris)
 library(tidyverse)
-source("houseResults.R")
+source("dataWrangling/houseResults.R")
 source("map.R")
+
 
 ui <- fluidPage(
   fluidRow(
       column(
           4, 
           selectInput(
-              "selectedDistrict", 
-              "District", 
+              "selectedState", 
+              "State", 
               choices = districtChoices,
               selected = "Utah District 4"
               )
