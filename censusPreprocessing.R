@@ -1005,3 +1005,14 @@ rowMaker <- function(congressionalDistrict) {
   
   return(varRow)
 }
+
+for (i in 1:length(unique(wholeCountry$district))) {
+  for (
+    v in colnames(districtDemographics)[1:(length(colnames(districtDemographics)) - 2)]
+  ) {
+    newRow <- rowMaker(unique(wholeCountry$ddistrict)[i])
+    districtDemographics[i, v] <- newRow[[v]]
+  }
+}
+
+varRows <- list()
