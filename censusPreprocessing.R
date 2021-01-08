@@ -1030,6 +1030,9 @@ for (i in 1:length(hr$districtDemographics)) {
   }
 }
 
-for (congressionalDistrict in hr$districtDemographics) {
-  
-}
+colnames(districtDemographics)[1] <- "districtDemographics"
+districtDemographics <- merge(
+  districtDemographics[, !(names(districtDemographics) %in% c("party", "flipped"))],
+  hr[, c("districtDemographics", "party", "flipped")],
+  by = "districtDemographics"
+  )
