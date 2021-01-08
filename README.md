@@ -1,6 +1,6 @@
 # Flipped Seats
 
-**States With Flipped Seats**
+## States With Flipped Seats
 
 - California
 - Florida
@@ -10,15 +10,15 @@
 - South Carolina
 - Utah
 
-## Confirmed
+## Republican Victories
 
-**Republican Victories**
-
+- David G. Valadao (R) vs. TJ Cox (D) - California District 21
 - Young Kim (R) vs. Gil Cisneros (D) - California District 39
 - Michelle Steel (R) vs. Harley Rouda (D) - California District 48
 - Carlos Giminéz (R) vs. Debbie Mucarsel-Powell (D) - Florida District 26
 - Maria Elvira Salazar (R) vs. Donna Shalala (D) - Flordia District 27
 - Ashley Hinson (R) vs. Abby Finkenauer (D) - Iowa District 1
+- Mariannette Miller-Meeks (R) vs. Rita Hart (D) - Iowa District 2
 - Michelle Fischbach (R) vs. Collin Peterson (D) - Minnesota District 7
 - Yvette Herrell (R) vs. Xochitl Torres Small (D) - New Mexico District 2
 - Nicole Malliotakis (R) vs. Max Rose (D) - New York District 11
@@ -27,11 +27,6 @@
 - Burgess Owens (R) vs. Ben MacAdamas (D) - Utah District 4
 
 
-**Democratic Victories**
+## Democratic Victories
 
 - Carolyn Bourdeaux (D) vs. Rich McCormick (R) - Georgia District 7
-
-## Still Counting
-
-- David G. Valadao (R) vs. TJ Cox (D) - California District 21 <- *Fox called for David G. Valadao*
-- Mariannette Miller-Meeks (R) vs. Rita Hart (D) - Iowa District 2
