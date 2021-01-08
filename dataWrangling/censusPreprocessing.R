@@ -1,5 +1,5 @@
 library(tidyverse)
-source("houseResults.R")
+source("dataWrangling/houseResults.R")
 
 substrRight <- function(x, n){
   substr(x, nchar(x)-n+1, nchar(x))
@@ -19,15 +19,6 @@ for (f in list.files("data/census/demographics/raw/")) {
       atLarge <- atLarge %>% append(
         paste(
           strsplit(f, split = "_")[[1]][1], strsplit(f, split = "_")[[1]][2]
-        )
-      )
-      # Accounting for Washington DC
-    } else if (strsplit(f, split = "_")[[1]][1] == "District") {
-      atLarge <- atLarge %>% append(
-        paste(
-          strsplit(f, split = "_")[[1]][1],
-          strsplit(f, split = "_")[[1]][2],
-          strsplit(f, split = "_")[[1]][3]
         )
       )
     } else {atLarge <- atLarge %>% append(strsplit(f, split = "_")[[1]][1])}
@@ -136,7 +127,7 @@ stateDemographics <- function(state) {
   return(wholeState)
 }
 
-statesDC <- state.name %>% append("District of Columbia")
+statesDC <- state.name
 demographics <- list()
 
 for (state in statesDC) {
@@ -346,9 +337,6 @@ districtDemographics <- data.frame(
   bachelors = rep(NA, n),
   # Graduate or professional degree
   graduate = rep(NA, n),
-  
-  party = rep(NA, n),
-  flipped = rep(NA, n),
   
   stringsAsFactors = FALSE
 )
@@ -1032,7 +1020,7 @@ for (i in 1:length(hr$districtDemographics)) {
 
 colnames(districtDemographics)[1] <- "districtDemographics"
 districtDemographics <- merge(
-  districtDemographics[, !(names(districtDemographics) %in% c("party", "flipped"))],
+  districtDemographics,
   hr[, c("districtDemographics", "party", "flipped")],
   by = "districtDemographics"
   )

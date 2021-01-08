@@ -1,10 +1,8 @@
-library(dotenv)
-library(tigris)
 library(tidyverse)
 source("houseResults.R")
 source("stringManipulator.R")
 
-cd117 <- congressional_districts(year = 2019)
+cd117 <- tigris::congressional_districts(year = 2019)
 
 stateData <- function(selectedDistrict, stateString) {
   stateName <- stateString(selectedDistrict)

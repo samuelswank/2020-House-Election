@@ -110,17 +110,3 @@ for (i in 1:length(district)) {
     hr$flipped[i] <- TRUE
   } else {hr$flipped == FALSE}
 }
-
-flippedDistricts <- filter(
-  flippedResults, winning_candidate %in% flippedWinners
-)
-
-stateChoices <- usdata::state_stats$state
-
-districtChoices <- c()
-
-for (i in 1:nrow(flippedDistricts)) {
-  districtChoices[i] <- paste("District",
-    str_remove(flippedDistricts[i, "district"], "Congressional District ")
-  )
-}
