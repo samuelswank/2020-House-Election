@@ -27,6 +27,6 @@
 - Burgess Owens (R) vs. Ben MacAdamas (D) - Utah District 4
 
 
-## Democratic Victories
+## Democratic Victory
 
 - Carolyn Bourdeaux (D) vs. Rich McCormick (R) - Georgia District 7
