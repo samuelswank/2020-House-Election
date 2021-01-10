@@ -3,7 +3,7 @@ library(tidyverse)
 df <- read_csv("data/census/demographics/preprocessed/districtDemographics.csv")
 
 districtChoices <- list()
-for (stadt in state.name) {districtChoices[[stadt]] <- c(NA)}
+for (stadt in state.name) {districtChoices[[stadt]] <- c("")}
 
 for (i in 1:length(df$districtDemographics)) {
   if (strsplit(df$districtDemographics[i], split = " ")[[1]][1] %in% atLarge) {
@@ -70,8 +70,13 @@ for (i in 1:length(df$districtDemographics)) {
 }
 
 for (i in 1:length(districtChoices)) {
-  districtChoices[[i]] <- districtChoices[[i]][2:length(districtChoices[[i]])]
   districtChoices[[i]] <- gtools::mixedsort(districtChoices[[i]])
+}
+
+for (stadt in state.name) {
+  if (stadt %in% atLarge) {
+    districtChoices[[stadt]] <- districtChoices[[stadt]][2]
+    }
 }
 
 
