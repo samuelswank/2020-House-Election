@@ -76,32 +76,28 @@ hr <- hr %>% mutate(state = usdata::abbr2state(state_abb))
 fips <- read_csv("data/stfipsab.csv") %>% select(stname, st)
 fipsList <- split(fips, seq(nrow(fips)))
 fipsList <- setNames(fipsList, fips$stname)
+
 fipsCodes <- c()
 for (i in 1:nrow(hr)) {
   fipsCodes[i] <- fipsList[[hr[i, "state"]]]$st
 }
 hr$fipsCode <- fipsCodes
-hr <- hr[, c(11, 1, 12, 2, 3, 4, 5, 6, 7, 8, 9, 10)]
-
-flippedStates <- c("MN", "NM", "IA", "CA", "SC", "NY", "UT", "FL", "OK", "GA")
-
-flippedResults <- filter(hr, state_abb %in% flippedStates)
 
 flippedWinners <- c(
+  "Stephanie Bice",
+  "Carolyn Bourdeaux",
   "Michelle Fischbach",
+  "Carlos Gimenez",
   "Yvette Herrell",
   "Ashley Hinson",
   "Young Kim",
   "Nancy Mace",
+  "Nicole Malliotakis",
+  "Mariannette Miller-Meeks",
+  "Burgess Owens",
   "Maria Elvira Salazar",
   "Michelle Steel",
-  "Stephanie Bice",
-  "Burgess Owens",
-  "Carlos Gimenez",
-  "Carolyn Bourdeaux",
-  "David Valadao",
-  "Nicole Malliotakis",
-  "Mariannette Miller-Meeks"
+  "David Valadao"
   )
 
 hr <- hr %>% add_column(flipped = NA)
@@ -110,3 +106,20 @@ for (i in 1:length(district)) {
     hr$flipped[i] <- TRUE
   } else {hr$flipped == FALSE}
 }
+
+hr <- hr[
+  ,
+  c(
+    "state",
+    "state_abb",
+    "fipsCode",
+    "district",
+    "winning_candidate",
+    "party",
+    "opponent",
+    "opponent_party",
+    "incumbent",
+    "uncontested",
+    "flipped"
+    )
+  ]
