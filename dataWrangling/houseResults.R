@@ -104,7 +104,7 @@ hr <- hr %>% add_column(flipped = NA)
 for (i in 1:length(district)) {
   if(hr$winning_candidate[i] %in% flippedWinners) {
     hr$flipped[i] <- TRUE
-  } else {hr$flipped == FALSE}
+  } else {hr$flipped[i] <- FALSE}
 }
 
 hr <- hr[
