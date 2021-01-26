@@ -499,7 +499,9 @@ rowMaker <- function(congressionalDistrict) {
     (singleDistrict %>%
        filter(Subject == "Place of Birth", Title == "State of residence") %>%
        .$statistic %>% .[1]) /
-      varRow$natural_born_citizen
+      (singleDistrict %>%
+         filter(Subject == "Place of Birth", Title == "Native") %>%
+         .$statistic %>% .[1])
   ) * 100
   
   # born_out_of_state
@@ -508,7 +510,9 @@ rowMaker <- function(congressionalDistrict) {
     (singleDistrict %>%
        filter(Subject == "Place of Birth", Title == "Different state") %>%
        .$statistic %>% .[1]) /
-      varRow$natural_born_citizen
+      (singleDistrict %>%
+         filter(Subject == "Place of Birth", Title == "Native") %>%
+         .$statistic %>% .[1])
   ) * 100
   
   # born_abroad
@@ -521,7 +525,9 @@ rowMaker <- function(congressionalDistrict) {
          Title == "Born in Puerto Rico, U.S. Island areas, or born abroad to American parent(s)"
          ) %>%
        .$statistic %>% .[1]) /
-      varRow$natural_born_citizen
+      (singleDistrict %>%
+         filter(Subject == "Place of Birth", Title == "Native") %>%
+         .$statistic %>% .[1])
   ) * 100
   
   # foreign_born
@@ -997,7 +1003,7 @@ rowMaker <- function(congressionalDistrict) {
 
 for (i in 1:length(unique(wholeCountry$district))) {
   for (
-    v in colnames(districtDemographics)[1:(length(colnames(districtDemographics)) - 2)]
+    v in colnames(districtDemographics)[1:(length(colnames(districtDemographics)))]
   ) {
     print(glue::glue("{unique(wholeCountry$district)[i]}: {v}"))
     newRow <- rowMaker(unique(wholeCountry$district)[i])
@@ -1019,8 +1025,17 @@ for (i in 1:length(hr$districtDemographics)) {
 }
 
 colnames(districtDemographics)[1] <- "districtDemographics"
+
+mergehr <- hr[, c("state", "district", "party", "flipped")]
+
+for (i in 1:length(mergehr$district)) {
+  mergehr$district[i] <- strsplit(mergehr$district[i], split = " ")[[1]][3]
+}
+
+mergehr$districtDemographics <- paste(mergehr$state, mergehr$district)
+mergehr[, c("districtDemographics", "party", "flipped")]
+
+colnames(districtDemographics[1]) <- "districtDemographics"
 districtDemographics <- merge(
-  districtDemographics,
-  hr[, c("districtDemographics", "party", "flipped")],
-  by = "districtDemographics"
+  districtDemographics, mergehr, by = "districtDemographics"
   )
