@@ -1,6 +1,6 @@
 library(tidyverse)
 
-df <- read_csv("data/census/demographics/preprocessed/districtDemographics.csv")
+df <- read_csv("data/census/demographics/preprocessed/modelData.csv")
 
 districtChoices <- list()
 for (stadt in state.name) {districtChoices[[stadt]] <- c("")}
