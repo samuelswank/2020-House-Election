@@ -99,11 +99,11 @@ for (i in 1:length(districtChoices)) {
   districtChoices[[i]] <- gtools::mixedsort(districtChoices[[i]])
 }
 
-# for (stadt in state.name) {
-#   if (stadt %in% atLarge) {
-#     districtChoices[[stadt]] <- districtChoices[[stadt]][2]
-#   }
-# }
+for (stadt in state.name) {
+  if (stadt %in% atLarge) {
+    districtChoices[[stadt]] <- districtChoices[[stadt]][2]
+  }
+}
 
 
 
