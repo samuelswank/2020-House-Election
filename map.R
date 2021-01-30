@@ -2,6 +2,10 @@ library(tidyverse)
 source("dataWrangling/houseResults.R")
 
 cd117 <- tigris::congressional_districts(year = 2019)
+partyPreds <- read_csv(
+  "data/predictions/partyPreds.csv",
+  col_names = c("NAMELSAD", "predicted", "actual")
+  )[, 1:2]
 
 stateData <- function(selectedState) {
   stateParty <- hr %>%
@@ -24,6 +28,11 @@ stateData <- function(selectedState) {
 
 districtData <- function(selectedState, selectedDistrict) {
   return(stateData(selectedState) %>% filter(NAMELSAD == selectedDistrict))
+}
+
+predictionData <- function(selectedState, selectedDistrict) {
+  districtData <- districtData(selectedState, selectedDistrict)
+  return(districtData)
 }
 
 plotState <- function(selectedState) {
