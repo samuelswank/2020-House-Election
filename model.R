@@ -50,3 +50,8 @@ pa.test.preds <- data.frame(
 pa.preds <- bind_rows(pa.train.preds, pa.test.preds) %>%
   select(predicted, actual)
 
+pa.preds$district <- row.names(pa.preds)
+pa.preds <- pa.preds[, c(3, 1)]
+
+
+
