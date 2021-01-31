@@ -1,31 +1,8 @@
 library(tidyverse)
+source("stringManipulator.R")
 source("dataWrangling/houseResults.R")
 
-substrRight <- function(x, n){
-  substr(x, nchar(x)-n+1, nchar(x))
-}
-
 # Accounting for single district states
-
-atLarge <- character()
-
-for (f in list.files("data/census/demographics/raw/")) {
-  if (substrRight(f, 9) == "Large.csv") {
-    # Accounting for North and South Dakota
-    if (
-      strsplit(f, split = "_")[[1]][1] == "North" |
-      strsplit(f, split = "_")[[1]][1] == "South"
-    ) {
-      atLarge <- atLarge %>% append(
-        paste(
-          strsplit(f, split = "_")[[1]][1], strsplit(f, split = "_")[[1]][2]
-        )
-      )
-    } else {atLarge <- atLarge %>% append(strsplit(f, split = "_")[[1]][1])}
-  }
-}
-
-
 
 stateDemographics <- function(state) {
   if (state %in% atLarge) {
@@ -139,7 +116,7 @@ wholeCountry$district1 <- paste0(wholeCountry$state, " ", wholeCountry$district)
 wholeCountry <- wholeCountry[, c(6, 3, 4, 5)]
 colnames(wholeCountry)[1] <- "district"
 
-n <- 436
+n <- 435
 # 66 variables 
 
 districtDemographics <- data.frame(
@@ -1025,17 +1002,9 @@ for (i in 1:length(hr$districtDemographics)) {
 }
 
 colnames(districtDemographics)[1] <- "districtDemographics"
+mergehr <- hr[, c("districtDemographics", "party", "flipped")]
 
-mergehr <- hr[, c("state", "district", "party", "flipped")]
 
-for (i in 1:length(mergehr$district)) {
-  mergehr$district[i] <- strsplit(mergehr$district[i], split = " ")[[1]][3]
-}
-
-mergehr$districtDemographics <- paste(mergehr$state, mergehr$district)
-mergehr[, c("districtDemographics", "party", "flipped")]
-
-colnames(districtDemographics[1]) <- "districtDemographics"
 districtDemographics <- merge(
   districtDemographics, mergehr, by = "districtDemographics"
   )
