@@ -60,7 +60,12 @@ str(df)
 ```
 
 ```{r}
-paData <- df[-269, !names(df) %in% c("med_smoc_mort", "med_smoc_no_mort"), drop = F]
+df[269, "flipped"] <- TRUE
+```
+
+
+```{r}
+paData <- df[, !names(df) %in% c("med_smoc_mort", "med_smoc_no_mort"), drop = F]
 colnames(paData)
 ```
 
@@ -174,15 +179,7 @@ Fitting a single decision tree to
 
 ```{r}
 paTree <- rpart(
-  party ~ walking_public_transit +
-    natural_born_citizen +
-    renter_occupied +
-    foreign_born +
-    white +
-    owner_occupied +
-    asian +
-    car +
-    other_race,
+  party ~ walking_public_transit + renter_occupied + foreign_born,
   method='class',
   data = trainPA
   )
@@ -196,10 +193,7 @@ rpart.plot(paTree)
 
 ```{r}
 paTree2 <- rpart(
-  party ~ natural_born_citizen +
-    renter_occupied +
-    walking_public_transit +
-    white,
+  party ~ owner_occupied + car + white,
   method='class',
   data = paScaled
   )
@@ -210,9 +204,18 @@ printcp(paTree2)
 ```{r}
 rpart.plot(paTree2)
 ```
+```{r}
+paTree3 <- rpart(
+  party ~ natural_born_citizen + asian + other_race + med_rent,
+  method='class',
+  data = paScaled
+  )
 
-
-
+printcp(paTree3)
+```
+```{r}
+rpart.plot(paTree3)
+```
 
 
 
