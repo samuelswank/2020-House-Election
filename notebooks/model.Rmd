@@ -1,0 +1,219 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(randomForest)
+library(rpart)
+library(rpart.plot)
+```
+
+```{r}
+sessionInfo()
+```
+
+Omit from published notebook
+
+```{r}
+workingDir <- getwd()
+workingDir <- workingDir %>% strsplit(split = "/")
+workingDir <- workingDir[[1]][1:6]
+workingDir <- paste(
+  workingDir[1],
+  workingDir[2],
+  workingDir[3],
+  workingDir[4],
+  workingDir[5],
+  workingDir[6],
+  sep = "/"
+  )
+
+workingDir
+```
+
+
+```{r}
+df <- read.csv(
+  paste(
+    workingDir, "data/census/demographics/preprocessed/modelData.csv", sep = "/"
+    )
+  )
+
+str(df)
+```
+
+```{r}
+df$party <- df$party %>% sapply(as.factor)
+class(df$party)
+```
+
+```{r}
+for (col in colnames(df)) {
+    if (class(df[[col]]) == "integer") {
+        df[[col]] <- sapply(df[[col]], as.numeric)
+    } 
+}
+
+str(df)
+```
+
+```{r}
+paData <- df[-269, !names(df) %in% c("med_smoc_mort", "med_smoc_no_mort"), drop = F]
+colnames(paData)
+```
+
+```{r}
+scale.many <- function(dat, column.nos) {
+  nms <- names(dat)
+  for(col in column.nos) {
+    name <- paste(nms[col],".z", sep = "")
+    dat[name] <- scale(dat[,col])
+  }
+  cat(paste("Scaled ", length(column.nos), " variable(s)\n"))
+  dat
+}
+```
+
+```{r}
+to.be.scaled <- 2:(length(colnames(paData)) - 2)
+paScaled <- paData %>% mutate_at(to.be.scaled, ~(scale(.) %>% as.vector))
+
+row.names(paScaled) <- paScaled$districtDemographics
+paScaled <- paScaled[, !names(paScaled) %in% c("flipped"), drop = F]
+
+paScaled
+```
+
+```{r}
+Democrat   <- length((paScaled %>% subset(party == "D"))$party)
+Republican <- length((paScaled %>% subset(party == "R"))$party)
+
+baseline <- (Democrat / (Democrat + Republican)) * 100
+
+sprintf("Baseline Accuracy: %.2f percent", baseline)
+```
+
+```{r}
+set.seed(42)
+sample <- caTools::sample.split(paScaled$party, SplitRatio = 0.8)
+
+trainPA <- subset(paScaled, sample == TRUE)
+testPA  <- subset(paScaled, sample == FALSE)
+
+print(glue::glue("({length(trainPA$party)}, {length(testPA$party)})"))
+```
+```{r}
+head(trainPA)
+```
+
+
+```{r}
+head(testPA)
+```
+
+
+The model that is used in the app
+
+```{r}
+set.seed(42)
+pa.model <- randomForest(party ~ ., data = trainPA)
+pa.model
+```
+
+```{r}
+varImpPlot(pa.model, n.var = 20, main = "Party Affiliation Model")
+```
+
+```{r}
+varImportances <- importance(pa.model)
+topTen <- varImportances[varImportances > 4, ] %>% sort(decreasing = TRUE)
+
+topTen
+```
+
+```{r}
+pa.train.preds <- data.frame(
+  predicted = pa.model$predicted, actual = trainPA$party
+  )
+
+train.pa.cm <- yardstick::conf_mat(
+  pa.train.preds, truth = actual, estimate = predicted
+  )
+
+summary(train.pa.cm)
+```
+
+```{r}
+pa.test.preds <- pa.model %>% predict(testPA %>% select(1:65))
+
+pa.test.preds <- data.frame(
+  predicted = pa.test.preds, actual = testPA$party
+  )
+
+test.pa.cm <- yardstick::conf_mat(
+  pa.test.preds, truth = actual, estimate = predicted
+  )
+
+test.pa.cm
+```
+
+```{r}
+summary(test.pa.cm)
+```
+
+
+```{r}
+pa.preds <- bind_rows(pa.train.preds, pa.test.preds) %>%
+  select(predicted, actual)
+
+head(pa.preds)
+```
+Fitting a single decision tree to 
+
+```{r}
+paTree <- rpart(
+  party ~ walking_public_transit +
+    natural_born_citizen +
+    renter_occupied +
+    foreign_born +
+    white +
+    owner_occupied +
+    asian +
+    car +
+    other_race,
+  method='class',
+  data = trainPA
+  )
+
+printcp(paTree)
+```
+
+```{r}
+rpart.plot(paTree)
+```
+
+```{r}
+paTree2 <- rpart(
+  party ~ natural_born_citizen +
+    renter_occupied +
+    walking_public_transit +
+    white,
+  method='class',
+  data = paScaled
+  )
+
+printcp(paTree2)
+```
+
+```{r}
+rpart.plot(paTree2)
+```
+
+
+
+
+
+
+
