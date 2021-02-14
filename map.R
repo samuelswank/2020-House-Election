@@ -1,8 +1,9 @@
 library(tidyverse)
+source("partyModel.R")
 source("dataWrangling/houseResults.R")
 
 cd117 <- tigris::congressional_districts(year = 2019)
-partyPreds <- read_csv("data/predictions/partyPreds.csv")
+partyPreds <- pa.preds
 partyPreds$district <- partyPreds$district %>%
   sapply(function(x) gsub( " *\\(.*?\\) *", " 1", x))
 
@@ -10,7 +11,7 @@ stateData <- function(selectedState) {
   stateParty <- hr %>%
     filter(fipsCode == fipsList[[selectedState]]$st) %>%
     merge(partyPreds, by = c("state", "district")) %>%
-    select(4, 2, 6, 12)
+    select(4, 2, 6, 13)
   
   if (selectedState %in% atLarge) {
     stateParty$district[1] <- "Congressional District (at Large)"
