@@ -13231,7 +13231,7 @@
             },
             "partyCode":"R",
             "partyName":"Republican",
-            "isWinner":false,
+            "isWinner":true,
             "isIncumbent":false,
             "votes":{
                "count":148313,
