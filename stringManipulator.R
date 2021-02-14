@@ -1,5 +1,51 @@
 library(tidyverse)
 
+# Function for fixing state names in partyModel.R and flippedModel.R
+predState <- function(col) {
+  vec <- c()
+  for (i in 1:length(col)) {
+    if (strsplit(col[i], split = " ")[[1]][1] %in% state.name) {
+      vec[i] <- strsplit(col[i], split = " ")[[1]][1]
+    } else if (
+      paste(
+        strsplit(col[i], split = " ")[[1]][1],
+        strsplit(col[i], split = " ")[[1]][2],
+        sep = " "
+      ) %in% state.name
+    ) {
+      vec[i] <- paste(
+        strsplit(col[i], split = " ")[[1]][1],
+        strsplit(col[i], split = " ")[[1]][2],
+        sep = " "
+      )
+    }
+  }
+  return(vec)
+}
+
+# Function for fixing district names in partyModel.R and flippedModel.R
+predDistrict <- function(col) {
+  vec <- c()
+  for (i in 1:length(col)) {
+    if ("At" %in% strsplit(col[i], split = " ")[[1]]) {
+      vec[i] <- "Congressional District (At Large)"
+    } else if (
+      strsplit(col[i], split = " ")[[1]][3] %in% as.character(1:100)
+    ) {
+      vec[i] <- paste(
+        "Congressional District",
+        strsplit(col[i], split = " ")[[1]][3]
+      )
+    } else {
+      vec[i] <- paste(
+        "Congressional District",
+        strsplit(col[i], split = " ")[[1]][2]
+      )
+    }
+  }
+  return(vec)
+}
+
 # Addressing single district states
 
 substrRight <- function(x, n){
