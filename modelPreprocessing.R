@@ -24,7 +24,7 @@ scale.many <- function(dat, column.nos) {
   dat
 }
 
-to.be.scaled <- 2:(length(colnames(paData)) - 3)
+to.be.scaled <- 2:(length(colnames(df)) - 3)
 dfScaled <- df %>% mutate_at(to.be.scaled, ~(scale(.) %>% as.vector))
 row.names(dfScaled) <- dfScaled$districtDemographics
 

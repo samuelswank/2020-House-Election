@@ -1,8 +1,10 @@
+library(randomForest)
+
 source("modelPreprocessing.R")
 source("stringManipulator.R")
 
 set.seed(42)
-sample <- caTools::sample.split(paScaled$party, SplitRatio = 0.8)
+sample <- caTools::sample.split(dfScaled$party, SplitRatio = 0.8)
 
 trainPA <- subset(
   dfScaled[, !names(dfScaled) %in% c("flipped"), drop = F], sample == TRUE
