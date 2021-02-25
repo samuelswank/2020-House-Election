@@ -8,6 +8,7 @@ library(tidyverse)
 library(randomForest)
 library(rpart)
 library(rpart.plot)
+library(logistf)
 ```
 
 ```{r}
@@ -60,13 +61,11 @@ str(df)
 ```
 
 ```{r}
-df[269, "flipped"] <- TRUE
+df <- df[, !names(df) %in% c("med_smoc_mort", "med_smoc_no_mort"), drop = F]
+colnames(df)
 ```
-
-
 ```{r}
-paData <- df[, !names(df) %in% c("med_smoc_mort", "med_smoc_no_mort"), drop = F]
-colnames(paData)
+df[269, "flipped"] <- TRUE
 ```
 
 ```{r}
@@ -81,12 +80,15 @@ scale.many <- function(dat, column.nos) {
 }
 ```
 
-```{r}
-to.be.scaled <- 2:(length(colnames(paData)) - 2)
-paScaled <- paData %>% mutate_at(to.be.scaled, ~(scale(.) %>% as.vector))
 
-row.names(paScaled) <- paScaled$districtDemographics
-paScaled <- paScaled[, !names(paScaled) %in% c("flipped"), drop = F]
+```{r}
+to.be.scaled <- 2:(length(colnames(df)) - 2)
+dfScaled <- df %>% mutate_at(to.be.scaled, ~(scale(.) %>% as.vector))
+
+row.names(dfScaled) <- dfScaled$districtDemographics
+paScaled <- dfScaled[
+  , !names(dfScaled) %in% c("districtDemographics", "flipped"), drop = F
+  ]
 
 paScaled
 ```
@@ -216,6 +218,130 @@ printcp(paTree3)
 ```{r}
 rpart.plot(paTree3)
 ```
+```{r}
+flippedScaled <- dfScaled[
+  , !names(dfScaled) %in% c("districtDemographics"), drop = F
+  ]
+
+flipped    <- length((flippedScaled %>% subset(flipped == TRUE))$flipped)
+notFlipped <- length((flippedScaled %>% subset(flipped == FALSE))$flipped)
+
+
+sprintf("Flipped Seats:   %d ", flipped - 1)
+sprintf("Unflipped Seats: %d", notFlipped + 1)
+```
+```{r}
+set.seed(67)
+propSample <- sample(
+  1:nrow(flippedScaled %>% subset(party == "D" & flipped == FALSE)), 86
+  )
+
+propFlipped <- rbind(
+  flippedScaled %>% subset(party == "R" & flipped == TRUE),
+  flippedScaled[propSample, ]
+  )
+
+propFlipped <- propFlipped[sample(nrow(propFlipped)), ]
+
+rownames(propFlipped)
+```
+```{r}
+propFlipped$flipped
+```
+
+```{r}
+propFlipped <- propFlipped[, !names(propFlipped) %in% c("party"), drop = F]
+colnames(propFlipped)
+```
+
+
+```{r}
+trainProp <- propFlipped[1:80, ]
+testProp  <- propFlipped[81:100, ]
+
+print(glue::glue("({nrow(trainProp)}, {nrow(testProp)})"))
+```
+
+```{r}
+trainProp$flipped <- as.character(trainProp$flipped)
+testProp$flipped <- as.character(testProp$flipped)
+
+trainProp$flipped <- factor(trainProp$flipped, levels = c("TRUE", "FALSE"))
+testProp$flipped <- factor(testProp$flipped, levels = c("TRUE", "FALSE"))
+```
+
+
+```{r}
+for (i in 1:25) {
+  set.seed(67)
+  treeModel <- randomForest(flipped ~ ., data = trainProp, ntree = i)
+  sprintf("%d\n-----------------------------------------------------\n", i)
+  flipped.train.preds <- data.frame(
+  predicted = treeModel$predicted, actual = trainProp$flipped
+  )
+
+train.flipped.cm <- yardstick::conf_mat(
+  flipped.train.preds, truth = actual, estimate = predicted
+  )
+
+print(
+  summary(train.flipped.cm) %>%
+    subset(
+      .metric == "accuracy" |
+      .metric == "mcc" |
+      .metric == "precision" |
+      .metric == "recall" |
+      .metric == "f_meas"
+      )
+  )
+}
+```
+
+```{r}
+set.seed(67)
+# ntree = 17
+propModel <- randomForest(flipped ~ ., data = trainProp, ntree = 18)
+propModel
+```
+```{r}
+flipped.train.preds <- data.frame(
+  predicted = propModel$predicted, actual = trainProp$flipped
+  )
+
+train.flipped.cm <- yardstick::conf_mat(
+  flipped.train.preds, truth = actual, estimate = predicted
+  )
+
+summary(train.flipped.cm)
+```
+
+
+```{r}
+varImportances <- importance(propModel)
+topTen <- varImportances[varImportances > 0.575, ] %>% sort(decreasing = TRUE)
+
+topTen
+```
+```{r}
+flipped.test.preds <- propModel %>% predict(testProp %>% select(1:64))
+
+flipped.test.preds <- data.frame(
+  predicted = flipped.test.preds, actual = testProp$flipped
+  )
+
+test.flipped.cm <- yardstick::conf_mat(
+  flipped.test.preds, truth = actual, estimate = predicted
+  )
+
+test.flipped.cm
+```
+```{r}
+summary(test.flipped.cm)
+```
+
+
+
+
 
 
 
