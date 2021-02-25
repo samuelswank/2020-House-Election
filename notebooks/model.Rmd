@@ -231,7 +231,7 @@ sprintf("Flipped Seats:   %d ", flipped - 1)
 sprintf("Unflipped Seats: %d", notFlipped + 1)
 ```
 ```{r}
-set.seed(67)
+set.seed(1492)
 propSample <- sample(
   1:nrow(flippedScaled %>% subset(party == "D" & flipped == FALSE)), 86
   )
@@ -273,7 +273,7 @@ testProp$flipped <- factor(testProp$flipped, levels = c("TRUE", "FALSE"))
 
 ```{r}
 for (i in 1:25) {
-  set.seed(67)
+  set.seed(1812)
   treeModel <- randomForest(flipped ~ ., data = trainProp, ntree = i)
   sprintf("%d\n-----------------------------------------------------\n", i)
   flipped.train.preds <- data.frame(
@@ -298,9 +298,9 @@ print(
 ```
 
 ```{r}
-set.seed(67)
-# ntree = 17
-propModel <- randomForest(flipped ~ ., data = trainProp, ntree = 18)
+set.seed(1812)
+# ntree = 9
+propModel <- randomForest(flipped ~ ., data = trainProp, ntree = 9)
 propModel
 ```
 ```{r}
