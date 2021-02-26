@@ -130,7 +130,7 @@ pa.model
 ```
 
 ```{r}
-varImpPlot(pa.model, n.var = 20, main = "Party Affiliation Model")
+varImpPlot(pa.model, n.var = 10, main = "Party Affiliation Model")
 ```
 
 ```{r}
@@ -180,8 +180,9 @@ head(pa.preds)
 Fitting a single decision tree to 
 
 ```{r}
+set.seed(2020)
 paTree <- rpart(
-  party ~ walking_public_transit + renter_occupied + foreign_born,
+  party ~ .,
   method='class',
   data = trainPA
   )
@@ -342,7 +343,7 @@ varImpPlot(propModel, n.var = 10, main = "Flipped District Model")
 ```
 ```{r}
 flippedTree <- rpart(
-  flipped ~ associates + diff_county + disabled,
+  flipped ~ .,
   method='class',
   data = trainProp
   )
@@ -353,18 +354,44 @@ printcp(flippedTree)
 ```{r}
 rpart.plot(flippedTree)
 ```
+
 ```{r}
 flippedTree2 <- rpart(
-  flipped ~ commute + uninsured + born_abroad,
+  flipped ~ associates + diff_county + disabled,
   method='class',
   data = trainProp
   )
 
 printcp(flippedTree2)
 ```
+
+```{r}
+rpart.plot(flippedTree2)
+```
+```{r}
+flippedTree3 <- rpart(
+  flipped ~ commute + uninsured + born_abroad,
+  method='class',
+  data = trainProp
+  )
+
+printcp(flippedTree3)
 ```
 
+```{r}
+rpart.plot(flippedTree3)
+```
 
+```{r}
+flippedTree4 <- rpart(
+  flipped ~ high_school + born_out_of_state,
+  method='class',
+  data = trainProp
+  )
 
-
+printcp(flippedTree4)
+```
+```{r}
+rpart.plot(flippedTree4)
+```
 
