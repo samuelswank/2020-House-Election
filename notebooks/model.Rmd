@@ -299,7 +299,6 @@ print(
 
 ```{r}
 set.seed(1812)
-# ntree = 9
 propModel <- randomForest(flipped ~ ., data = trainProp, ntree = 9)
 propModel
 ```
@@ -318,7 +317,7 @@ summary(train.flipped.cm)
 
 ```{r}
 varImportances <- importance(propModel)
-topTen <- varImportances[varImportances > 0.575, ] %>% sort(decreasing = TRUE)
+topTen <- varImportances[varImportances > 0.87, ] %>% sort(decreasing = TRUE)
 
 topTen
 ```
@@ -338,9 +337,32 @@ test.flipped.cm
 ```{r}
 summary(test.flipped.cm)
 ```
+```{r}
+varImpPlot(propModel, n.var = 10, main = "Flipped District Model")
+```
+```{r}
+flippedTree <- rpart(
+  flipped ~ associates + diff_county + disabled,
+  method='class',
+  data = trainProp
+  )
 
+printcp(flippedTree)
+```
 
+```{r}
+rpart.plot(flippedTree)
+```
+```{r}
+flippedTree2 <- rpart(
+  flipped ~ commute + uninsured + born_abroad,
+  method='class',
+  data = trainProp
+  )
 
+printcp(flippedTree2)
+```
+```
 
 
 
