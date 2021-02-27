@@ -40,7 +40,6 @@ flipped.train.preds <- data.frame(
 )
 
 flipped.test.preds <- propModel %>% predict(testProp %>% select(1:64))
-
 flipped.test.preds <- data.frame(
   predicted = flipped.test.preds, actual = testProp$flipped
 )
