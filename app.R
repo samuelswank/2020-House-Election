@@ -15,7 +15,8 @@ ui <- fluidPage(
     column(4, uiOutput("selectedDistrict"))
   ),
   fluidRow(
-    column(4, plotOutput("stateMap")), column(4, plotOutput("districtMap"))
+    column(4, plotOutput("stateMap")),
+    column(4, plotOutput("districtMap"))
     ),
   fluidRow(
     column(4, plotOutput("predictedState")),
@@ -30,8 +31,6 @@ server <- function(input, output, session) {
       "selectedDistrict", "District", districtChoices[[input$selectedState]]
       )
   })
-  
-  # output$stateMap <- renderPlot({plotState(input$selectedState)})
   
   observeEvent(input$selectedState, {
     if (input$selectedState == "") {

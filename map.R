@@ -42,10 +42,10 @@ plotState <- function(selectedState) {
       ) +
       xlim(-180, -120) +
       scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
-      ggtitle("Actual") +
+      ylab("Actual") +
       theme(
         panel.background = element_blank(),
-        plot.title = element_text(
+        axis.title.y.left = element_text(
           hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
         ),
         axis.text = element_blank(),
@@ -61,10 +61,10 @@ plotState <- function(selectedState) {
         color = "black"
       ) +
       scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
-      ggtitle("Actual") +
+      ylab("Actual") +
       theme(
         panel.background = element_blank(),
-        plot.title = element_text(
+        axis.title.y.left = element_text(
           hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
         ),
         axis.text = element_blank(),
@@ -107,10 +107,10 @@ plotPredicted <- function(selectedState, selectedDistrict, geography) {
         ) +
         xlim(-180, -120) +
         scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
-        ggtitle("Predicted") +
+        ylab("Predicted") +
         theme(
           panel.background = element_blank(),
-          plot.title = element_text(
+          axis.title.y.left = element_text(
             hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
           ),
           axis.text = element_blank(),
@@ -126,10 +126,10 @@ plotPredicted <- function(selectedState, selectedDistrict, geography) {
           color = "black"
         ) +
         scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
-        ggtitle("Predicted") +
+        ylab("Predicted") +
         theme(
           panel.background = element_blank(),
-          plot.title = element_text(
+          axis.title.y.left = element_text(
             hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
           ),
           axis.text = element_blank(),
@@ -146,12 +146,8 @@ plotPredicted <- function(selectedState, selectedDistrict, geography) {
         color = "black"
       ) +
       scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
-      labs(title = selectedDistrict) +
       theme(
         panel.background = element_blank(),
-        plot.title = element_text(
-          hjust = 0.5, size = 18, family = "NewCenturySchoolbook"
-        ),
         axis.text = element_blank(),
         axis.ticks = element_blank(),
         legend.position = "none"
