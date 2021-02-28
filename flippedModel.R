@@ -3,6 +3,8 @@ library(randomForest)
 source("modelPreprocessing.R")
 source("stringManipulator.R")
 
+'%!in%' <- function(x,y){!('%in%'(x,y))}
+
 flippedScaled <- dfScaled[
   , !names(dfScaled) %in% c("districtDemographics"), drop = F
 ]
@@ -81,6 +83,23 @@ flipped.test.preds <- data.frame(
 )
 
 flipped.preds <- rbind(flipped.train.preds, flipped.test.preds)
+for (col in colnames(flipped.preds)) {
+  flipped.preds[[col]] <- as.logical(flipped.preds[[col]])
+  }
 
-
-
+flippedResult <- function(selectedState, selectedDistrict) {
+  result <- list()
+  if (reverseDistrict(selectedState, selectedDistrict) %!in% flipped.preds$district) {
+    result$actual    <- FALSE
+    result$predicted <- FALSE
+  } else {
+    result$actual <- flipped.preds %>%
+      filter(district == reverseDistrict(selectedState, selectedDistrict)) %>%
+      .$actual[1]
+    
+    result$predicted <- flipped.preds %>%
+      filter(district == reverseDistrict(selectedState, selectedDistrict)) %>%
+      .$predicted[1]
+  }
+  return(result)
+}
