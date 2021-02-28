@@ -16,11 +16,13 @@ ui <- fluidPage(
   ),
   fluidRow(
     column(4, plotOutput("stateMap")),
-    column(4, plotOutput("districtMap"))
+    column(4, plotOutput("districtMap")),
+    column(4, textOutput("flippedActual"))
     ),
   fluidRow(
     column(4, plotOutput("predictedState")),
-    column(4, plotOutput("predictedDistrict"))
+    column(4, plotOutput("predictedDistrict")),
+    column(4, textOutput("flippedPredicted"))
     )
 )
 
@@ -35,7 +37,7 @@ server <- function(input, output, session) {
   observeEvent(input$selectedState, {
     if (input$selectedState == "") {
       output$stateMap     <- NULL
-      output$predictedMap <- NULL
+      output$districtMap  <- NULL
     } else if (input$selectedState %!in% atLarge) {
       output$stateMap <- renderPlot({plotState(input$selectedState)})
       output$districtMap <- renderPlot({
