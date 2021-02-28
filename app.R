@@ -23,7 +23,7 @@ ui <- fluidPage(
   fluidRow(
     column(4, plotOutput("predictedState")),
     column(4, plotOutput("predictedDistrict")),
-    column(4, textOutput("flippedPredicted"), uiOutput("flippedPredic"))
+    column(4, textOutput("flippedPredicted"), uiOutput("flippedPredicted"))
     )
 )
 
@@ -62,35 +62,36 @@ server <- function(input, output, session) {
     }
   })
   
-  # observeEvent(input$selectedDistrict, {
-  #   if (
-  #     input$selectedDistrict == "" |
-  #     is.null(reverseDistrict(input$selectedState, input$selectedDistrict)) == TRUE
-  #     ) {
-  #     output$flippedActual    <- NULL
-  #     output$flippedPredicted <- NULL
-  #   } else if (
-  #     reverseDistrict(input$selectedState, input$selectedDistrict) %!in%
-  #     flipped.preds$district
-  #     ) {
-  #     output$flippedActual    <- NULL
-  #     output$flippedPredicted <- NULL
-  #   } else {
-  #     output$flipped <- renderUI({h1("Flipped Republican?")})
-  #     if (flippedResult(input$selectedState, input$selectedDistrict)$in_sample == FALSE) {
-  #       output$flippedAcutal   <- NULL
-  #       output$flippedPreicted <- NULL
-  #     } else {
-  #       if (flippedResult(input$selectedState, input$selectedDistrict)$actual == TRUE) {
-  #         output$flippedActual <- renderUI({tags$b("FLIPPED")})
-  #       } else {output$flippedActual <- renderUI({tags$b("NOT FLIPPED")})}
-  #       
-  #       if (flippedResult(input$selectedState, input$selectedDistrict)$predicted == TRUE) {
-  #         output$flippedPredicted <- renderText({"TRUE"})
-  #       } else {output$flippedPredicted <- renderText({"FALSE"})}
-  #     }
-  #   }
-  # })
+  observeEvent(input$selectedDistrict, {
+    if (
+      input$selectedDistrict == "" |
+      input$selectedDistrict == "Congressional District (At Large)" |
+      is.null(reverseDistrict(input$selectedState, input$selectedDistrict)) == TRUE
+      ) {
+      output$flippedActual    <- NULL
+      output$flippedPredicted <- NULL
+    } else if (
+      reverseDistrict(input$selectedState, input$selectedDistrict) %!in%
+      flipped.preds$district
+      ) {
+      output$flippedActual    <- NULL
+      output$flippedPredicted <- NULL
+    } else {
+      output$flipped <- renderUI({h1("Flipped Republican?")})
+      if (flippedResult(input$selectedState, input$selectedDistrict)$in_sample == FALSE) {
+        output$flippedAcutal   <- NULL
+        output$flippedPreicted <- NULL
+      } else {
+        if (flippedResult(input$selectedState, input$selectedDistrict)$actual == TRUE) {
+          output$flippedActual <- renderUI({tags$b("FLIPPED")})
+        } else {output$flippedActual <- renderUI({tags$b("NOT FLIPPED")})}
+
+        if (flippedResult(input$selectedState, input$selectedDistrict)$predicted == TRUE) {
+          output$flippedPredicted <- renderUI({tags$b("FLIPPED")})
+        } else {output$flippedPredicted <- renderUI({tags$b("NOT FLIPPED")})}
+      }
+    }
+  })
 }
 
 shinyApp(ui, server)
