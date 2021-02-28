@@ -1,6 +1,6 @@
 library(tidyverse)
 
-# Function for fixing state names in partyModel.R and flippedModel.R
+# Function for fixing state names in partyModel.R
 predState <- function(col) {
   vec <- c()
   for (i in 1:length(col)) {
@@ -23,7 +23,7 @@ predState <- function(col) {
   return(vec)
 }
 
-# Function for fixing district names in partyModel.R and flippedModel.R
+# Function for fixing district names in partyModel.R
 predDistrict <- function(col) {
   vec <- c()
   for (i in 1:length(col)) {
@@ -44,6 +44,34 @@ predDistrict <- function(col) {
     }
   }
   return(vec)
+}
+
+# Function for reversing district names in flippedModel.R
+reverseDistrict <- function(selectedState, selectedDistrict) {
+  if (
+    "(At" %in% strsplit(selectedDistrict, split = " ")[[1]] |
+    selectedDistrict == ""
+    ) {return(NULL)} 
+  else if (
+    "New" %in% strsplit(selectedDistrict, split = " ")[[1]] |
+    "North" %in% strsplit(selectedDistrict, split = " ")[[1]] |
+    "South" %in% strsplit(selectedDistrict, split = " ")[[1]] |
+    "West" %in% strsplit(selectedDistrict, split = " ")[[1]]
+    ) {
+     dn <- paste(
+       selectedState,
+       strsplit(selectedDistrict, split = " ")[[1]][3],
+       sep = " "
+     )
+     return(dn)
+  } else {
+    dn <- paste(
+      selectedState,
+      strsplit(selectedDistrict, split = " ")[[1]][3],
+      sep = " "
+    )
+    return(dn)
+  }
 }
 
 # Addressing single district states
