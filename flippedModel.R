@@ -12,9 +12,9 @@ flippedScaled <- dfScaled[
 flipped    <- length((flippedScaled %>% subset(flipped == TRUE))$flipped)
 notFlipped <- length((flippedScaled %>% subset(flipped == FALSE))$flipped)
 
-set.seed(1492)
+set.seed(42)
 propSample <- sample(
-  1:nrow(flippedScaled %>% subset(party == "D" & flipped == FALSE)), 87
+  1:nrow(flippedScaled %>% filter(party == "D" & flipped == FALSE)), 87
 )
 
 flippedScaled$district <- rownames(flippedScaled)
@@ -22,7 +22,7 @@ rownames(flippedScaled) <- NULL
 
 propFlipped <- rbind(
   flippedScaled %>% subset(party == "R" & flipped == TRUE),
-  flippedScaled[propSample, ]
+  flippedScaled %>% filter(party == "D" & flipped == FALSE) %>% .[propSample, ]
 )
 
 propFlipped <- propFlipped[sample(nrow(propFlipped)), ]
@@ -39,34 +39,36 @@ testProp$flipped <- as.character(testProp$flipped)
 trainProp$flipped <- factor(trainProp$flipped, levels = c("TRUE", "FALSE"))
 testProp$flipped <- factor(testProp$flipped, levels = c("TRUE", "FALSE"))
 
-# for (i in 1:25) {
-#   set.seed(1812)
-#   treeModel <- randomForest(flipped ~ ., data = trainProp, ntree = i)
-#   sprintf("%d\n-----------------------------------------------------\n", i)
-#   flipped.train.preds <- data.frame(
-#     predicted = treeModel$predicted, actual = trainProp$flipped
-#   )
-#   
-#   train.flipped.cm <- yardstick::conf_mat(
-#     flipped.train.preds, truth = actual, estimate = predicted
-#   )
-#   
-#   print(i)
-#   print(
-#     summary(train.flipped.cm) %>%
-#       subset(
-#         .metric == "accuracy" |
-#           .metric == "mcc" |
-#           .metric == "precision" |
-#           .metric == "recall" |
-#           .metric == "f_meas"
-#       )
-#   )
-# }
+for (i in 1:25) {
+  set.seed(1)
+  treeModel <- randomForest(flipped ~ ., data = trainProp, ntree = i)
+  sprintf("%d\n-----------------------------------------------------\n", i)
+  flipped.train.preds <- data.frame(
+    district = trainProp$district,
+    predicted = propModel$predicted,
+    actual = trainProp$flipped
+  )
 
-set.seed(1812)
+  train.flipped.cm <- yardstick::conf_mat(
+    flipped.train.preds, truth = actual, estimate = predicted
+  )
+
+  print(i)
+  print(
+    summary(train.flipped.cm) %>%
+      subset(
+        .metric == "accuracy" |
+          .metric == "mcc" |
+          .metric == "precision" |
+          .metric == "recall" |
+          .metric == "f_meas"
+      )
+  )
+}
+
+set.seed(42)
 propModel <- randomForest(
-  flipped ~ ., data = trainProp %>% select(1:65), ntree = 25
+  flipped ~ ., data = trainProp %>% select(1:65), ntree = 1
   )
 
 flipped.train.preds <- data.frame(
@@ -83,23 +85,25 @@ flipped.test.preds <- data.frame(
 )
 
 flipped.preds <- rbind(flipped.train.preds, flipped.test.preds)
-for (col in colnames(flipped.preds)) {
+for (col in colnames(flipped.preds)[2:3]) {
   flipped.preds[[col]] <- as.logical(flipped.preds[[col]])
   }
 
 flippedResult <- function(selectedState, selectedDistrict) {
   result <- list()
   if (reverseDistrict(selectedState, selectedDistrict) %!in% flipped.preds$district) {
+    result$in_sample <- FALSE
     result$actual    <- FALSE
     result$predicted <- FALSE
   } else {
+    result$in_sample <- TRUE
     result$actual <- flipped.preds %>%
       filter(district == reverseDistrict(selectedState, selectedDistrict)) %>%
-      .$actual[1]
+      .$actual
     
     result$predicted <- flipped.preds %>%
       filter(district == reverseDistrict(selectedState, selectedDistrict)) %>%
-      .$predicted[1]
+      .$predicted
   }
   return(result)
 }
