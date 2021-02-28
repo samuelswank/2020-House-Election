@@ -16,7 +16,7 @@ ui <- fluidPage(
     column(4, uiOutput("selectedDistrict"))
   ),
   fluidRow(
-    column(4, plotOutput("stateMap")),
+    column(4, uiOutput("party"), plotOutput("stateMap")),
     column(4, plotOutput("districtMap")),
     column(4, uiOutput("flipped"), uiOutput("flippedActual"))
     ),
@@ -67,27 +67,55 @@ server <- function(input, output, session) {
       input$selectedDistrict == "" |
       is.null(reverseDistrict(input$selectedState, input$selectedDistrict)) == TRUE
       ) {
+      output$party            <- NULL
+      output$flipped          <- NULL
       output$flippedActual    <- NULL
       output$flippedPredicted <- NULL
     } else if (
       reverseDistrict(input$selectedState, input$selectedDistrict) %!in%
       flipped.preds$district
       ) {
+      output$party            <- NULL
+      output$flipped          <- NULL
       output$flippedActual    <- NULL
       output$flippedPredicted <- NULL
     } else {
-      output$flipped <- renderUI({h1("Flipped Republican?")})
       if (flippedResult(input$selectedState, input$selectedDistrict)$in_sample == FALSE) {
         output$flippedAcutal   <- NULL
         output$flippedPreicted <- NULL
       } else {
+        output$party <- renderUI({h2("Party Affiliation Model")})
+        output$flipped <- renderUI({h2("Flipped Model")})
         if (flippedResult(input$selectedState, input$selectedDistrict)$actual == TRUE) {
-          output$flippedActual <- renderUI({tags$b("FLIPPED")})
-        } else {output$flippedActual <- renderUI({tags$b("NOT FLIPPED")})}
-
+          output$flippedActual <- renderUI({
+            tags$div(
+              style = "margin: 0; position: absolute; top: 300%;",
+              tags$b(style = "font-size: 25px", "FLIPPED REPUBLICAN")
+              )
+            })
+        } else {
+          output$flippedActual <- renderUI({
+            tags$div(
+              style = "margin: 0; position: absolute; top: 300%;",
+              tags$b(style = "font-size: 25px", "STAYED DEMOCRAT")
+            )
+          })
+        }
         if (flippedResult(input$selectedState, input$selectedDistrict)$predicted == TRUE) {
-          output$flippedPredicted <- renderUI({tags$b("FLIPPED")})
-        } else {output$flippedPredicted <- renderUI({tags$b("NOT FLIPPED")})}
+          output$flippedPredicted <- renderUI({
+            tags$div(
+              style = "margin: 0; position: absolute; top: 300%;",
+              tags$b(style = "font-size: 25px", "FLIPPED REPUBLICAN")
+            )
+          })
+        } else {
+          output$flippedPredicted <- renderUI({
+            tags$div(
+              style = "margin: 0; position: absolute; top: 300%;",
+              tags$b(style = "font-size: 25px", "STAYED DEMOCRAT")
+            )
+          })
+        }
       }
     }
   })
