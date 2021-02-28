@@ -57,6 +57,12 @@ flipped.test.preds <- data.frame(
   actual = testProp$flipped
 )
 
+# test.flipped.cm <- yardstick::conf_mat(
+#   flipped.test.preds, truth = actual, estimate = predicted
+# )
+# 
+# summary(test.flipped.cm)
+
 flipped.preds <- rbind(flipped.train.preds, flipped.test.preds)
 for (col in colnames(flipped.preds)[2:3]) {
   flipped.preds[[col]] <- as.logical(flipped.preds[[col]])
