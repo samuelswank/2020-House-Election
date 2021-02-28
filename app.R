@@ -23,7 +23,7 @@ ui <- fluidPage(
   fluidRow(
     column(4, plotOutput("predictedState")),
     column(4, plotOutput("predictedDistrict")),
-    column(4, textOutput("flippedPredicted"), uiOutput("flippedPredicted"))
+    column(4, uiOutput("flippedPredicted"))
     )
 )
 
@@ -65,7 +65,6 @@ server <- function(input, output, session) {
   observeEvent(input$selectedDistrict, {
     if (
       input$selectedDistrict == "" |
-      input$selectedDistrict == "Congressional District (At Large)" |
       is.null(reverseDistrict(input$selectedState, input$selectedDistrict)) == TRUE
       ) {
       output$flippedActual    <- NULL
