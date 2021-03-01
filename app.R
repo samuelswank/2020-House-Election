@@ -62,6 +62,15 @@ server <- function(input, output, session) {
     }
   })
   
+  flippedText <- function(resultString) {
+    renderUI({
+      tags$div(
+        style = "margin: 0; position: absolute; top: 300%;",
+        tags$b(style = "font-size: 25px", resultString)
+      )
+    })
+  }
+  
   observeEvent(input$selectedDistrict, {
     if (
       input$selectedDistrict == "" |
@@ -100,34 +109,14 @@ server <- function(input, output, session) {
           )
         })
         if (flippedResult(input$selectedState, input$selectedDistrict)$actual == TRUE) {
-          output$flippedActual <- renderUI({
-            tags$div(
-              style = "margin: 0; position: absolute; top: 300%;",
-              tags$b(style = "font-size: 25px", "FLIPPED REPUBLICAN")
-              )
-            })
+          output$flippedActual <- flippedText("FLIPPED REPUBLICAN")
         } else {
-          output$flippedActual <- renderUI({
-            tags$div(
-              style = "margin: 0; position: absolute; top: 300%;",
-              tags$b(style = "font-size: 25px", "STAYED DEMOCRAT")
-            )
-          })
+          output$flippedActual <- flippedText("STAYED DEMOCRAT")
         }
         if (flippedResult(input$selectedState, input$selectedDistrict)$predicted == TRUE) {
-          output$flippedPredicted <- renderUI({
-            tags$div(
-              style = "margin: 0; position: absolute; top: 300%;",
-              tags$b(style = "font-size: 25px", "FLIPPED REPUBLICAN")
-            )
-          })
+          output$flippedPredicted <- flippedText("FLIPPED REPUBLICAN")
         } else {
-          output$flippedPredicted <- renderUI({
-            tags$div(
-              style = "margin: 0; position: absolute; top: 300%;",
-              tags$b(style = "font-size: 25px", "STAYED DEMOCRAT")
-            )
-          })
+          output$flippedPredicted <- flippedText("STAYED DEMOCRAT")
         }
       }
     }
