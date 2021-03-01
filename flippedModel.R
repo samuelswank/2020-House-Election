@@ -9,10 +9,8 @@ flippedScaled <- dfScaled[
   , !names(dfScaled) %in% c("districtDemographics"), drop = F
 ]
 
-flipped    <- length((flippedScaled %>% subset(flipped == TRUE))$flipped)
-notFlipped <- length((flippedScaled %>% subset(flipped == FALSE))$flipped)
-
-set.seed(19)
+# set.seed(1930)
+set.seed(1930)
 propSample <- sample(
   1:nrow(flippedScaled %>% filter(party == "D" & flipped == FALSE)), 37
 )
@@ -39,9 +37,11 @@ testProp$flipped <- as.character(testProp$flipped)
 trainProp$flipped <- factor(trainProp$flipped, levels = c("TRUE", "FALSE"))
 testProp$flipped <- factor(testProp$flipped, levels = c("TRUE", "FALSE"))
 
-set.seed(42)
+# set.seed(1492)
+set.seed(1492)
+# ntree = 200
 propModel <- randomForest(
-  flipped ~ ., data = trainProp %>% select(1:65), ntree = 25
+  flipped ~ ., data = trainProp %>% select(1:65), ntree = 325
   )
 
 flipped.train.preds <- data.frame(
@@ -57,11 +57,11 @@ flipped.test.preds <- data.frame(
   actual = testProp$flipped
 )
 
-# test.flipped.cm <- yardstick::conf_mat(
-#   flipped.test.preds, truth = actual, estimate = predicted
-# )
-# 
-# summary(test.flipped.cm)
+test.flipped.cm <- yardstick::conf_mat(
+  flipped.test.preds, truth = actual, estimate = predicted
+)
+
+summary(test.flipped.cm)
 
 flipped.preds <- rbind(flipped.train.preds, flipped.test.preds)
 for (col in colnames(flipped.preds)[2:3]) {
