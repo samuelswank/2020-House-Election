@@ -17,7 +17,7 @@ ui <- fluidPage(
   ),
   fluidRow(
     column(4, uiOutput("party"), plotOutput("stateMap")),
-    column(4, plotOutput("districtMap")),
+    column(4, uiOutput("filler"), plotOutput("districtMap")),
     column(4, uiOutput("flipped"), uiOutput("flippedActual"))
     ),
   fluidRow(
@@ -68,6 +68,7 @@ server <- function(input, output, session) {
       is.null(reverseDistrict(input$selectedState, input$selectedDistrict)) == TRUE
       ) {
       output$party            <- NULL
+      output$filler           <- NULL
       output$flipped          <- NULL
       output$flippedActual    <- NULL
       output$flippedPredicted <- NULL
@@ -76,6 +77,7 @@ server <- function(input, output, session) {
       flipped.preds$district
       ) {
       output$party            <- NULL
+      output$filler           <- NULL
       output$flipped          <- NULL
       output$flippedActual    <- NULL
       output$flippedPredicted <- NULL
@@ -84,8 +86,19 @@ server <- function(input, output, session) {
         output$flippedAcutal   <- NULL
         output$flippedPreicted <- NULL
       } else {
-        output$party <- renderUI({h2("Party Affiliation Model")})
-        output$flipped <- renderUI({h2("Flipped Model")})
+        output$party   <- renderUI({
+          tags$div(
+            style = "text-align: center", tags$h2("Party Affiliation Model")
+            )
+          })
+        output$filler  <- renderUI({
+          h2("----------------------------------------------------")
+          })
+        output$flipped   <- renderUI({
+          tags$div(
+            style = "text-align: left", tags$h2("Flipped Model")
+          )
+        })
         if (flippedResult(input$selectedState, input$selectedDistrict)$actual == TRUE) {
           output$flippedActual <- renderUI({
             tags$div(
