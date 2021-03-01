@@ -10,7 +10,7 @@ flippedScaled <- dfScaled[
 ]
 
 # set.seed(1930)
-set.seed(1930)
+set.seed(1473) # set.seed(1473) 
 propSample <- sample(
   1:nrow(flippedScaled %>% filter(party == "D" & flipped == FALSE)), 37
 )
@@ -39,9 +39,9 @@ testProp$flipped <- factor(testProp$flipped, levels = c("TRUE", "FALSE"))
 
 # set.seed(1492)
 set.seed(1492)
-# ntree = 200
+# ntree = 2
 propModel <- randomForest(
-  flipped ~ ., data = trainProp %>% select(1:65), ntree = 325
+  flipped ~ ., data = trainProp %>% select(1:65), ntree = 14
   )
 
 flipped.train.preds <- data.frame(
@@ -49,6 +49,12 @@ flipped.train.preds <- data.frame(
   predicted = propModel$predicted,
   actual = trainProp$flipped
   )
+
+test.flipped.cm <- yardstick::conf_mat(
+  flipped.train.preds, truth = actual, estimate = predicted
+)
+
+summary(train.flipped.cm)
 
 flipped.test.preds <- propModel %>% predict(testProp %>% select(1:65))
 flipped.test.preds <- data.frame(
