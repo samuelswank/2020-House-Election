@@ -307,7 +307,9 @@ rpart.plot(flippedTree2)
 ```{r}
 set.seed(2020)
 flippedTree3 <- rpart(
-  flipped ~ ten_to_nineteen, method='class', data = trainProp %>% select(1:65)
+  flipped ~ ten_to_nineteen,
+  method='class',
+  data = trainProp %>% select(1:65)
   )
 
 printcp(flippedTree3)
@@ -321,7 +323,8 @@ rpart.plot(flippedTree3)
 set.seed(2020)
 flippedTree4 <- rpart(
   flipped ~ diff_state + med_age,
-  method='class', data = trainProp %>% select(1:65)
+  method='class',
+  data = trainProp %>% select(1:65)
   )
 
 printcp(flippedTree4)
@@ -330,3 +333,34 @@ printcp(flippedTree4)
 ```{r}
 rpart.plot(flippedTree4)
 ```
+
+```{r}
+set.seed(2020)
+flippedTree5 <- rpart(
+  flipped ~ black,
+  method='class',
+  data = trainProp %>% select(1:65)
+  )
+
+printcp(flippedTree5)
+```
+
+```{r}
+rpart.plot(flippedTree5)
+```
+
+```{r}
+set.seed(2020)
+flippedTree6 <- rpart(
+  flipped ~ walking_public_transit,
+  method='class',
+  data = trainProp %>% select(1:65)
+  )
+
+printcp(flippedTree6)
+```
+
+```{r}
+rpart.plot(flippedTree6)
+```
+
