@@ -50,11 +50,11 @@ flipped.train.preds <- data.frame(
   actual = trainProp$flipped
   )
 
-test.flipped.cm <- yardstick::conf_mat(
-  flipped.train.preds, truth = actual, estimate = predicted
-)
-
-summary(train.flipped.cm)
+# train.flipped.cm <- yardstick::conf_mat(
+#   flipped.train.preds, truth = actual, estimate = predicted
+# )
+# 
+# summary(train.flipped.cm)
 
 flipped.test.preds <- propModel %>% predict(testProp %>% select(1:65))
 flipped.test.preds <- data.frame(
@@ -63,11 +63,11 @@ flipped.test.preds <- data.frame(
   actual = testProp$flipped
 )
 
-test.flipped.cm <- yardstick::conf_mat(
-  flipped.test.preds, truth = actual, estimate = predicted
-)
-
-summary(test.flipped.cm)
+# test.flipped.cm <- yardstick::conf_mat(
+#   flipped.test.preds, truth = actual, estimate = predicted
+# )
+# 
+# summary(test.flipped.cm)
 
 flipped.preds <- rbind(flipped.train.preds, flipped.test.preds)
 for (col in colnames(flipped.preds)[2:3]) {
