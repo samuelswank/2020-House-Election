@@ -9,7 +9,7 @@ stateChoices <- state.name %>% R.utils::insert(1, c(""))
 
 ui <- fluidPage(
   # Title
-  fluidRow(column(12, centeredText(h1("2020 House Elections Model")))),
+  fluidRow(column(12, centerText(h1("2020 House Elections Model")))),
   # Dropdown Menu Row
   fluidRow(
     column(3),
@@ -34,7 +34,10 @@ ui <- fluidPage(
     column(2)
     ),
   fluidRow(column(12, uiOutput("statistics"))),
-  fluidRow(column(1), column(3, h3("Importances"), tableOutput("importances")))
+  fluidRow(
+    column(1),
+    column(3, uiOutput("importancesTitle"), tableOutput("importancesTable"))
+    )
 )
 
 
@@ -45,7 +48,7 @@ server <- function(input, output, session) {
       )
   })
   
-  statistics <- centeredText(h2("Statistics"))
+  statistics <- centerText(h2("Statistics"))
   
   # Party Affiliation Model Maps
   observeEvent(input$selectedState, {
@@ -66,7 +69,8 @@ server <- function(input, output, session) {
           )
       })
       output$statistics <- renderUI({statistics})
-      output$importances <- renderTable(topTen, rownames = TRUE)
+      output$importancesTitle <- renderUI({centerText(h3("Importances"))})
+      output$importancesTable <- renderTable(topTen, rownames = TRUE)
     } else if (input$selectedState %in% atLarge) {
       output$stateMap <- renderPlot({plotState(input$selectedState)})
       output$districtMap <- renderPlot({plotState(input$selectedState)})
@@ -77,11 +81,11 @@ server <- function(input, output, session) {
         plotPredicted(input$selectedState, NA, geography = "state")
       })
       output$statistics <- renderUI({statistics})
-      output$importances <- renderTable(topTen, rownames = TRUE)
+      output$importancesTitle <- renderUI({centerText(h3("Importances"))})
+      output$importancesTable <- renderTable(topTen, rownames = TRUE)
     }
   })
   
-  output$importancesTable <- renderTable(topTen, rownames = TRUE)
 }
 
 shinyApp(ui, server)
