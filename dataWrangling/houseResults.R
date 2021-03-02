@@ -1,5 +1,7 @@
 library(tidyverse)
 
+# See data directory readme in master branch for a not on the data and their
+# source
 houseResults <- rjson::fromJSON(file = "data/houseResults.json")
 
 stateAbb           <- c()

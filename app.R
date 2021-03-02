@@ -8,6 +8,7 @@ stateChoices <- state.name %>% R.utils::insert(1, c(""))
 '%!in%' <- function(x,y){!('%in%'(x,y))}
 
 ui <- fluidPage(
+  # Dropdown Menu Row
   fluidRow(
     column(
       4, 
@@ -15,11 +16,13 @@ ui <- fluidPage(
       ),
     column(4, uiOutput("selectedDistrict"))
   ),
+  # Actual Row
   fluidRow(
     column(4, uiOutput("party"), plotOutput("stateMap")),
     column(4, uiOutput("filler"), plotOutput("districtMap")),
     column(4, uiOutput("flipped"), uiOutput("flippedActual"))
     ),
+  # Predicted Row
   fluidRow(
     column(4, plotOutput("predictedState")),
     column(4, plotOutput("predictedDistrict")),
@@ -35,6 +38,7 @@ server <- function(input, output, session) {
       )
   })
   
+  # Party Affiliation Model Maps
   observeEvent(input$selectedState, {
     if (input$selectedState == "") {
       output$stateMap     <- NULL
@@ -62,6 +66,7 @@ server <- function(input, output, session) {
     }
   })
   
+  # flippedText helper function
   flippedText <- function(resultString) {
     renderUI({
       tags$div(
@@ -71,6 +76,8 @@ server <- function(input, output, session) {
     })
   }
   
+  
+  # Flipped District Model
   observeEvent(input$selectedDistrict, {
     if (
       input$selectedDistrict == "" |
@@ -95,7 +102,7 @@ server <- function(input, output, session) {
         output$flippedAcutal   <- NULL
         output$flippedPreicted <- NULL
       } else {
-        output$party   <- renderUI({
+        output$party <- renderUI({
           tags$div(
             style = "text-align: center", tags$h2("Party Affiliation Model")
             )
@@ -108,11 +115,15 @@ server <- function(input, output, session) {
             style = "text-align: left", tags$h2("Flipped Model")
           )
         })
+        
+        # Flipped Actual Text
         if (flippedResult(input$selectedState, input$selectedDistrict)$actual == TRUE) {
           output$flippedActual <- flippedText("FLIPPED REPUBLICAN")
         } else {
           output$flippedActual <- flippedText("STAYED DEMOCRAT")
         }
+        
+        # Flipped Predicted Text
         if (flippedResult(input$selectedState, input$selectedDistrict)$predicted == TRUE) {
           output$flippedPredicted <- flippedText("FLIPPED REPUBLICAN")
         } else {

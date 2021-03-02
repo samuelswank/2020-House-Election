@@ -2,11 +2,18 @@ library(tidyverse)
 source("partyModel.R")
 source("dataWrangling/houseResults.R")
 
+# Congressional District sf dataframe
 cd117 <- tigris::congressional_districts(year = 2019)
+
+# Party Affiliation Predictions
 partyPreds <- pa.preds
+
+# Addressing  "(At Large)" Districts
 partyPreds$district <- partyPreds$district %>%
   sapply(function(x) gsub( " *\\(.*?\\) *", " 1", x))
 
+# Combines House Results, Party Affiliation Predictions, and each district's
+# appropriate shape files
 stateData <- function(selectedState) {
   stateParty <- hr %>%
     filter(fipsCode == fipsList[[selectedState]]$st) %>%
@@ -16,8 +23,10 @@ stateData <- function(selectedState) {
   if (selectedState %in% atLarge) {
     stateParty$district[1] <- "Congressional District (at Large)"
   }
-
+  
+  # STATEFP  - State Fips Code
   colnames(stateParty)[1] <- "STATEFP"
+  # NAMELSAD - Congressional District
   colnames(stateParty)[2] <- "NAMELSAD"
 
   shapeFile <- cd117  %>%
@@ -27,6 +36,7 @@ stateData <- function(selectedState) {
   return(shapeFile)
 }
 
+# Subsets single district out of state sf dataframe subset
 districtData <- function(selectedState, selectedDistrict) {
   return(stateData(selectedState) %>% filter(NAMELSAD == selectedDistrict))
 }

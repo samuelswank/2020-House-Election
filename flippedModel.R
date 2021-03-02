@@ -9,8 +9,7 @@ flippedScaled <- dfScaled[
   , !names(dfScaled) %in% c("districtDemographics"), drop = F
 ]
 
-# set.seed(1930)
-set.seed(1473) # set.seed(1473) 
+set.seed(1473)
 propSample <- sample(
   1:nrow(flippedScaled %>% filter(party == "D" & flipped == FALSE)), 37
 )
@@ -37,9 +36,8 @@ testProp$flipped <- as.character(testProp$flipped)
 trainProp$flipped <- factor(trainProp$flipped, levels = c("TRUE", "FALSE"))
 testProp$flipped <- factor(testProp$flipped, levels = c("TRUE", "FALSE"))
 
-# set.seed(1492)
+
 set.seed(1492)
-# ntree = 2
 propModel <- randomForest(
   flipped ~ ., data = trainProp %>% select(1:65), ntree = 14
   )
@@ -74,6 +72,7 @@ for (col in colnames(flipped.preds)[2:3]) {
   flipped.preds[[col]] <- as.logical(flipped.preds[[col]])
   }
 
+# flippedResult helper function for app.R
 flippedResult <- function(selectedState, selectedDistrict) {
   result <- list()
   if (reverseDistrict(selectedState, selectedDistrict) %!in% flipped.preds$district) {
