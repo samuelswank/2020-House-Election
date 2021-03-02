@@ -39,3 +39,20 @@ paDistricts <- predDistrict(pa.preds$district)
 pa.preds$state <- paStates
 pa.preds$district <- paDistricts
 pa.preds <- pa.preds[, c(4, 3, 2, 1)]
+
+varImportances <- importance(model)
+topTen <- varImportances[varImportances > 4, ] %>% sort(decreasing = TRUE)
+topTen <- as.data.frame(topTen)
+colnames(topTen)[1] <- "Importances"
+rownames(topTen) <- c(
+  "Walking/Public Transit",
+  "Renter Occupied Units",
+  "Natural-born Citizens",
+  "Commuters by Car",
+  "Owner Occupied Units",
+  "Foreign-born Citizens",
+  "Whites",
+  "Asians",
+  "Persons of Other Race",
+  "Median Rent"
+  )
