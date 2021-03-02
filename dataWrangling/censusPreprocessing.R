@@ -119,6 +119,7 @@ colnames(wholeCountry)[1] <- "district"
 n <- 435
 # 66 variables 
 
+# dataframe for storing features to be used in model
 districtDemographics <- data.frame(
   district = rep(NA, n),
   # Population Density (Total population / Land Area)
@@ -318,6 +319,8 @@ districtDemographics <- data.frame(
   stringsAsFactors = FALSE
 )
 
+# rowMaker - function for extracting raw data by congressional district to be
+# stored in above dataframe
 rowMaker <- function(congressionalDistrict) {
   varRow <- list()
   for (
@@ -1003,7 +1006,6 @@ for (i in 1:length(hr$districtDemographics)) {
 
 colnames(districtDemographics)[1] <- "districtDemographics"
 mergehr <- hr[, c("districtDemographics", "party", "flipped")]
-
 
 districtDemographics <- merge(
   districtDemographics, mergehr, by = "districtDemographics"

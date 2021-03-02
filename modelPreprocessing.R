@@ -10,10 +10,13 @@ for (col in colnames(df)) {
   } 
 }
 
+# Removing "med_smoc_mort" and "med_smoc_no_mort" because "Over $4,000" is a
+# character rather than a numerical variable.
 df <- df[
   , !names(df) %in% c("med_smoc_mort", "med_smoc_no_mort"), drop = F
   ]
 
+# scale.many function - standardizes whole columns
 scale.many <- function(dat, column.nos) {
   nms <- names(dat)
   for(col in column.nos) {
