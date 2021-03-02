@@ -8,14 +8,11 @@ library(tidyverse)
 library(randomForest)
 library(rpart)
 library(rpart.plot)
-library(logistf)
 ```
 
 ```{r}
 sessionInfo()
 ```
-
-Omit from published notebook
 
 ```{r}
 workingDir <- getwd()
@@ -33,7 +30,6 @@ workingDir <- paste(
 
 workingDir
 ```
-
 
 ```{r}
 df <- read.csv(
@@ -80,7 +76,6 @@ scale.many <- function(dat, column.nos) {
 }
 ```
 
-
 ```{r}
 to.be.scaled <- 2:(length(colnames(df)) - 2)
 dfScaled <- df %>% mutate_at(to.be.scaled, ~(scale(.) %>% as.vector))
@@ -111,6 +106,7 @@ testPA  <- subset(paScaled, sample == FALSE)
 
 print(glue::glue("({length(trainPA$party)}, {length(testPA$party)})"))
 ```
+
 ```{r}
 head(trainPA)
 ```
@@ -120,24 +116,10 @@ head(trainPA)
 head(testPA)
 ```
 
-
-The model that is used in the app
-
 ```{r}
 set.seed(42)
 pa.model <- randomForest(party ~ ., data = trainPA)
 pa.model
-```
-
-```{r}
-varImpPlot(pa.model, n.var = 10, main = "Party Affiliation Model")
-```
-
-```{r}
-varImportances <- importance(pa.model)
-topTen <- varImportances[varImportances > 4, ] %>% sort(decreasing = TRUE)
-
-topTen
 ```
 
 ```{r}
@@ -177,190 +159,14 @@ pa.preds <- bind_rows(pa.train.preds, pa.test.preds) %>%
 
 head(pa.preds)
 ```
-Fitting a single decision tree to 
 
 ```{r}
-set.seed(2020)
-paTree <- rpart(
-  party ~ .,
-  method='class',
-  data = trainPA
-  )
-
-printcp(paTree)
-```
-
-
-```{r}
-flippedScaled <- dfScaled[
-  , !names(dfScaled) %in% c("districtDemographics"), drop = F
-]
-
-flipped    <- length((flippedScaled %>% subset(flipped == TRUE))$flipped)
-notFlipped <- length((flippedScaled %>% subset(flipped == FALSE))$flipped)
-
-sprintf("Flipped Seats:   %d ", flipped - 1)
-sprintf("Unflipped Seats: %d", notFlipped + 1)
-```
-```{r}
-flippedScaled <- dfScaled[
-  , !names(dfScaled) %in% c("districtDemographics"), drop = F
-]
-
-set.seed(1473)
-propSample <- sample(
-  1:nrow(flippedScaled %>% filter(party == "D" & flipped == FALSE)), 37
-)
-
-flippedScaled$district <- rownames(flippedScaled)
-rownames(flippedScaled) <- NULL
-
-propFlipped <- rbind(
-  flippedScaled %>% subset(party == "R" & flipped == TRUE),
-  flippedScaled %>% filter(party == "D" & flipped == FALSE) %>% .[propSample, ]
-)
-
-propFlipped <- propFlipped[sample(nrow(propFlipped)), ]
-propFlipped <- propFlipped[, !names(propFlipped) %in% c("party"), drop = F]
-
-rownames(propFlipped) <- NULL
-
-trainProp <- propFlipped[1:40, ]
-testProp  <- propFlipped[41:50, ]
-
-trainProp$flipped <- as.character(trainProp$flipped)
-testProp$flipped <- as.character(testProp$flipped)
-
-trainProp$flipped <- factor(trainProp$flipped, levels = c("TRUE", "FALSE"))
-testProp$flipped <- factor(testProp$flipped, levels = c("TRUE", "FALSE"))
-
-sprintf("(%d, %d)", nrow(trainProp), nrow(testProp))
+varImpPlot(pa.model, n.var = 10, main = "Party Affiliation Model")
 ```
 
 ```{r}
-# set.seed(1492)
-set.seed(1492)
-# ntree = 200
-propModel <- randomForest(
-  flipped ~ ., data = trainProp %>% select(1:65), ntree = 14
-  )
-
-propModel
-```
-
-```{r}
-flipped.train.preds <- data.frame(
-  district = trainProp$district,
-  predicted = propModel$predicted,
-  actual = trainProp$flipped
-  )
-
-flipped.test.preds <- propModel %>% predict(testProp %>% select(1:65))
-flipped.test.preds <- data.frame(
-  district = testProp$district,
-  predicted = flipped.test.preds,
-  actual = testProp$flipped
-)
-
-test.flipped.cm <- yardstick::conf_mat(
-  flipped.test.preds, truth = actual, estimate = predicted
-)
-
-summary(test.flipped.cm)
-```
-
-```{r}
-varImportances <- importance(propModel)
-topTen <- varImportances[varImportances > 0.475, ] %>% sort(decreasing = TRUE)
+varImportances <- importance(pa.model)
+topTen <- varImportances[varImportances > 4, ] %>% sort(decreasing = TRUE)
 
 topTen
 ```
-
-```{r}
-set.seed(2020)
-flippedTree <- rpart(
-  flipped ~ ., method='class', data = trainProp %>% select(1:65)
-  )
-
-printcp(flippedTree)
-```
-
-```{r}
-rpart.plot(flippedTree)
-```
-
-```{r}
-set.seed(2020)
-flippedTree2 <- rpart(
-  flipped ~ white,
-  method='class',
-  data = trainProp %>% select(1:65)
-  )
-
-printcp(flippedTree2)
-```
-
-```{r}
-rpart.plot(flippedTree2)
-```
-
-```{r}
-set.seed(2020)
-flippedTree3 <- rpart(
-  flipped ~ ten_to_nineteen,
-  method='class',
-  data = trainProp %>% select(1:65)
-  )
-
-printcp(flippedTree3)
-```
-
-```{r}
-rpart.plot(flippedTree3)
-```
-
-```{r}
-set.seed(2020)
-flippedTree4 <- rpart(
-  flipped ~ diff_state + med_age,
-  method='class',
-  data = trainProp %>% select(1:65)
-  )
-
-printcp(flippedTree4)
-```
-
-```{r}
-rpart.plot(flippedTree4)
-```
-
-```{r}
-set.seed(2020)
-flippedTree5 <- rpart(
-  flipped ~ black,
-  method='class',
-  data = trainProp %>% select(1:65)
-  )
-
-printcp(flippedTree5)
-```
-
-```{r}
-rpart.plot(flippedTree5)
-```
-
-```{r}
-set.seed(2020)
-flippedTree6 <- rpart(
-  flipped ~ walking_public_transit,
-  method='class',
-  data = trainProp %>% select(1:65)
-  )
-
-printcp(flippedTree6)
-```
-
-```{r}
-rpart.plot(flippedTree6)
-```
-
