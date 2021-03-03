@@ -87,6 +87,25 @@ plotState <- function(selectedState) {
         axis.ticks = element_blank(),
         legend.position = "none"
       )
+  } else if (selectedState %in% atLarge) {
+    ggplot() + 
+      geom_sf(
+        stateData(selectedState),
+        mapping = aes(fill = party),
+        size = 0.75,
+        color = "black"
+      ) +
+      scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+      ylab("Actual") +
+      theme(
+        panel.background = element_blank(),
+        axis.title.y.left = element_text(
+          hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
+        ),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none"
+      )
   } else {
     if (
       min(stateData(selectedState)$area) < 0.5 &
