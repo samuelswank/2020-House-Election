@@ -1,5 +1,6 @@
 library(tidyverse)
 library(sf)
+library(ggrepel)
 source("partyModel.R")
 source("dataWrangling/houseResults.R")
 
@@ -7,6 +8,12 @@ source("dataWrangling/houseResults.R")
 cd117 <- tigris::congressional_districts(year = 2019)
 # Calculating centroids for congressional district geometries
 cd117 <- cbind(cd117, st_coordinates(st_centroid(cd117$geometry)))
+
+# Calculating area of each district polygon.
+area <- c()
+for (i in 1:nrow(cd117)) {area[i] <- st_area(cd117$geometry[[i]])}
+
+cd117$area <- area
 
 # House Results dataframe
 # Fixing flipped column so that it conveys information better
@@ -29,8 +36,6 @@ partyPreds <- pa.preds
 # Addressing  "(At Large)" Districts
 partyPreds$district <- partyPreds$district %>%
   sapply(function(x) gsub( " *\\(.*?\\) *", " 1", x))
-
-
 
 # Combines House Results, Party Affiliation Predictions, and each district's
 # appropriate shape files
@@ -83,29 +88,63 @@ plotState <- function(selectedState) {
         legend.position = "none"
       )
   } else {
-    ggplot() + 
-      geom_sf(
-        stateData(selectedState),
-        mapping = aes(fill = party),
-        size = 0.75,
-        color = "black"
-      ) +
-      scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
-      ylab("Actual") +
-      theme(
-        panel.background = element_blank(),
-        axis.title.y.left = element_text(
-          hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
-        ),
-        axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        legend.position = "none"
-      )
+    if (
+      min(stateData(selectedState)$area) < 0.5 &
+      nrow(stateData(selectedState)) > 5
+      ) {
+      ggplot() + 
+        geom_sf(
+          stateData(selectedState),
+          mapping = aes(fill = party),
+          size = 0.75,
+          color = "black"
+        ) +
+        geom_text(stateData(selectedState) %>% filter(area > 0.5), mapping = aes(X, Y, label = NAMELSAD), size = 3, fontface = "bold") +
+        geom_text_repel(
+          stateData(selectedState) %>% filter(area < 0.5),
+          mapping = aes(X, Y, label = NAMELSAD), 
+          fontface = "bold", 
+          nudge_x = c(1, -1.5, 2, 2, -1), 
+          nudge_y = c(0.25, -0.25, 0.5, 0.5, -0.5)
+        ) +
+        scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+        ylab("Actual") +
+        theme(
+          panel.background = element_blank(),
+          axis.title.y.left = element_text(
+            hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
+          ),
+          axis.text = element_blank(),
+          axis.ticks = element_blank(),
+          legend.position = "none"
+        )
+    } else {
+      ggplot() + 
+        geom_sf(
+          stateData(selectedState),
+          mapping = aes(fill = party),
+          size = 0.75,
+          color = "black"
+        ) +
+        geom_text(stateData(selectedState), mapping = aes(X, Y, label = NAMELSAD), size = 3, fontface = "bold") +
+        scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+        ylab("Actual") +
+        theme(
+          panel.background = element_blank(),
+          axis.title.y.left = element_text(
+            hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
+          ),
+          axis.text = element_blank(),
+          axis.ticks = element_blank(),
+          legend.position = "none"
+        )
     }
+  }
 }
 
 plotDistrict <- function(selectedState, selectedDistrict) {
-  if (districtData(selectedState, selectedDistrict)$flipped[1] == "FALSE") {
+  if (selectedDistrict == "") {return(NULL)}
+  else if (districtData(selectedState, selectedDistrict)$flipped[1] == "FALSE") {
     ggplot() + 
       geom_sf(
         districtData(selectedState, selectedDistrict),
