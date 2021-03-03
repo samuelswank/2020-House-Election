@@ -8,6 +8,21 @@ cd117 <- tigris::congressional_districts(year = 2019)
 # Calculating centroids for congressional district geometries
 cd117 <- cbind(cd117, st_coordinates(st_centroid(cd117$geometry)))
 
+# House Results dataframe
+# Fixing flipped column so that it conveys information better
+flipped <- c()
+for (i in 1:nrow(hr)) {
+  if (hr$party[i] == "R" & hr$flipped[i] == TRUE) {
+    flipped[i] <- "Flipped Republican"
+  } else if (hr$party[i] == "D" & hr$flipped[i] == TRUE) {
+    flipped[i] <- "Flipped Democrat"
+  } else {
+    flipped[i] <- "FALSE"
+  }
+}
+
+hr$flipped <- flipped
+
 # Party Affiliation Predictions
 partyPreds <- pa.preds
 
@@ -90,7 +105,7 @@ plotState <- function(selectedState) {
 }
 
 plotDistrict <- function(selectedState, selectedDistrict) {
-  if (districtData(selectedState, selectedDistrict)$flipped[1] == FALSE) {
+  if (districtData(selectedState, selectedDistrict)$flipped[1] == "FALSE") {
     ggplot() + 
       geom_sf(
         districtData(selectedState, selectedDistrict),
