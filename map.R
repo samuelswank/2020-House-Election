@@ -4,6 +4,8 @@ library(ggrepel)
 source("partyModel.R")
 source("dataWrangling/houseResults.R")
 
+'%!in%' <- function(x,y){!('%in%'(x,y))}
+
 # Congressional District sf dataframe
 cd117 <- tigris::congressional_districts(year = 2019)
 # Calculating centroids for congressional district geometries
@@ -30,6 +32,16 @@ for (i in 1:nrow(hr)) {
 
 hr$flipped <- flipped
 
+# For ease in labeling districts on map
+districtLabel <- c()
+districtSplit <- strsplit(hr$district, split = " ")
+
+for (i in 1:length(districtSplit)) {
+  districtLabel[i] <- districtSplit[[i]][3]
+}
+
+hr$district_label <- districtLabel
+
 # Party Affiliation Predictions
 partyPreds <- pa.preds
 
@@ -43,7 +55,7 @@ stateData <- function(selectedState) {
   stateParty <- hr %>%
     filter(fipsCode == fipsList[[selectedState]]$st) %>%
     merge(partyPreds, by = c("state", "district")) %>%
-    select(4, 2, 6, 11, 13)
+    select(4, 2, 6, 11, 12, 14)
   
   if (selectedState %in% atLarge) {
     stateParty$district[1] <- "Congressional District (at Large)"
@@ -107,58 +119,33 @@ plotState <- function(selectedState) {
         legend.position = "none"
       )
   } else {
-    if (
-      min(stateData(selectedState)$area) < 0.5 &
-      nrow(stateData(selectedState)) > 5
-      ) {
-      ggplot() + 
-        geom_sf(
-          stateData(selectedState),
-          mapping = aes(fill = party),
-          size = 0.75,
-          color = "black"
+    ggplot() + 
+      geom_sf(
+        stateData(selectedState),
+        mapping = aes(fill = party),
+        size = 0.75,
+        color = "black"
         ) +
-        geom_text(stateData(selectedState) %>% filter(area > 0.5), mapping = aes(X, Y, label = NAMELSAD), size = 3, fontface = "bold") +
-        geom_text_repel(
-          stateData(selectedState) %>% filter(area < 0.5),
-          mapping = aes(X, Y, label = NAMELSAD), 
-          fontface = "bold", 
-          nudge_x = c(1, -1.5, 2, 2, -1), 
-          nudge_y = c(0.25, -0.25, 0.5, 0.5, -0.5)
+      geom_text_repel(
+        stateData(selectedState),
+        mapping = aes(X, Y, label = district_label), 
+        fontface = "bold",
+        size = 5,
+        segment.linetype = 1,
+        max.overlaps = 10
         ) +
-        scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
-        ylab("Actual") +
-        theme(
-          panel.background = element_blank(),
-          axis.title.y.left = element_text(
-            hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
+      scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+      ylab("Actual") +
+      theme(
+        panel.background = element_blank(),
+        axis.title.y.left = element_text(
+          hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
           ),
-          axis.text = element_blank(),
-          axis.ticks = element_blank(),
-          legend.position = "none"
-        )
-    } else {
-      ggplot() + 
-        geom_sf(
-          stateData(selectedState),
-          mapping = aes(fill = party),
-          size = 0.75,
-          color = "black"
-        ) +
-        geom_text(stateData(selectedState), mapping = aes(X, Y, label = NAMELSAD), size = 3, fontface = "bold") +
-        scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
-        ylab("Actual") +
-        theme(
-          panel.background = element_blank(),
-          axis.title.y.left = element_text(
-            hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
-          ),
-          axis.text = element_blank(),
-          axis.ticks = element_blank(),
-          legend.position = "none"
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none"
         )
     }
-  }
 }
 
 plotDistrict <- function(selectedState, selectedDistrict) {
@@ -173,26 +160,6 @@ plotDistrict <- function(selectedState, selectedDistrict) {
       ) +
       scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
       labs(title = selectedDistrict) +
-      theme(
-        panel.background = element_blank(),
-        plot.title = element_text(
-          hjust = 0.5, size = 18, family = "NewCenturySchoolbook"
-        ),
-        axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        legend.position = "none"
-      )
-  } else {
-    ggplot() + 
-      geom_sf(
-        districtData(selectedState, selectedDistrict),
-        mapping = aes(fill = party), 
-        size = 0.75, 
-        color = "black"
-      ) +
-      scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
-      labs(title = selectedDistrict) +
-      geom_text(districtData(selectedState, selectedDistrict), mapping = aes(X, Y, label = flipped)) +
       theme(
         panel.background = element_blank(),
         plot.title = element_text(
@@ -227,6 +194,25 @@ plotPredicted <- function(selectedState, selectedDistrict, geography) {
           axis.ticks = element_blank(),
           legend.position = "none"
         )
+    } else if (selectedState %in% atLarge) {
+      ggplot() + 
+        geom_sf(
+          stateData(selectedState),
+          mapping = aes(fill = predicted),
+          size = 0.75,
+          color = "black"
+        ) +
+        scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+        ylab("Predicted") +
+        theme(
+          panel.background = element_blank(),
+          axis.title.y.left = element_text(
+            hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
+          ),
+          axis.text = element_blank(),
+          axis.ticks = element_blank(),
+          legend.position = "none"
+        )
     } else {
       ggplot() + 
         geom_sf(
@@ -234,6 +220,14 @@ plotPredicted <- function(selectedState, selectedDistrict, geography) {
           mapping = aes(fill = predicted),
           size = 0.75,
           color = "black"
+        ) +
+        geom_text_repel(
+          stateData(selectedState),
+          mapping = aes(X, Y, label = district_label), 
+          fontface = "bold",
+          size = 5,
+          segment.linetype = 1,
+          max.overlaps = 10
         ) +
         scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
         ylab("Predicted") +
