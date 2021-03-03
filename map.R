@@ -1,9 +1,12 @@
 library(tidyverse)
+library(sf)
 source("partyModel.R")
 source("dataWrangling/houseResults.R")
 
 # Congressional District sf dataframe
 cd117 <- tigris::congressional_districts(year = 2019)
+# Calculating centroids for congressional district geometries
+cd117 <- cbind(cd117, st_coordinates(st_centroid(cd117$geometry)))
 
 # Party Affiliation Predictions
 partyPreds <- pa.preds
@@ -12,13 +15,15 @@ partyPreds <- pa.preds
 partyPreds$district <- partyPreds$district %>%
   sapply(function(x) gsub( " *\\(.*?\\) *", " 1", x))
 
+
+
 # Combines House Results, Party Affiliation Predictions, and each district's
 # appropriate shape files
 stateData <- function(selectedState) {
   stateParty <- hr %>%
     filter(fipsCode == fipsList[[selectedState]]$st) %>%
     merge(partyPreds, by = c("state", "district")) %>%
-    select(4, 2, 6, 13)
+    select(4, 2, 6, 11, 13)
   
   if (selectedState %in% atLarge) {
     stateParty$district[1] <- "Congressional District (at Large)"
@@ -85,24 +90,46 @@ plotState <- function(selectedState) {
 }
 
 plotDistrict <- function(selectedState, selectedDistrict) {
-  ggplot() + 
-    geom_sf(
-      districtData(selectedState, selectedDistrict),
-      mapping = aes(fill = party), 
-      size = 0.75, 
-      color = "black"
+  if (districtData(selectedState, selectedDistrict)$flipped[1] == FALSE) {
+    ggplot() + 
+      geom_sf(
+        districtData(selectedState, selectedDistrict),
+        mapping = aes(fill = party), 
+        size = 0.75, 
+        color = "black"
       ) +
-    scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
-    labs(title = selectedDistrict) +
-    theme(
-      panel.background = element_blank(),
-      plot.title = element_text(
-        hjust = 0.5, size = 18, family = "NewCenturySchoolbook"
+      scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+      labs(title = selectedDistrict) +
+      theme(
+        panel.background = element_blank(),
+        plot.title = element_text(
+          hjust = 0.5, size = 18, family = "NewCenturySchoolbook"
         ),
-      axis.text = element_blank(),
-      axis.ticks = element_blank(),
-      legend.position = "none"
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none"
       )
+  } else {
+    ggplot() + 
+      geom_sf(
+        districtData(selectedState, selectedDistrict),
+        mapping = aes(fill = party), 
+        size = 0.75, 
+        color = "black"
+      ) +
+      scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+      labs(title = selectedDistrict) +
+      geom_text(districtData(selectedState, selectedDistrict), mapping = aes(X, Y, label = flipped)) +
+      theme(
+        panel.background = element_blank(),
+        plot.title = element_text(
+          hjust = 0.5, size = 18, family = "NewCenturySchoolbook"
+        ),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none"
+      )
+  }
 }
 
 plotPredicted <- function(selectedState, selectedDistrict, geography) {
