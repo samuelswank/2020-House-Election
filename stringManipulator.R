@@ -47,11 +47,18 @@ predDistrict <- function(col) {
 }
 
 # Function for reversing district names in flippedModel.R
-reverseDistrict <- function(selectedState, selectedDistrict) {
+reverseDistrict <- function(selectedState, selectedDistrict, atLarge = FALSE) {
   if (
     "(At" %in% strsplit(selectedDistrict, split = " ")[[1]] |
     selectedDistrict == ""
-    ) {return(NULL)} 
+  ) {
+    if (atLarge == "FALSE") {return(NULL)}
+    else {
+      dn <- paste(selectedState, "1", sep = " ")
+      return(dn)
+    }
+  }
+  
   else if (
     "New" %in% strsplit(selectedDistrict, split = " ")[[1]] |
     "North" %in% strsplit(selectedDistrict, split = " ")[[1]] |
