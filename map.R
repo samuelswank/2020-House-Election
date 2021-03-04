@@ -99,7 +99,7 @@ plotState <- function(selectedState) {
         axis.ticks = element_blank(),
         legend.position = "none"
       )
-  } else if (selectedState %in% atLarge) {
+  } else if (selectedState %in% atLarge | selectedState == "Hawaii") {
     ggplot() + 
       geom_sf(
         stateData(selectedState),
@@ -142,6 +142,7 @@ plotState <- function(selectedState) {
           hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
           ),
         axis.text = element_blank(),
+        axis.title.x = element_blank(),
         axis.ticks = element_blank(),
         legend.position = "none"
         )
@@ -194,7 +195,7 @@ plotPredicted <- function(selectedState, selectedDistrict, geography) {
           axis.ticks = element_blank(),
           legend.position = "none"
         )
-    } else if (selectedState %in% atLarge) {
+    } else if (selectedState %in% atLarge | selectedState == "Hawaii") {
       ggplot() + 
         geom_sf(
           stateData(selectedState),
@@ -228,7 +229,7 @@ plotPredicted <- function(selectedState, selectedDistrict, geography) {
           size = 5,
           segment.linetype = 1,
           max.overlaps = 10
-        ) +
+          ) +
         scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
         ylab("Predicted") +
         theme(
@@ -237,6 +238,7 @@ plotPredicted <- function(selectedState, selectedDistrict, geography) {
             hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
           ),
           axis.text = element_blank(),
+          axis.title.x = element_blank(),
           axis.ticks = element_blank(),
           legend.position = "none"
         )
