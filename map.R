@@ -78,6 +78,10 @@ districtData <- function(selectedState, selectedDistrict) {
   return(stateData(selectedState) %>% filter(NAMELSAD == selectedDistrict))
 }
 
+titleFormat <- element_text(
+  hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
+)
+
 plotState <- function(selectedState) {
   if (selectedState == "Alaska") {
     ggplot() + 
@@ -89,12 +93,12 @@ plotState <- function(selectedState) {
       ) +
       xlim(-180, -120) +
       scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+      ggtitle(selectedState) +
       ylab("Actual") +
       theme(
         panel.background = element_blank(),
-        axis.title.y.left = element_text(
-          hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
-        ),
+        plot.title = titleFormat,
+        axis.title.y.left = titleFormat,
         axis.text = element_blank(),
         axis.ticks = element_blank(),
         legend.position = "none"
@@ -108,12 +112,12 @@ plotState <- function(selectedState) {
         color = "black"
       ) +
       scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+      ggtitle(selectedState) +
       ylab("Actual") +
       theme(
         panel.background = element_blank(),
-        axis.title.y.left = element_text(
-          hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
-        ),
+        plot.title = titleFormat,
+        axis.title.y.left = titleFormat,
         axis.text = element_blank(),
         axis.ticks = element_blank(),
         legend.position = "none"
@@ -135,12 +139,12 @@ plotState <- function(selectedState) {
         max.overlaps = 10
         ) +
       scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+      ggtitle(selectedState) +
       ylab("Actual") +
       theme(
         panel.background = element_blank(),
-        axis.title.y.left = element_text(
-          hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
-          ),
+        plot.title = titleFormat,
+        axis.title.y.left = titleFormat,
         axis.text = element_blank(),
         axis.title.x = element_blank(),
         axis.ticks = element_blank(),
@@ -151,7 +155,70 @@ plotState <- function(selectedState) {
 
 plotDistrict <- function(selectedState, selectedDistrict) {
   if (selectedDistrict == "") {return(NULL)}
-  else if (districtData(selectedState, selectedDistrict)$flipped[1] == "FALSE") {
+  else if (
+    districtData(selectedState, selectedDistrict)$flipped[1] == "Flipped Republican" |
+    districtData(selectedState, selectedDistrict)$flipped[1] == "Flipped Democrat"
+    ) {
+    if (selectedState != "Minnesota" & selectedState != "Utah") {
+      ggplot() + 
+        geom_sf(
+          districtData(selectedState, selectedDistrict),
+          mapping = aes(fill = party), 
+          size = 0.75, 
+          color = "black"
+        ) +
+        geom_text_repel(
+          districtData(selectedState, selectedDistrict),
+          mapping = aes(X, Y, label = flipped), 
+          fontface = "bold",
+          size = 10,
+          segment.linetype = 1,
+          max.overlaps = 10
+        ) +
+        scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+        labs(title = selectedDistrict) +
+        theme(
+          panel.background = element_blank(),
+          plot.title = element_text(
+            hjust = 0.5, size = 18, family = "NewCenturySchoolbook"
+          ),
+          axis.title.x = element_blank(),
+          axis.title.y = element_blank(),
+          axis.text = element_blank(),
+          axis.ticks = element_blank(),
+          legend.position = "none"
+        )
+    } else {
+      ggplot() + 
+        geom_sf(
+          districtData(selectedState, selectedDistrict),
+          mapping = aes(fill = party), 
+          size = 0.75, 
+          color = "black"
+        ) +
+        geom_text_repel(
+          districtData(selectedState, selectedDistrict),
+          mapping = aes(X, Y, label = flipped), 
+          fontface = "bold",
+          size = 5,
+          segment.linetype = 1,
+          max.overlaps = 10
+        ) +
+        scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+        labs(title = selectedDistrict) +
+        theme(
+          panel.background = element_blank(),
+          plot.title = element_text(
+            hjust = 0.5, size = 18, family = "NewCenturySchoolbook"
+          ),
+          axis.title.x = element_blank(),
+          axis.title.y = element_blank(),
+          axis.text = element_blank(),
+          axis.ticks = element_blank(),
+          legend.position = "none"
+        )
+    }
+  } else {
     ggplot() + 
       geom_sf(
         districtData(selectedState, selectedDistrict),
@@ -185,12 +252,12 @@ plotPredicted <- function(selectedState, selectedDistrict, geography) {
         ) +
         xlim(-180, -120) +
         scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+        ggtitle(selectedState) +
         ylab("Predicted") +
         theme(
           panel.background = element_blank(),
-          axis.title.y.left = element_text(
-            hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
-          ),
+          plot.title = titleFormat,
+          axis.title.y.left = titleFormat,
           axis.text = element_blank(),
           axis.ticks = element_blank(),
           legend.position = "none"
@@ -204,12 +271,12 @@ plotPredicted <- function(selectedState, selectedDistrict, geography) {
           color = "black"
         ) +
         scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+        ggtitle(selectedState) +
         ylab("Predicted") +
         theme(
           panel.background = element_blank(),
-          axis.title.y.left = element_text(
-            hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
-          ),
+          plot.title = titleFormat,
+          axis.title.y.left = titleFormat,
           axis.text = element_blank(),
           axis.ticks = element_blank(),
           legend.position = "none"
@@ -234,9 +301,8 @@ plotPredicted <- function(selectedState, selectedDistrict, geography) {
         ylab("Predicted") +
         theme(
           panel.background = element_blank(),
-          axis.title.y.left = element_text(
-            hjust = 0.5, size = 24, family = "NewCenturySchoolbook"
-          ),
+          plot.title = titleFormat,
+          axis.title.y.left = titleFormat,
           axis.text = element_blank(),
           axis.title.x = element_blank(),
           axis.ticks = element_blank(),
