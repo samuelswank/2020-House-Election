@@ -1,7 +1,5 @@
 library(tidyverse)
 
-# source("")
-
 # Relevant Statistics
 
 # Walking/Public Transit
@@ -17,13 +15,21 @@ library(tidyverse)
 
 modelData <- read_csv("data/census/demographics/preprocessed/modelData.csv")
 
-pieChart <- function(selectedState, selectedDistrict, categories, n_seed = NULL) {
+pieChart <- function(
+  selectedState,
+  selectedDistrict,
+  categories,
+  category_strings = NULL,
+  n_seed = NULL
+  ) {
   
   c <- c()
   for (i in 1:length(categories)) {
     c[i] <- (modelData %>%
       filter(
-        districtDemographics == reverseDistrict(selectedState, selectedDistrict)
+        districtDemographics == reverseDistrict(
+          selectedState, selectedDistrict, atLarge = TRUE
+          )
         ) %>%
       select(categories) %>%
       .[[categories[i]]]) / 100
@@ -34,7 +40,13 @@ pieChart <- function(selectedState, selectedDistrict, categories, n_seed = NULL)
   sampleVec <- sample(categories, 710767, replace = TRUE, prob = c)
   counts <- table(sampleVec) %>% as.data.frame()
   
-  ggplot(data = counts, aes(x = "", y = Freq, fill = sampleVec)) +
-    geom_bar(stat = "identity", width = 1) +
-    coord_polar("y", start = 0)
+  if (is.na(category_strings) == TRUE) {
+    ggplot(data = counts, aes(x = "", y = Freq, fill = sampleVec)) +
+      geom_bar(stat = "identity", width = 1) +
+      coord_polar("y", start = 0)
+  } else {
+    ggplot(data = counts, aes(x = "", y = Freq, fill = sampleVec)) +
+      geom_bar(stat = "identity", width = 1) +
+      coord_polar("y", start = 0)
+  }
 }
