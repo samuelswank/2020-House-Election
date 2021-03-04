@@ -28,10 +28,10 @@ ui <- fluidPage(
     ),
   # Predicted Row
   fluidRow(
-    column(2),
-    column(4, plotOutput("predictedState")),
-    column(4, plotOutput("predictedDistrict")),
-    column(2)
+    column(1),
+    column(5, plotOutput("predictedState")),
+    column(5, plotOutput("predictedDistrict")),
+    column(1)
     ),
   fluidRow(column(12, uiOutput("statistics"))),
   fluidRow(
