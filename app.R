@@ -3,6 +3,7 @@ library(tidyverse)
 source("helpers.R")
 source("stringManipulator.R")
 source("map.R")
+source("statistics.R")
 
 stateChoices <- state.name %>% R.utils::insert(1, c(""))
 '%!in%' <- function(x,y){!('%in%'(x,y))}
@@ -28,15 +29,16 @@ ui <- fluidPage(
     ),
   # Predicted Row
   fluidRow(
-    column(1),
-    column(5, plotOutput("predictedState")),
-    column(5, plotOutput("predictedDistrict")),
-    column(1)
+    column(2),
+    column(4, plotOutput("predictedState")),
+    column(4, plotOutput("predictedDistrict")),
+    column(2)
     ),
   fluidRow(column(12, uiOutput("statistics"))),
   fluidRow(
     column(1),
-    column(3, uiOutput("importancesTitle"), tableOutput("importancesTable"))
+    column(3, uiOutput("importancesTitle"), tableOutput("importancesTable")),
+    column(3, uiOutput("raceTitle"), plotOutput("racePie"))
     )
 )
 
@@ -53,8 +55,10 @@ server <- function(input, output, session) {
   # Party Affiliation Model Maps
   observeEvent(input$selectedState, {
     if (input$selectedState == "") {
-      output$stateMap     <- NULL
-      output$districtMap  <- NULL
+      output$stateMap          <- NULL
+      output$districtMap       <- NULL
+      output$predictedState    <- NULL
+      output$predictedDistrict <- NULL
     } else if (input$selectedState %!in% atLarge) {
       output$stateMap <- renderPlot({plotState(input$selectedState)})
       output$districtMap <- renderPlot({
@@ -68,9 +72,7 @@ server <- function(input, output, session) {
           input$selectedState, input$selectedDistrict, geography = "district"
           )
       })
-      output$statistics <- renderUI({statistics})
-      output$importancesTitle <- renderUI({centerText(h3("Importances"))})
-      output$importancesTable <- renderTable(topTen, rownames = TRUE)
+      
     } else if (input$selectedState %in% atLarge) {
       output$stateMap <- renderPlot({plotState(input$selectedState)})
       output$districtMap <- renderPlot({plotState(input$selectedState)})
@@ -80,12 +82,25 @@ server <- function(input, output, session) {
       output$predictedDistrict <- renderPlot({
         plotPredicted(input$selectedState, NA, geography = "state")
       })
-      output$statistics <- renderUI({statistics})
-      output$importancesTitle <- renderUI({centerText(h3("Importances"))})
-      output$importancesTable <- renderTable(topTen, rownames = TRUE)
     }
   })
   
+  observeEvent(input$selectedDistrict, {
+    if (input$selectedDistrict != "") {
+      output$statistics <- renderUI({statistics})
+      output$importancesTitle <- renderUI({centerText(h3("Importances"))})
+      output$importancesTable <- renderTable(topTen, rownames = TRUE)
+      output$raceTitle  <- renderUI({centerText(h3("Race"))})
+      output$racePie <- renderPlot(width = 425, height = 425, expr = {
+        pieChart(
+          input$selectedState,
+          input$selectedDistrict,
+          colnames(modelData)[7:13],
+          n_seed = 42
+          )
+        })
+    }
+  })
 }
 
 shinyApp(ui, server)
