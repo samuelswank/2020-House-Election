@@ -34,11 +34,16 @@ ui <- fluidPage(
     column(4, plotOutput("predictedDistrict")),
     column(2)
     ),
-  fluidRow(column(12, uiOutput("statistics"))),
+  fluidRow(
+    column(2),
+    column(4, uiOutput("statistics")),
+    column(4, uiOutput("statInput")),
+    column(2)
+    ),
   fluidRow(
     column(1),
     column(3, uiOutput("importancesTitle"), tableOutput("importancesTable")),
-    column(3, uiOutput("raceTitle"), plotOutput("racePie"))
+    column(3, uiOutput("statTitle"), plotOutput("statPlot"))
     )
 )
 
@@ -88,18 +93,49 @@ server <- function(input, output, session) {
   observeEvent(input$selectedDistrict, {
     if (input$selectedDistrict != "") {
       output$statistics <- renderUI({statistics})
+      output$statInput <- renderUI({
+        selectInput(
+          "selectedChart", "Chart", choices = c(
+            "",
+            "Race",
+            "Native-born and Naturalized Citizens",
+            "Commuter Method",
+            "Residential Data"
+            ),
+          selected = ""
+          )
+      })
       output$importancesTitle <- renderUI({centerText(h3("Importances"))})
       output$importancesTable <- renderTable(topTen, rownames = TRUE)
-      output$raceTitle  <- renderUI({centerText(h3("Race"))})
-      output$racePie <- renderPlot(width = 425, height = 425, expr = {
-        pieChart(
-          input$selectedState,
-          input$selectedDistrict,
-          colnames(modelData)[7:13],
-          category_strings = NULL,
-          n_seed = 42
-          )
-        })
+      
+      observeEvent(input$selectedChart, {
+        if (is.null(input$selectedChart) == TRUE) {
+          output$statPlot <- NULL
+          output$statTitle  <- NULL
+        } else if (input$selectedChart == "") {
+          output$statPlot <- NULL
+          output$statTitle  <- NULL
+        } else if (input$selectedChart == "Race") {
+          output$statTitle  <- renderUI({centerText(h3("Race"))})
+          output$statPlot <- renderPlot(width = 425, height = 575, expr = {
+            pieChart(
+              input$selectedState,
+              input$selectedDistrict,
+              colnames(modelData)[7:13],
+              category_strings = c(
+                "American Indians",
+                "Asians",
+                "Blacks",
+                "Pacific Islanders",
+                "Multiracial Persons",
+                "Persons of Other Races",
+                "White"
+              ),
+              n_seed = 42
+            )
+          })
+        }
+      })
     }
   })
 }
