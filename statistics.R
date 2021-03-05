@@ -15,6 +15,28 @@ library(tidyverse)
 
 modelData <- read_csv("data/census/demographics/preprocessed/modelData.csv")
 
+chartData <- function(
+  selectedState, selectedDistrict, categories, n_seed = NULL
+) {
+  c <- c()
+  for (i in 1:length(categories)) {
+    c[i] <- (modelData %>%
+               filter(
+                 districtDemographics == reverseDistrict(
+                   selectedState, selectedDistrict, atLarge = TRUE
+                 )
+               ) %>%
+               select(categories) %>%
+               .[[categories[i]]]) / 100
+  }
+  
+  if (is.null(n_seed) == TRUE) {set.seed(n_seed)}
+  
+  sampleVec <- sample(categories, 710767, replace = TRUE, prob = c)
+  counts <- table(sampleVec) %>% as.data.frame()
+  return(counts)
+}
+
 pieChart <- function(
   selectedState,
   selectedDistrict,
@@ -24,22 +46,7 @@ pieChart <- function(
   n_seed = NULL
   ) {
   
-  c <- c()
-  for (i in 1:length(categories)) {
-    c[i] <- (modelData %>%
-      filter(
-        districtDemographics == reverseDistrict(
-          selectedState, selectedDistrict, atLarge = TRUE
-          )
-        ) %>%
-      select(categories) %>%
-      .[[categories[i]]]) / 100
-  }
-
-  if (is.null(n_seed) == TRUE) {set.seed(n_seed)}
-  
-  sampleVec <- sample(categories, 710767, replace = TRUE, prob = c)
-  counts <- table(sampleVec) %>% as.data.frame()
+  counts <- chartData(selectedState, selectedDistrict, categories, n_seed)
   
   if (is.null(category_strings) == TRUE) {
     ggplot(data = counts, aes(x = "", y = Freq, fill = sampleVec)) +
