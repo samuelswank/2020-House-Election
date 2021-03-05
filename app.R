@@ -96,6 +96,7 @@ server <- function(input, output, session) {
           input$selectedState,
           input$selectedDistrict,
           colnames(modelData)[7:13],
+          category_strings = NULL,
           n_seed = 42
           )
         })
