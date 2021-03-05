@@ -116,7 +116,7 @@ server <- function(input, output, session) {
           output$statPlot <- NULL
           output$statTitle  <- NULL
         } else if (input$selectedChart == "Race") {
-          output$statTitle  <- renderUI({centerText(h3("Race"))})
+          output$statTitle <- renderUI({centerText(h3(input$selectedChart))})
           output$statPlot <- renderPlot(width = 425, height = 575, expr = {
             pieChart(
               input$selectedState,
@@ -131,6 +131,23 @@ server <- function(input, output, session) {
                 "Persons of Other Races",
                 "White"
               ),
+              n_seed = 42
+            )
+          })
+        } else if (input$selectedChart == "Native-born and Naturalized Citizens") {
+          output$statTitle <- renderUI({centerText(h3(input$selectedChart))})
+          output$statPlot <- renderPlot(width = 425, height = 575, expr = {
+            barChart(
+              input$selectedState,
+              input$selectedDistricdt,
+              categories = colnames(modelData)[19:23],
+              # category_strings = c(
+              #   "Born Abroad or in US Territory",
+              #   "Born in State",
+              #   "Born Out of State",
+              #   "Foreign-born (Naturalized)",
+              #   "Natural Born"
+              #   ),
               n_seed = 42
             )
           })
