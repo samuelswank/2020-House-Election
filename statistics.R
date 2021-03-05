@@ -20,6 +20,7 @@ pieChart <- function(
   selectedDistrict,
   categories,
   category_strings = NULL,
+  fill = NULL,
   n_seed = NULL
   ) {
   
@@ -40,13 +41,27 @@ pieChart <- function(
   sampleVec <- sample(categories, 710767, replace = TRUE, prob = c)
   counts <- table(sampleVec) %>% as.data.frame()
   
-  if (is.na(category_strings) == TRUE) {
+  if (is.null(category_strings) == TRUE) {
     ggplot(data = counts, aes(x = "", y = Freq, fill = sampleVec)) +
       geom_bar(stat = "identity", width = 1) +
-      coord_polar("y", start = 0)
+      coord_polar("y", start = 0) +
+      scale_fill_discrete(name = "") +
+      theme(
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank()
+      )
   } else {
     ggplot(data = counts, aes(x = "", y = Freq, fill = sampleVec)) +
       geom_bar(stat = "identity", width = 1) +
-      coord_polar("y", start = 0)
+      coord_polar("y", start = 0) +
+      scale_fill_discrete(name = "", labels = category_strings) +
+      theme(
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank()
+      )
   }
 }
