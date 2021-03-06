@@ -136,10 +136,10 @@ server <- function(input, output, session) {
           })
         } else if (input$selectedChart == "Native-born and Naturalized Citizens") {
           output$statTitle <- renderUI({centerText(h3(input$selectedChart))})
-          output$statPlot <- renderPlot(width = 425, height = 575, expr = {
+          output$statPlot <- renderPlot(expr = {
             barChart(
               input$selectedState,
-              input$selectedDistricdt,
+              input$selectedDistrict,
               categories = colnames(modelData)[19:23],
               # category_strings = c(
               #   "Born Abroad or in US Territory",
@@ -148,6 +148,9 @@ server <- function(input, output, session) {
               #   "Foreign-born (Naturalized)",
               #   "Natural Born"
               #   ),
+              grouping = c(
+                "Natural", "Natural", "Natural", "Naturalized", "Natural"
+                ),
               n_seed = 42
             )
           })
