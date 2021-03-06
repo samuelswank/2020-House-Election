@@ -16,7 +16,7 @@ library(tidyverse)
 modelData <- read_csv("data/census/demographics/preprocessed/modelData.csv")
 
 chartData <- function(
-  selectedState, selectedDistrict, categories, n_seed = NULL
+  selectedState, selectedDistrict, categories, grouping = NULL, n_seed = NULL
 ) {
   c <- c()
   for (i in 1:length(categories)) {
@@ -34,6 +34,12 @@ chartData <- function(
   
   sampleVec <- sample(categories, 710767, replace = TRUE, prob = c)
   counts <- table(sampleVec) %>% as.data.frame()
+  
+  # Accounting for groupings in bar chart
+  if (is.null(grouping) == FALSE) {
+    counts$group <- grouping
+  }
+  
   return(counts)
 }
 
@@ -42,7 +48,7 @@ pieChart <- function(
   selectedDistrict,
   categories,
   category_strings = NULL,
-  fill = NULL,
+  grouping = NULL,
   n_seed = NULL
   ) {
   
@@ -78,10 +84,13 @@ barChart <- function(
   selectedDistrict,
   categories,
   category_strings = NULL,
+  grouping = NULL,
   n_seed = NULL
   ) {
   
-  counts <- chartData(selectedState, selectedDistrict, categories, n_seed)
+  counts <- chartData(
+    selectedState, selectedDistrict, categories, grouping, n_seed
+    )
   
   if (is.null(category_strings) == TRUE) {
     ggplot(data = counts, aes(x = sampleVec, y = Freq)) +
