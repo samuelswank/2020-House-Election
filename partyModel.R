@@ -40,7 +40,7 @@ pa.preds$state <- paStates
 pa.preds$district <- paDistricts
 pa.preds <- pa.preds[, c(4, 3, 2, 1)]
 
-varImportances <- importance(model)
+varImportances <- importance(pa.model)
 topTen <- varImportances[varImportances > 4, ] %>% sort(decreasing = TRUE)
 topTen <- as.data.frame(topTen)
 colnames(topTen)[1] <- "Importances"
