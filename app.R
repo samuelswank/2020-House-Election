@@ -34,16 +34,11 @@ ui <- fluidPage(
     column(4, plotOutput("predictedDistrict")),
     column(2)
     ),
+  fluidRow(column(12, uiOutput("statistics"), uiOutput("statInput"))),
   fluidRow(
     column(2),
-    column(4, uiOutput("statistics")),
-    column(4, uiOutput("statInput")),
-    column(2)
-    ),
-  fluidRow(
-    column(1),
-    column(3, uiOutput("importancesTitle"), tableOutput("importancesTable")),
-    column(3, uiOutput("statTitle"), plotOutput("statPlot"))
+    column(4, uiOutput("importancesTitle"), tableOutput("importancesTable")),
+    column(4, uiOutput("statTitle"), plotOutput("statPlot"))
     )
 )
 
@@ -91,7 +86,14 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$selectedDistrict, {
-    if (input$selectedDistrict != "") {
+    if (input$selectedDistrict == "") {
+      output$statistics       <- NULL
+      output$statInput        <- NULL
+      output$importancesTitle <- NULL
+      output$importancesTable <- NULL
+      output$statTitle        <- NULL
+      output$statPlot         <- NULL
+    } else if (input$selectedDistrict != "") {
       output$statistics <- renderUI({statistics})
       output$statInput <- renderUI({
         selectInput(
@@ -105,7 +107,7 @@ server <- function(input, output, session) {
           selected = ""
           )
       })
-      output$importancesTitle <- renderUI({centerText(h3("Importances"))})
+      output$importancesTitle <- renderUI({h3("Importances")})
       output$importancesTable <- renderTable(topTen, rownames = TRUE)
       
       observeEvent(input$selectedChart, {
@@ -136,20 +138,24 @@ server <- function(input, output, session) {
           })
         } else if (input$selectedChart == "Native-born and Naturalized Citizens") {
           output$statTitle <- renderUI({centerText(h3(input$selectedChart))})
-          output$statPlot <- renderPlot(expr = {
+          output$statPlot <- renderPlot(width = 425, height = 575, expr = {
             barChart(
               input$selectedState,
               input$selectedDistrict,
               categories = colnames(modelData)[19:23],
-              # category_strings = c(
-              #   "Born Abroad or in US Territory",
-              #   "Born in State",
-              #   "Born Out of State",
-              #   "Foreign-born (Naturalized)",
-              #   "Natural Born"
-              #   ),
+              category_strings = c(
+                "Born Abroad or in US Territory",
+                "Born in State",
+                "Born Out of State",
+                "Foreign-born (Naturalized)",
+                "Natural Born"
+                ),
               grouping = c(
-                "Natural", "Natural", "Natural", "Naturalized", "Natural"
+                "Natural-born",
+                "Natural-born",
+                "Natural-born",
+                "Naturalized",
+                "Natural-born"
                 ),
               n_seed = 42
             )
