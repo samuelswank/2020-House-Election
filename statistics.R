@@ -14,15 +14,17 @@ library(scales)
 # Persons of Other Races
 # Median Rent
 
+'%!in%' <- function(x,y){!('%in%'(x,y))}
+
 modelData <- read_csv("data/census/demographics/preprocessed/modelData.csv")
 
 getRent <- function(selectedState, selectedDistrict) {
+  if (selectedState %!in% atLarge) {
+    districtString <- reverseDistrict(selectedState, selectedDistrict)
+  } else {districtString <- paste(selectedState, "At Large", sep = " ")}
+  
   med_rent <- modelData %>%
-    filter(
-      districtDemographics == reverseDistrict(
-        selectedState, selectedDistrict, atLarge = TRUE
-        )
-      ) %>%
+    filter(districtDemographics == districtString) %>%
     pull(med_rent)
   
   return(as.character(med_rent))
@@ -159,4 +161,18 @@ barChart <- function(
         )
     }
   }
+}
+
+densityPlot <- function(selectedState, selectedDistrict) {
+  ggplot(data = modelData, aes(x = med_rent)) +
+    geom_density(alpha = .2, fill="#FF6655") +
+    geom_vline(
+      aes(xintercept = as.integer(getRent(selectedState, selectedDistrict))),
+      colour = "red",
+      linetype ="longdash",
+      size = .8
+      ) +
+    scale_y_continuous(labels = comma_format(big.mar = ",", decimal.mark = ".")) +
+    ylab("Density") +
+    xlab("Median Rent")
 }

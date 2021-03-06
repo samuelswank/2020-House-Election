@@ -141,8 +141,8 @@ server <- function(input, output, session) {
           output$statPlot <- NULL
           output$statTitle  <- NULL
         } else if (input$selectedChart == "Race") {
-          output$statTitle <- renderUI({centerText(h3(input$selectedChart))})
-          output$statPlot <- renderPlot(width = 425, height = 575, expr = {
+          output$statTitle <- renderUI({h3(input$selectedChart)})
+          output$statPlot <- renderPlot(width = 575, height = 475, expr = {
             pieChart(
               input$selectedState,
               input$selectedDistrict,
@@ -160,7 +160,7 @@ server <- function(input, output, session) {
             )
           })
         } else if (input$selectedChart == "Native-born and Naturalized Citizens") {
-          output$statTitle <- renderUI({centerText(h3(input$selectedChart))})
+          output$statTitle <- renderUI({h3(input$selectedChart)})
           output$statPlot <- renderPlot(width = 575, height = 475, expr = {
             barChart(
               input$selectedState,
@@ -184,7 +184,7 @@ server <- function(input, output, session) {
             )
           })
         } else if (input$selectedChart == "Commuter Method") {
-          output$statTitle <- renderUI({centerText(h3(input$selectedChart))})
+          output$statTitle <- renderUI({h3(input$selectedChart)})
           output$statPlot <- renderPlot(width = 575, height = 475, {
             barChart(
               input$selectedState,
@@ -197,7 +197,7 @@ server <- function(input, output, session) {
             )
           })
         } else if (input$selectedChart == "Residential Occupancy") {
-          output$statTitle <- renderUI({centerText(h3(input$selectedChart))})
+          output$statTitle <- renderUI({h3(input$selectedChart)})
           
           occupancyPlot <- barChart(
             input$selectedState,
@@ -221,6 +221,12 @@ server <- function(input, output, session) {
           
           output$statPlot <- renderPlot(width = 575, height = 475, {
             grid.arrange(occupancyPlot, vacancyPlot, ncol = 2)
+          })
+        } else if (input$selectedChart == "Rental Data") {
+          output$statTitle <- renderUI({h3(input$selectedChart)})
+          
+          output$statPlot <- renderPlot( width = 575, height = 475, {
+            densityPlot(input$selectedState, input$selectedDistrict)
           })
         }
       })
