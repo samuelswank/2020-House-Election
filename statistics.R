@@ -73,6 +73,7 @@ pieChart <- function(
     ggplot(data = counts, aes(x = "", y = Freq, fill = sampleVec)) +
       geom_bar(stat = "identity", width = 1) +
       coord_polar("y", start = 0) +
+      theme_minimal() +
       scale_fill_discrete(name = "") +
       theme(
         axis.text.x = element_blank(),
@@ -84,6 +85,7 @@ pieChart <- function(
     ggplot(data = counts, aes(x = "", y = Freq, fill = sampleVec)) +
       geom_bar(stat = "identity", width = 1) +
       coord_polar("y", start = 0) +
+      theme_minimal() +
       scale_fill_discrete(name = "", labels = category_strings) +
       theme(
         axis.text.x = element_blank(),
@@ -172,6 +174,7 @@ densityPlot <- function(selectedState, selectedDistrict) {
       linetype ="longdash",
       size = .8
       ) +
+    theme_minimal() +
     scale_y_continuous(labels = comma_format(big.mar = ",", decimal.mark = ".")) +
     ylab("Density") +
     xlab("Median Rent")
