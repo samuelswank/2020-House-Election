@@ -34,7 +34,8 @@ ui <- fluidPage(
     column(4, plotOutput("predictedDistrict")),
     column(2)
     ),
-  fluidRow(column(12, uiOutput("statistics"), uiOutput("statInput"))),
+  fluidRow(column(12, uiOutput("statistics"))),
+  fluidRow(column(5), column(2, uiOutput("statInput")), column(3)),
   fluidRow(
     column(2),
     column(4, uiOutput("importancesTitle"), tableOutput("importancesTable")),
