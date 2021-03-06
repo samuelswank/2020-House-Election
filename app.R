@@ -38,7 +38,13 @@ ui <- fluidPage(
   fluidRow(column(5), column(2, uiOutput("statInput")), column(3)),
   fluidRow(
     column(2),
-    column(4, uiOutput("importancesTitle"), tableOutput("importancesTable")),
+    column(
+      4,
+      uiOutput("importancesTitle"),
+      tableOutput("importancesTable"),
+      uiOutput("rentTitle"),
+      uiOutput("medRent")
+      ),
     column(4, uiOutput("statTitle"), plotOutput("statPlot")),
     column(2)
     )
@@ -95,6 +101,8 @@ server <- function(input, output, session) {
       output$importancesTable <- NULL
       output$statTitle        <- NULL
       output$statPlot         <- NULL
+      output$rentTitle        <- NULL
+      output$medRent          <- NULL
     } else if (input$selectedDistrict != "") {
       output$statistics <- renderUI({statistics})
       output$statInput <- renderUI({
@@ -104,17 +112,29 @@ server <- function(input, output, session) {
             "Race",
             "Native-born and Naturalized Citizens",
             "Commuter Method",
-            "Residential Data"
+            "Residential Occupancy",
+            "Rental Data"
             ),
-          selected = ""
+          selected = "Commuter Method"
           )
       })
       output$importancesTitle <- renderUI({h3("Importances")})
       output$importancesTable <- renderTable(topTen, rownames = TRUE)
+      output$rentTitle <- renderUI({h3("Median Rent")})
+      output$medRent <- renderUI({
+        h4(
+          paste(
+            "$",
+            getRent(input$selectedState, input$selectedDistrict),
+            " per month",
+            sep = ""
+            )
+          )
+        })
       
       observeEvent(input$selectedChart, {
         if (is.null(input$selectedChart) == TRUE) {
-          output$statPlot <- NULL
+          output$statPlot   <- NULL
           output$statTitle  <- NULL
         } else if (input$selectedChart == "") {
           output$statPlot <- NULL

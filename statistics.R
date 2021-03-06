@@ -16,6 +16,18 @@ library(scales)
 
 modelData <- read_csv("data/census/demographics/preprocessed/modelData.csv")
 
+getRent <- function(selectedState, selectedDistrict) {
+  med_rent <- modelData %>%
+    filter(
+      districtDemographics == reverseDistrict(
+        selectedState, selectedDistrict, atLarge = TRUE
+        )
+      ) %>%
+    pull(med_rent)
+  
+  return(as.character(med_rent))
+}
+
 chartData <- function(
   selectedState, selectedDistrict, categories, grouping = NULL, n_seed = NULL
 ) {
