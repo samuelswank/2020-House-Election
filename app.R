@@ -39,7 +39,8 @@ ui <- fluidPage(
   fluidRow(
     column(2),
     column(4, uiOutput("importancesTitle"), tableOutput("importancesTable")),
-    column(4, uiOutput("statTitle"), plotOutput("statPlot"))
+    column(4, uiOutput("statTitle"), plotOutput("statPlot")),
+    column(2)
     )
 )
 
@@ -139,7 +140,7 @@ server <- function(input, output, session) {
           })
         } else if (input$selectedChart == "Native-born and Naturalized Citizens") {
           output$statTitle <- renderUI({centerText(h3(input$selectedChart))})
-          output$statPlot <- renderPlot(width = 425, height = 575, expr = {
+          output$statPlot <- renderPlot(width = 575, height = 475, expr = {
             barChart(
               input$selectedState,
               input$selectedDistrict,
@@ -148,7 +149,7 @@ server <- function(input, output, session) {
                 "Born Abroad or in US Territory",
                 "Born in State",
                 "Born Out of State",
-                "Foreign-born (Naturalized)",
+                "Foreign-born",
                 "Natural Born"
                 ),
               grouping = c(
@@ -157,6 +158,19 @@ server <- function(input, output, session) {
                 "Natural-born",
                 "Naturalized",
                 "Natural-born"
+                ),
+              n_seed = 42
+            )
+          })
+        } else if (input$selectedChart == "Commuter Method") {
+          output$statTitle <- renderUI({centerText(h3(input$selectedChart))})
+          output$statPlot <- renderPlot(width = 575, height = 475, {
+            barChart(
+              input$selectedState,
+              input$selectedDistrict,
+              categories = colnames(modelData)[32:33],
+              category_strings = c(
+                "By Car (including carpooling)", "Walking / Public Transit"
                 ),
               n_seed = 42
             )

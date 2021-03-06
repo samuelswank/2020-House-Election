@@ -1,4 +1,5 @@
 library(tidyverse)
+library(scales)
 
 # Relevant Statistics
 
@@ -97,18 +98,25 @@ barChart <- function(
       ggplot(data = counts, aes(x = sampleVec, y = Freq)) +
         geom_bar(stat = "identity", position = "stack", aes(fill = sampleVec)) +
         theme_minimal() +
-        scale_fill_discrete(name = "") +
+        scale_y_continuous(
+          labels = comma_format(big.mark = ",", decimal.mark = ".")
+          ) +
         theme(
           axis.text.x = element_blank(),
-          axis.title.x = element_blank()
+          axis.title.x = element_blank(),
+          axis.title.y = element_blank()
         )
     } else {
       ggplot(data = counts[1:4, ], aes(x = group, y = Freq)) +
         geom_bar(stat = "identity", position = "dodge", aes(fill = sampleVec)) +
         theme_minimal() +
         scale_fill_discrete(name = "") +
+        scale_y_continuous(
+          labels = comma_format(big.mark = ",", decimal.mark = ".")
+        ) +
         theme(
-          axis.title.x = element_blank()
+          axis.title.x = element_blank(),
+          axis.title.y = element_blank()
         )
     }
   } else {
@@ -117,17 +125,25 @@ barChart <- function(
         geom_bar(stat = "identity", position = "stack", aes(fill = sampleVec)) +
         theme_minimal() +
         scale_fill_discrete(name = "", labels = category_strings) +
+        scale_y_continuous(
+          labels = comma_format(big.mark = ",", decimal.mark = ".")
+        ) +
         theme(
           axis.text.x = element_blank(),
-          axis.title.x = element_blank()
+          axis.title.x = element_blank(),
+          axis.title.y = element_blank()
         )
     } else {
       ggplot(data = counts[1:4, ], aes(x = group, y = Freq)) +
         geom_bar(stat = "identity", position = "dodge", aes(fill = sampleVec)) +
         theme_minimal() +
         scale_fill_discrete(name = "", labels = category_strings) +
+        scale_y_continuous(
+          labels = comma_format(big.mark = ",", decimal.mark = ".")
+        ) +
         theme(
-          axis.title.x = element_blank()
+          axis.title.x = element_blank(),
+          axis.title.y = element_blank()
         )
     }
   }
