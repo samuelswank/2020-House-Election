@@ -93,22 +93,44 @@ barChart <- function(
     )
   
   if (is.null(category_strings) == TRUE) {
-    ggplot(data = counts, aes(x = sampleVec, y = Freq)) +
-      geom_bar(stat = "identity", position = "stack", aes(fill = sampleVec)) +
-      theme_minimal() +
-      scale_fill_discrete(name = "") +
-      theme(
-        axis.text.x = element_blank(),
-        axis.title.x = element_blank()
-      )
+    if (is.null(grouping) == TRUE) {
+      ggplot(data = counts, aes(x = sampleVec, y = Freq)) +
+        geom_bar(stat = "identity", position = "stack", aes(fill = sampleVec)) +
+        theme_minimal() +
+        scale_fill_discrete(name = "") +
+        theme(
+          axis.text.x = element_blank(),
+          axis.title.x = element_blank()
+        )
+    } else {
+      ggplot(data = counts[1:4, ], aes(x = group, y = Freq)) +
+        geom_bar(stat = "identity", position = "dodge", aes(fill = sampleVec)) +
+        theme_minimal() +
+        scale_fill_discrete(name = "") +
+        theme(
+          axis.text.x = element_blank(),
+          axis.title.x = element_blank()
+        )
+    }
   } else {
-    ggplot(data = counts, aes(x = sampleVec, y = Freq)) +
-      geom_bar(stat = "identity", position = "stack", aes(fill = sampleVec)) +
-      theme_minimal() +
-      scale_fill_discrete(name = "", labels = category_strings) +
-      theme(
-        axis.text.x = element_blank(),
-        axis.title.x = element_blank()
-      )
+    if (is.null(grouping) == TRUE) {
+      ggplot(data = counts, aes(x = sampleVec, y = Freq)) +
+        geom_bar(stat = "identity", position = "stack", aes(fill = sampleVec)) +
+        theme_minimal() +
+        scale_fill_discrete(name = "", labels = category_strings) +
+        theme(
+          axis.text.x = element_blank(),
+          axis.title.x = element_blank()
+        )
+    } else {
+      ggplot(data = counts[1:4, ], aes(x = sampleVec, y = Freq)) +
+        geom_bar(stat = "identity", position = "dodge", aes(fill = sampleVec)) +
+        theme_minimal() +
+        scale_fill_discrete(name = "", labels = category_strings) +
+        theme(
+          axis.text.x = element_blank(),
+          axis.title.x = element_blank()
+        )
+    }
   }
 }
