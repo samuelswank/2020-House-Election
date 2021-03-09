@@ -52,7 +52,8 @@ ui <- fluidPage(
   fluidRow(column(12), h1("")),
   fluidRow(column(12), h1("")),
   fluidRow(column(12), h1("")),
-  fluidRow(column(12), uiOutput("eeTitle"))
+  fluidRow(column(12), uiOutput("eeTitle")),
+  fluidRow(column(12), uiOutput("eeText"))
 )
 
 
@@ -242,16 +243,19 @@ server <- function(input, output, session) {
   observeEvent(toListen(), {
     if (is.null(input$selectedDistrict) == TRUE) {
       output$eeTitle <- NULL
+      output$eeText  <- NULL
     } else if (
       input$selectedState != "Oklahoma" |
       input$selectedDistrict != "Congressional District 5"
     ) {
       output$eeTitle <- NULL
+      output$eeText  <- NULL
     } else if (
       input$selectedState == "Oklahoma" &
       input$selectedDistrict == "Congressional District 5"
     ) {
       output$eeTitle <- renderUI({eeTitle})
+      output$eeText <- renderUI({eeText})
     }
   })
 }
