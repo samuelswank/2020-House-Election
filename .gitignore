@@ -5,5 +5,6 @@
 
 .env
 .html
+.nb.html
 
 rsconnect/
