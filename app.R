@@ -1,10 +1,10 @@
 library(shiny)
 library(tidyverse)
 library(gridExtra)
-source("helpers.R")
 source("stringManipulator.R")
 source("map.R")
 source("statistics.R")
+source("easterEgg.R")
 
 stateChoices <- state.name %>% R.utils::insert(1, c(""))
 '%!in%' <- function(x,y){!('%in%'(x,y))}
