@@ -48,7 +48,11 @@ ui <- fluidPage(
       ),
     column(4, uiOutput("statTitle"), plotOutput("statPlot")),
     column(2)
-    )
+    ),
+  fluidRow(column(12), h1("")),
+  fluidRow(column(12), h1("")),
+  fluidRow(column(12), h1("")),
+  fluidRow(column(12), uiOutput("eeTitle"))
 )
 
 
@@ -58,6 +62,8 @@ server <- function(input, output, session) {
       "selectedDistrict", "District", districtChoices[[input$selectedState]]
       )
   })
+  
+  toListen <- reactive({list(input$selectedState,input$selectedDistrict)})
   
   statistics <- centerText(h2("Statistics"))
   
@@ -230,6 +236,22 @@ server <- function(input, output, session) {
           })
         }
       })
+    }
+  })
+  
+  observeEvent(toListen(), {
+    if (is.null(input$selectedDistrict) == TRUE) {
+      output$eeTitle <- NULL
+    } else if (
+      input$selectedState != "Oklahoma" |
+      input$selectedDistrict != "Congressional District 5"
+    ) {
+      output$eeTitle <- NULL
+    } else if (
+      input$selectedState == "Oklahoma" &
+      input$selectedDistrict == "Congressional District 5"
+    ) {
+      output$eeTitle <- renderUI({eeTitle})
     }
   })
 }
