@@ -1,6 +1,7 @@
 library(shiny)
 library(tidyverse)
 library(gridExtra)
+library(leaflet)
 source("stringManipulator.R")
 source("map.R")
 source("statistics.R")
@@ -60,7 +61,9 @@ ui <- fluidPage(
     column(3, imageOutput("fp")),
     column(3, imageOutput("fp2")),
     column(3)
-    )
+    ),
+  fluidRow(column(12, h1(""))),
+  fluidRow(column(3), column(6, leafletOutput("oldMap")), column(3))
 )
 
 
@@ -254,6 +257,7 @@ server <- function(input, output, session) {
       output$fTitle  <- NULL
       output$fp      <- NULL
       output$fp2     <- NULL
+      output$oldMap  <- NULL
     } else if (
       input$selectedState != "Oklahoma" |
       input$selectedDistrict != "Congressional District 5"
@@ -263,6 +267,7 @@ server <- function(input, output, session) {
       output$fTitle  <- NULL
       output$fp      <- NULL
       output$fp2     <- NULL
+      output$oldMap  <- NULL
     } else if (
       input$selectedState == "Oklahoma" &
       input$selectedDistrict == "Congressional District 5"
@@ -274,6 +279,7 @@ server <- function(input, output, session) {
         })
       output$fp <- renderImage({fpList1})
       output$fp2 <- renderImage({fpList2})
+      output$oldMap <- renderLeaflet({oldMap})
     }
   })
 }
