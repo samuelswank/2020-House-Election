@@ -49,11 +49,18 @@ ui <- fluidPage(
     column(4, uiOutput("statTitle"), plotOutput("statPlot")),
     column(2)
     ),
-  fluidRow(column(12), h1("")),
-  fluidRow(column(12), h1("")),
-  fluidRow(column(12), h1("")),
-  fluidRow(column(12), uiOutput("eeTitle")),
-  fluidRow(column(12), uiOutput("eeText"))
+  fluidRow(column(12, h1(""))),
+  fluidRow(column(12, h1(""))),
+  fluidRow(column(12, h1(""))),
+  # fluidRow(column(12), uiOutput("eeTitle")),
+  fluidRow(column(12), uiOutput("eeText")),
+  fluidRow(column(12), uiOutput("fTitle")),
+  fluidRow(
+    column(3),
+    column(3, imageOutput("fp")),
+    column(3, imageOutput("fp2")),
+    column(3)
+    )
 )
 
 
@@ -242,20 +249,31 @@ server <- function(input, output, session) {
   
   observeEvent(toListen(), {
     if (is.null(input$selectedDistrict) == TRUE) {
-      output$eeTitle <- NULL
+      # output$eeTitle <- NULL
       output$eeText  <- NULL
+      output$fTitle  <- NULL
+      output$fp      <- NULL
+      output$fp2     <- NULL
     } else if (
       input$selectedState != "Oklahoma" |
       input$selectedDistrict != "Congressional District 5"
     ) {
-      output$eeTitle <- NULL
+      # output$eeTitle <- NULL
       output$eeText  <- NULL
+      output$fTitle  <- NULL
+      output$fp      <- NULL
+      output$fp2     <- NULL
     } else if (
       input$selectedState == "Oklahoma" &
       input$selectedDistrict == "Congressional District 5"
     ) {
       output$eeTitle <- renderUI({eeTitle})
       output$eeText <- renderUI({eeText})
+      output$fTitle <- renderUI({
+        centeredText(h2("Fletcher B. Swank"))
+        })
+      output$fp <- renderImage({fpList1})
+      output$fp2 <- renderImage({fpList2})
     }
   })
 }
