@@ -99,11 +99,11 @@ server <- function(input, output, session) {
       output$predictedState    <- NULL
       output$predictedDistrict <- NULL
     } else if (input$selectedState %!in% atLarge) {
-      output$stateMap <- renderPlot({plotState(input$selectedState)})
-      output$districtMap <- renderPlot({
+      output$stateMap          <- renderPlot({plotState(input$selectedState)})
+      output$districtMap       <- renderPlot({
         plotDistrict(input$selectedState, input$selectedDistrict)
         })
-      output$predictedState <- renderPlot({
+      output$predictedState    <- renderPlot({
         plotPredicted(input$selectedState, NA, geography = "state")
         })
       output$predictedDistrict <- renderPlot({
@@ -113,9 +113,9 @@ server <- function(input, output, session) {
       })
       
     } else if (input$selectedState %in% atLarge) {
-      output$stateMap <- renderPlot({plotState(input$selectedState)})
-      output$districtMap <- renderPlot({plotState(input$selectedState)})
-      output$predictedState <- renderPlot({
+      output$stateMap          <- renderPlot({plotState(input$selectedState)})
+      output$districtMap       <- renderPlot({plotState(input$selectedState)})
+      output$predictedState    <- renderPlot({
         plotPredicted(input$selectedState, NA, geography = "state")
       })
       output$predictedDistrict <- renderPlot({
@@ -136,7 +136,7 @@ server <- function(input, output, session) {
       output$medRent          <- NULL
     } else if (input$selectedDistrict != "") {
       output$statistics <- renderUI({statistics})
-      output$statInput <- renderUI({
+      output$statInput  <- renderUI({
         selectInput(
           "selectedChart", "Chart", choices = c(
             "",
@@ -151,8 +151,8 @@ server <- function(input, output, session) {
       })
       output$importancesTitle <- renderUI({h3("Importances")})
       output$importancesTable <- renderTable(topTen, rownames = TRUE)
-      output$rentTitle <- renderUI({h3("Median Rent")})
-      output$medRent <- renderUI({
+      output$rentTitle        <- renderUI({h3("Median Rent")})
+      output$medRent          <- renderUI({
         h4(
           paste(
             "$",
@@ -169,7 +169,7 @@ server <- function(input, output, session) {
           output$statPlot   <- NULL
           output$statTitle  <- NULL
         } else if (input$selectedChart == "") {
-          output$statPlot <- NULL
+          output$statPlot   <- NULL
           output$statTitle  <- NULL
           
         # Race
@@ -297,13 +297,13 @@ server <- function(input, output, session) {
       input$selectedDistrict == "Congressional District 5"
     ) {
       output$eeTitle <- renderUI({eeTitle})
-      output$eeText <- renderUI({eeText})
-      output$fTitle <- renderUI({
+      output$eeText  <- renderUI({eeText})
+      output$fTitle  <- renderUI({
         centeredText(h2("Fletcher B. Swank"))
         })
-      output$fp <- renderImage({fpList1})
-      output$fp2 <- renderImage({fpList2})
-      output$oldMap <- renderLeaflet({oldMap})
+      output$fp      <- renderImage({fpList1}, deleteFile = FALSE)
+      output$fp2     <- renderImage({fpList2}, deleteFile = FALSE)
+      output$oldMap  <- renderLeaflet({oldMap})
     }
   })
 }
