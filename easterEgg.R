@@ -5,8 +5,6 @@ centerText <- function(htmlText) {
   return(tags$div(style = "text-align: center;", htmlText))
 }
 
-# eeTitle <- centerText(h1("A Note From the Creator"))
-
 eeText <- tags$body(
   tags$div(
     style = "border: 1px solid black; margin: 25px 200px 25px 200px;
@@ -14,9 +12,7 @@ eeText <- tags$body(
     centerText(h1("A Note From the Creator")),
     tags$p("This web applicaiton was originally intended to explore what
     characteristics made the House districts which flipped from Democrat to
-    Republican unique. Due to time constraints and statistical challenges
-    involved with training a machine learning model to accurately predict
-    whether or not a previously-Democratic district would flip Republican, this
+    Republican unique. Due to time constraints and statistical challenges, this
     analysis has since been perforemed in a non-predictive manner and moved to a
            notebook on RPubs (TODO - URL)."),
     

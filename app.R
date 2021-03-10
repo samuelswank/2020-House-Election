@@ -36,6 +36,7 @@ ui <- fluidPage(
     column(4, plotOutput("predictedDistrict")),
     column(2)
     ),
+  # Statistical Tables and Charts
   fluidRow(column(12, uiOutput("statistics"))),
   fluidRow(column(5), column(2, uiOutput("statInput")), column(3)),
   fluidRow(
@@ -53,7 +54,9 @@ ui <- fluidPage(
   fluidRow(column(12, h1(""))),
   fluidRow(column(12, h1(""))),
   fluidRow(column(12, h1(""))),
-  # fluidRow(column(12), uiOutput("eeTitle")),
+  
+  # Oklahoma 5th District Easter Egg: 
+  # Short Biography of Fletcher B. Swank
   fluidRow(column(12), uiOutput("eeText")),
   fluidRow(column(12), uiOutput("fTitle")),
   fluidRow(
@@ -63,7 +66,17 @@ ui <- fluidPage(
     column(3)
     ),
   fluidRow(column(12, h1(""))),
-  fluidRow(column(3), column(6, leafletOutput("oldMap")), column(3))
+  
+  # Old Oklahoma District Map
+  fluidRow(
+    column(3),
+    column(
+      6,
+      centerText(h3("House Congressional Districts: 1914 - 1940")),
+      leafletOutput("oldMap")
+      ),
+    column(3)
+    )
 )
 
 
@@ -150,6 +163,7 @@ server <- function(input, output, session) {
           )
         })
       
+      # Statistical Charts
       observeEvent(input$selectedChart, {
         if (is.null(input$selectedChart) == TRUE) {
           output$statPlot   <- NULL
@@ -157,6 +171,8 @@ server <- function(input, output, session) {
         } else if (input$selectedChart == "") {
           output$statPlot <- NULL
           output$statTitle  <- NULL
+          
+        # Race
         } else if (input$selectedChart == "Race") {
           output$statTitle <- renderUI({h3(input$selectedChart)})
           output$statPlot <- renderPlot(width = 575, height = 475, expr = {
@@ -176,6 +192,8 @@ server <- function(input, output, session) {
               n_seed = 42
             )
           })
+        
+        # Birthplace
         } else if (input$selectedChart == "Native-born and Naturalized Citizens") {
           output$statTitle <- renderUI({h3(input$selectedChart)})
           output$statPlot <- renderPlot(width = 575, height = 475, expr = {
@@ -200,6 +218,8 @@ server <- function(input, output, session) {
               n_seed = 42
             )
           })
+          
+        # Commute
         } else if (input$selectedChart == "Commuter Method") {
           output$statTitle <- renderUI({h3(input$selectedChart)})
           output$statPlot <- renderPlot(width = 575, height = 475, {
@@ -213,6 +233,8 @@ server <- function(input, output, session) {
               n_seed = 42
             )
           })
+          
+        # Housing Occupancy
         } else if (input$selectedChart == "Residential Occupancy") {
           output$statTitle <- renderUI({h3(input$selectedChart)})
           
@@ -239,6 +261,8 @@ server <- function(input, output, session) {
           output$statPlot <- renderPlot(width = 575, height = 475, {
             grid.arrange(occupancyPlot, vacancyPlot, ncol = 2)
           })
+          
+        # Median Rental Price Distribution
         } else if (input$selectedChart == "Rental Data") {
           output$statTitle <- renderUI({h3(input$selectedChart)})
           
@@ -250,9 +274,10 @@ server <- function(input, output, session) {
     }
   })
   
+  # Oklahoma 5th District Easter Egg: 
+  # Short Biography of Fletcher B. Swank
   observeEvent(toListen(), {
     if (is.null(input$selectedDistrict) == TRUE) {
-      # output$eeTitle <- NULL
       output$eeText  <- NULL
       output$fTitle  <- NULL
       output$fp      <- NULL
@@ -262,7 +287,6 @@ server <- function(input, output, session) {
       input$selectedState != "Oklahoma" |
       input$selectedDistrict != "Congressional District 5"
     ) {
-      # output$eeTitle <- NULL
       output$eeText  <- NULL
       output$fTitle  <- NULL
       output$fp      <- NULL
