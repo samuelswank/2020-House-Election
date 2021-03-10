@@ -1,4 +1,5 @@
 library(shiny)
+library(leaflet)
 
 centerText <- function(htmlText) {
   return(tags$div(style = "text-align: center;", htmlText))
@@ -37,14 +38,11 @@ fpList1 <- list(
 )
 
 fpList2 <- list(
-  style = "display: block;
-          margin-left: auto;
-          margin-right: auto;
-          width: 303px;
-          height: 412px;",
+  style = fpList1$style,
   src = paste("data", "images", "FletcherBSwank.jpg", sep = "/"),
-  filetype = "image/jpeg"
+  filetype = fpList1$filetype
 )
 
-
+oldOK <- rgdal::readOGR(paste("data", "Oklahoma_64_to_72.geojson", sep = "/"))
+oldMap <- leaflet(oldOK) %>% addTiles() %>% addPolygons(label = oldOK$district)
 
