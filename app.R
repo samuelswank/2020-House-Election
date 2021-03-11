@@ -58,12 +58,16 @@ ui <- fluidPage(
   # Oklahoma 5th District Easter Egg: 
   # Short Biography of Fletcher B. Swank
   fluidRow(column(12), uiOutput("eeText")),
-  fluidRow(column(12), uiOutput("fTitle")),
+  # fluidRow(column(12), uiOutput("fTitle")),
   fluidRow(
-    column(3),
-    column(3, imageOutput("fp")),
-    column(3, imageOutput("fp2")),
-    column(3)
+    column(2),
+    column(
+      3,
+      uiOutput("fbs"),
+      uiOutput("fbsCaption"),
+      imageOutput("wcs"),
+      uiOutput("wcsCaption")
+      )
     ),
   fluidRow(column(12, h1(""))),
   
@@ -196,7 +200,7 @@ server <- function(input, output, session) {
         # Birthplace
         } else if (input$selectedChart == "Native-born and Naturalized Citizens") {
           output$statTitle <- renderUI({h3(input$selectedChart)})
-          output$statPlot <- renderPlot(width = 575, height = 475, expr = {
+          output$statPlot  <- renderPlot(width = 575, height = 475, expr = {
             barChart(
               input$selectedState,
               input$selectedDistrict,
@@ -279,18 +283,18 @@ server <- function(input, output, session) {
   observeEvent(toListen(), {
     if (is.null(input$selectedDistrict) == TRUE) {
       output$eeText  <- NULL
-      output$fTitle  <- NULL
-      output$fp      <- NULL
-      output$fp2     <- NULL
+      # output$fTitle  <- NULL
+      output$fbs     <- NULL
+      output$wcs     <- NULL
       output$oldMap  <- NULL
     } else if (
       input$selectedState != "Oklahoma" |
       input$selectedDistrict != "Congressional District 5"
     ) {
       output$eeText  <- NULL
-      output$fTitle  <- NULL
-      output$fp      <- NULL
-      output$fp2     <- NULL
+      # output$fTitle  <- NULL
+      output$fbs     <- NULL
+      output$wcs     <- NULL
       output$oldMap  <- NULL
     } else if (
       input$selectedState == "Oklahoma" &
@@ -298,12 +302,26 @@ server <- function(input, output, session) {
     ) {
       output$eeTitle <- renderUI({eeTitle})
       output$eeText  <- renderUI({eeText})
-      output$fTitle  <- renderUI({
-        centeredText(h2("Fletcher B. Swank"))
-        })
-      output$fp      <- renderImage({fpList1}, deleteFile = FALSE)
-      output$fp2     <- renderImage({fpList2}, deleteFile = FALSE)
-      output$oldMap  <- renderLeaflet({oldMap})
+      output$fbs        <- renderUI({
+        tags$figure(
+          renderImage(deleteFile = FALSE, {
+            list(
+              style = "display: block;
+              margin-left: auto;
+              margin-right: auto;",
+              src = "data/images/FletcherBSwank.jpg",
+              filetype = "image/jpeg",
+              height = "400",
+              width = "300"
+            )
+          }),
+          tags$figcaption(
+            style = "text-align: center;",
+            tags$b("Representative Fletcher B. Swank")
+            )
+        )
+      })
+      output$oldMap     <- renderLeaflet({oldMap})
     }
   })
 }
