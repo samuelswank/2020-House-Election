@@ -58,17 +58,7 @@ ui <- fluidPage(
   # Oklahoma 5th District Easter Egg: 
   # Short Biography of Fletcher B. Swank
   fluidRow(column(12), uiOutput("eeText")),
-  # fluidRow(column(12), uiOutput("fTitle")),
-  fluidRow(
-    column(2),
-    column(
-      3,
-      uiOutput("fbs"),
-      uiOutput("fbsCaption"),
-      imageOutput("wcs"),
-      uiOutput("wcsCaption")
-      )
-    ),
+  fluidRow(column(2), column(3, uiOutput("fbs"), uiOutput("wcs"))),
   fluidRow(column(12, h1(""))),
   
   # Old Oklahoma District Map
@@ -302,13 +292,11 @@ server <- function(input, output, session) {
     ) {
       output$eeTitle <- renderUI({eeTitle})
       output$eeText  <- renderUI({eeText})
-      output$fbs        <- renderUI({
+      output$fbs     <- renderUI({
         tags$figure(
           renderImage(deleteFile = FALSE, {
             list(
-              style = "display: block;
-              margin-left: auto;
-              margin-right: auto;",
+              style = "display: block; margin-left: auto; margin-right: auto;",
               src = "data/images/FletcherBSwank.jpg",
               filetype = "image/jpeg",
               height = "400",
@@ -321,6 +309,29 @@ server <- function(input, output, session) {
             )
         )
       })
+      
+      output$wcs     <- renderUI({
+        tags$figure(
+          renderImage(deleteFile = FALSE, {
+            list(
+              style = "display:block;
+              margin-right: auto;
+              margin-left: auto;
+              margin-bottom: 0;",
+              src = "data/images/WilliamClaySwankI.jpg",
+              filetype = "image/jpeg",
+              height = "400",
+              width = "400"
+            )
+          }),
+          tags$figcaption(
+            style = "text-align: center;",
+            tags$b("My Great-Grandfather
+                   William C. Swank I")
+          )
+        )
+      })
+      
       output$oldMap     <- renderLeaflet({oldMap})
     }
   })
