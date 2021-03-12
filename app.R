@@ -277,22 +277,24 @@ server <- function(input, output, session) {
   # Short Biography of Fletcher B. Swank
   observeEvent(toListen(), {
     if (is.null(input$selectedDistrict) == TRUE) {
-      output$eeText   <- NULL
-      output$fbs      <- NULL
-      output$wcs      <- NULL
-      output$eeText2  <- NULL
-      output$eeText3  <- NULL
-      output$oldMap   <- NULL
+      output$eeText        <- NULL
+      output$fbs           <- NULL
+      output$wcs           <- NULL
+      output$eeText2       <- NULL
+      output$eeText3       <- NULL
+      output$old_map_title <- NULL
+      output$oldMap        <- NULL
     } else if (
       input$selectedState != "Oklahoma" |
       input$selectedDistrict != "Congressional District 5"
     ) {
-      output$eeText   <- NULL
-      output$fbs      <- NULL
-      output$wcs      <- NULL
-      output$eeText2  <- NULL
-      output$eeText3  <- NULL
-      output$oldMap   <- NULL
+      output$eeText        <- NULL
+      output$fbs           <- NULL
+      output$wcs           <- NULL
+      output$eeText2       <- NULL
+      output$eeText3       <- NULL
+      output$old_map_title <- NULL
+      output$oldMap        <- NULL
     } else if (
       input$selectedState == "Oklahoma" &
       input$selectedDistrict == "Congressional District 5"
