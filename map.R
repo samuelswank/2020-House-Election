@@ -43,7 +43,7 @@ for (i in 1:length(districtSplit)) {
 hr$district_label <- districtLabel
 
 # Party Affiliation Predictions
-partyPreds <- pa.preds
+partyPreds <- preds
 
 # Addressing  "(At Large)" Districts
 partyPreds$district <- partyPreds$district %>%
