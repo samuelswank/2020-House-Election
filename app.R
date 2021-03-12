@@ -58,7 +58,12 @@ ui <- fluidPage(
   # Oklahoma 5th District Easter Egg: 
   # Short Biography of Fletcher B. Swank
   fluidRow(column(12), uiOutput("eeText")),
-  fluidRow(column(2), column(3, uiOutput("fbs"), uiOutput("wcs"))),
+  fluidRow(
+    column(2),
+    column(3, uiOutput("fbs"), uiOutput("wcs")),
+    column(5, uiOutput("eeText2"), uiOutput("eeText3")),
+    column(2)
+    ),
   fluidRow(column(12, h1(""))),
   
   # Old Oklahoma District Map
@@ -66,7 +71,7 @@ ui <- fluidPage(
     column(3),
     column(
       6,
-      centerText(h3("House Congressional Districts: 1914 - 1940")),
+      uiOutput("old_map_title"),
       leafletOutput("oldMap")
       ),
     column(3)
@@ -169,7 +174,7 @@ server <- function(input, output, session) {
         # Race
         } else if (input$selectedChart == "Race") {
           output$statTitle <- renderUI({h3(input$selectedChart)})
-          output$statPlot <- renderPlot(width = 575, height = 475, expr = {
+          output$statPlot  <- renderPlot(width = 575, height = 475, expr = {
             pieChart(
               input$selectedState,
               input$selectedDistrict,
@@ -272,25 +277,26 @@ server <- function(input, output, session) {
   # Short Biography of Fletcher B. Swank
   observeEvent(toListen(), {
     if (is.null(input$selectedDistrict) == TRUE) {
-      output$eeText  <- NULL
-      # output$fTitle  <- NULL
-      output$fbs     <- NULL
-      output$wcs     <- NULL
-      output$oldMap  <- NULL
+      output$eeText   <- NULL
+      output$fbs      <- NULL
+      output$wcs      <- NULL
+      output$eeText2  <- NULL
+      output$eeText3  <- NULL
+      output$oldMap   <- NULL
     } else if (
       input$selectedState != "Oklahoma" |
       input$selectedDistrict != "Congressional District 5"
     ) {
-      output$eeText  <- NULL
-      # output$fTitle  <- NULL
-      output$fbs     <- NULL
-      output$wcs     <- NULL
-      output$oldMap  <- NULL
+      output$eeText   <- NULL
+      output$fbs      <- NULL
+      output$wcs      <- NULL
+      output$eeText2  <- NULL
+      output$eeText3  <- NULL
+      output$oldMap   <- NULL
     } else if (
       input$selectedState == "Oklahoma" &
       input$selectedDistrict == "Congressional District 5"
     ) {
-      output$eeTitle <- renderUI({eeTitle})
       output$eeText  <- renderUI({eeText})
       output$fbs     <- renderUI({
         tags$figure(
@@ -309,7 +315,7 @@ server <- function(input, output, session) {
             )
         )
       })
-      
+
       output$wcs     <- renderUI({
         tags$figure(
           renderImage(deleteFile = FALSE, {
@@ -326,13 +332,18 @@ server <- function(input, output, session) {
           }),
           tags$figcaption(
             style = "text-align: center;",
-            tags$b("My Great-Grandfather
-                   William C. Swank I")
+            tags$b("My Great-Grandfather, William C. Swank I")
           )
         )
       })
       
-      output$oldMap     <- renderLeaflet({oldMap})
+      output$eeText2 <- renderUI({eeText2})
+      output$eeText3 <- renderUI({eeText3})
+      output$old_map_title <- renderUI({
+        centerText(h3("Oklahoma Congressional Districts, 1914 - 1940"))
+        }) 
+      
+      output$oldMap        <- renderLeaflet({oldMap})
     }
   })
 }
