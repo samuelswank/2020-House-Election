@@ -1,6 +1,7 @@
 library(shiny)
 library(tidyverse)
 library(gridExtra)
+library(leaflet)
 source("stringManipulator.R")
 source("map.R")
 source("statistics.R")
@@ -35,6 +36,7 @@ ui <- fluidPage(
     column(4, plotOutput("predictedDistrict")),
     column(2)
     ),
+  # Statistical Tables and Charts
   fluidRow(column(12, uiOutput("statistics"))),
   fluidRow(column(5), column(2, uiOutput("statInput")), column(3)),
   fluidRow(
@@ -48,6 +50,31 @@ ui <- fluidPage(
       ),
     column(4, uiOutput("statTitle"), plotOutput("statPlot")),
     column(2)
+    ),
+  fluidRow(column(12, h1(""))),
+  fluidRow(column(12, h1(""))),
+  fluidRow(column(12, h1(""))),
+  
+  # Oklahoma 5th District Easter Egg: 
+  # Short Biography of Fletcher B. Swank
+  fluidRow(column(12), uiOutput("eeText")),
+  fluidRow(
+    column(2),
+    column(3, uiOutput("fbs"), uiOutput("wcs")),
+    column(5, uiOutput("eeText2"), uiOutput("eeText3")),
+    column(2)
+    ),
+  fluidRow(column(12, h1(""))),
+  
+  # Old Oklahoma District Map
+  fluidRow(
+    column(3),
+    column(
+      6,
+      uiOutput("old_map_title"),
+      leafletOutput("oldMap")
+      ),
+    column(3)
     )
 )
 
@@ -59,6 +86,8 @@ server <- function(input, output, session) {
       )
   })
   
+  toListen <- reactive({list(input$selectedState,input$selectedDistrict)})
+  
   statistics <- centerText(h2("Statistics"))
   
   # Party Affiliation Model Maps
@@ -69,11 +98,11 @@ server <- function(input, output, session) {
       output$predictedState    <- NULL
       output$predictedDistrict <- NULL
     } else if (input$selectedState %!in% atLarge) {
-      output$stateMap <- renderPlot({plotState(input$selectedState)})
-      output$districtMap <- renderPlot({
+      output$stateMap          <- renderPlot({plotState(input$selectedState)})
+      output$districtMap       <- renderPlot({
         plotDistrict(input$selectedState, input$selectedDistrict)
         })
-      output$predictedState <- renderPlot({
+      output$predictedState    <- renderPlot({
         plotPredicted(input$selectedState, NA, geography = "state")
         })
       output$predictedDistrict <- renderPlot({
@@ -83,9 +112,9 @@ server <- function(input, output, session) {
       })
       
     } else if (input$selectedState %in% atLarge) {
-      output$stateMap <- renderPlot({plotState(input$selectedState)})
-      output$districtMap <- renderPlot({plotState(input$selectedState)})
-      output$predictedState <- renderPlot({
+      output$stateMap          <- renderPlot({plotState(input$selectedState)})
+      output$districtMap       <- renderPlot({plotState(input$selectedState)})
+      output$predictedState    <- renderPlot({
         plotPredicted(input$selectedState, NA, geography = "state")
       })
       output$predictedDistrict <- renderPlot({
@@ -106,7 +135,7 @@ server <- function(input, output, session) {
       output$medRent          <- NULL
     } else if (input$selectedDistrict != "") {
       output$statistics <- renderUI({statistics})
-      output$statInput <- renderUI({
+      output$statInput  <- renderUI({
         selectInput(
           "selectedChart", "Chart", choices = c(
             "",
@@ -121,8 +150,8 @@ server <- function(input, output, session) {
       })
       output$importancesTitle <- renderUI({h3("Importances")})
       output$importancesTable <- renderTable(topTen, rownames = TRUE)
-      output$rentTitle <- renderUI({h3("Median Rent")})
-      output$medRent <- renderUI({
+      output$rentTitle        <- renderUI({h3("Median Rent")})
+      output$medRent          <- renderUI({
         h4(
           paste(
             "$",
@@ -133,16 +162,19 @@ server <- function(input, output, session) {
           )
         })
       
+      # Statistical Charts
       observeEvent(input$selectedChart, {
         if (is.null(input$selectedChart) == TRUE) {
           output$statPlot   <- NULL
           output$statTitle  <- NULL
         } else if (input$selectedChart == "") {
-          output$statPlot <- NULL
+          output$statPlot   <- NULL
           output$statTitle  <- NULL
+          
+        # Race
         } else if (input$selectedChart == "Race") {
           output$statTitle <- renderUI({h3(input$selectedChart)})
-          output$statPlot <- renderPlot(width = 575, height = 475, expr = {
+          output$statPlot  <- renderPlot(width = 575, height = 475, expr = {
             pieChart(
               input$selectedState,
               input$selectedDistrict,
@@ -159,9 +191,11 @@ server <- function(input, output, session) {
               n_seed = 42
             )
           })
+        
+        # Birthplace
         } else if (input$selectedChart == "Native-born and Naturalized Citizens") {
           output$statTitle <- renderUI({h3(input$selectedChart)})
-          output$statPlot <- renderPlot(width = 575, height = 475, expr = {
+          output$statPlot  <- renderPlot(width = 575, height = 475, expr = {
             barChart(
               input$selectedState,
               input$selectedDistrict,
@@ -183,6 +217,8 @@ server <- function(input, output, session) {
               n_seed = 42
             )
           })
+          
+        # Commute
         } else if (input$selectedChart == "Commuter Method") {
           output$statTitle <- renderUI({h3(input$selectedChart)})
           output$statPlot <- renderPlot(width = 575, height = 475, {
@@ -196,6 +232,8 @@ server <- function(input, output, session) {
               n_seed = 42
             )
           })
+          
+        # Housing Occupancy
         } else if (input$selectedChart == "Residential Occupancy") {
           output$statTitle <- renderUI({h3(input$selectedChart)})
           
@@ -222,6 +260,8 @@ server <- function(input, output, session) {
           output$statPlot <- renderPlot(width = 575, height = 475, {
             grid.arrange(occupancyPlot, vacancyPlot, ncol = 2)
           })
+          
+        # Median Rental Price Distribution
         } else if (input$selectedChart == "Rental Data") {
           output$statTitle <- renderUI({h3(input$selectedChart)})
           
@@ -230,6 +270,80 @@ server <- function(input, output, session) {
           })
         }
       })
+    }
+  })
+  
+  # Oklahoma 5th District Easter Egg: 
+  # Short Biography of Fletcher B. Swank
+  observeEvent(toListen(), {
+    if (is.null(input$selectedDistrict) == TRUE) {
+      output$eeText   <- NULL
+      output$fbs      <- NULL
+      output$wcs      <- NULL
+      output$eeText2  <- NULL
+      output$eeText3  <- NULL
+      output$oldMap   <- NULL
+    } else if (
+      input$selectedState != "Oklahoma" |
+      input$selectedDistrict != "Congressional District 5"
+    ) {
+      output$eeText   <- NULL
+      output$fbs      <- NULL
+      output$wcs      <- NULL
+      output$eeText2  <- NULL
+      output$eeText3  <- NULL
+      output$oldMap   <- NULL
+    } else if (
+      input$selectedState == "Oklahoma" &
+      input$selectedDistrict == "Congressional District 5"
+    ) {
+      output$eeText  <- renderUI({eeText})
+      output$fbs     <- renderUI({
+        tags$figure(
+          renderImage(deleteFile = FALSE, {
+            list(
+              style = "display: block; margin-left: auto; margin-right: auto;",
+              src = "data/images/FletcherBSwank.jpg",
+              filetype = "image/jpeg",
+              height = "400",
+              width = "300"
+            )
+          }),
+          tags$figcaption(
+            style = "text-align: center;",
+            tags$b("Representative Fletcher B. Swank")
+            )
+        )
+      })
+
+      output$wcs     <- renderUI({
+        tags$figure(
+          renderImage(deleteFile = FALSE, {
+            list(
+              style = "display:block;
+              margin-right: auto;
+              margin-left: auto;
+              margin-bottom: 0;",
+              src = "data/images/WilliamClaySwankI.jpg",
+              filetype = "image/jpeg",
+              height = "400",
+              width = "400"
+            )
+          }),
+          tags$figcaption(
+            style = "text-align: center;",
+            tags$b("My Great-Grandfather, William C. Swank I")
+          )
+        )
+      })
+      
+      output$eeText2 <- renderUI({eeText2})
+      output$eeText3 <- renderUI({eeText3})
+      output$old_map_title <- renderUI({
+        centerText(h3("Oklahoma Congressional Districts, 1914 - 1940"))
+        }) 
+      
+      output$oldMap        <- renderLeaflet({oldMap})
     }
   })
 }
