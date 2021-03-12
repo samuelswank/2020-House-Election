@@ -10,7 +10,7 @@ eeText <- tags$body(
     style = "border: 1px solid black; margin: 25px 200px 25px 200px;
     background-color: #2FABE1; font-size: large; color: black; font-weight: 900;",
     centerText(h1("A Note From the Creator")),
-    tags$p("This web applicaiton was originally intended to explore what
+    tags$p("This web application was originally intended to explore what
     characteristics made the House districts which flipped from Democrat to
     Republican unique. Due to time constraints and statistical challenges, this
     analysis has since been perforemed in a non-predictive manner and moved to a
