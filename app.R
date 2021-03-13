@@ -171,7 +171,7 @@ server <- function(input, output, session) {
           output$statPlot   <- NULL
           output$statTitle  <- NULL
           
-        
+        # Race
         } else if (input$selectedChart == "Race") {
           output$statTitle <- renderUI({h3(input$selectedChart)})
           output$statPlot  <- renderPlot(width = 575, height = 475, expr = {
