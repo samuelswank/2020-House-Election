@@ -50,6 +50,9 @@ output: html_notebook
 # - tidyr
 # - dplyr
 
+# knitr
+# kable
+
 # Attached
 # graph
 # igraph
@@ -75,7 +78,7 @@ summary(testCM) %>% select(.metric, .estimate) %>% filter(
 
 ### Statistical Insights
 
-|   Examining the *mean decrease Gini*, a measure which indicates the degree to which a given variable plays a role in classifying the data, we find that the following ten variables contributed the most to the model's final prediction.
+|   Examining the *mean decrease in Gini impurity*, a measure which indicates the degree to which a given variable plays a role in classifying the data, we find that the following ten variables contributed the most to the model's final prediction.
 
 ```{r include = FALSE}
 top.ten <- topTen
@@ -84,5 +87,75 @@ colnames(top.ten)[1] <- "Mean Decrease in Gini Impurity"
 
 ```{r}
 top.ten
+```
+
+|   Though the *mean decrease in Gini impurity* tells us the importance of a given variable in the model's classification of a district as either Democrat or Republican, it does not tell us what relationship these variables have to the target variable. Looking at individual trees from the forest may give us a clue. Due to the sheer number of trees in our Random Forest model, however, it cannot be assumed that any given tree would perform well enough as a predictor to represent the Forest as a whole. At this stage, a graphical approach looking at individual, randomly-selected, representative voting districts seems to be the most intuitive approach.
+
+\  
+
+|   In order to do so, we will need to use our model's data prior to standardization, coupled with appropriate helper functions to aid in extracting the appropriate data.
+
+```{r include=FALSE}
+modelData <- read_csv("data/census/demographics/preprocessed/modelData.csv")
+
+colnames(modelData)[1] <- "district"
+modelData <- as.data.frame(modelData)
+rownames(modelData) <- modelData$district
+modelData <- modelData[, 2:(ncol(modelData) - 1)]
+```
+
+```{r}
+modelData
+```
+
+```{r}
+# '%!in%' <- Not In Operator
+'%!in%' <- function(x,y){!('%in%'(x,y))}
+
+# chartData <- function for extracting appropriate data from modelData data.frame
+#              and converting from percentage to integers for use in graphs shown
+#              below
+
+chartData <- function(
+  selectedState, selectedDistrict, categories, grouping = NULL, n_seed = NULL
+) {
+  
+  if (selectedState %!in% atLarge) {
+    districtString <- reverseDistrict(selectedState, selectedDistrict)
+  } else {districtString <- paste(selectedState, "At Large", sep = " ")}
+  
+  c <- c()
+  for (i in 1:length(categories)) {
+    c[i] <- (modelData[districtString, ] %>%
+               select(categories) %>%
+               .[[categories[i]]]) / 100
+  }
+  
+  if (is.null(n_seed) == TRUE) {set.seed(n_seed)}
+  
+  # 710767 -> average_district_population
+  sampleVec <- sample(categories, 710767, replace = TRUE, prob = c)
+  counts <- table(sampleVec) %>% as.data.frame()
+  
+  # Accounting for groupings in bar chart
+  if (is.null(grouping) == FALSE) {
+    counts$group <- grouping
+  }
+  
+  return(counts)
+}
+
+# getRent <- function for extracting med_rent from modelData for use in density
+#            plot
+
+getRent <- function(selectedState, selectedDistrict) {
+  if (selectedState %!in% atLarge) {
+    districtString <- reverseDistrict(selectedState, selectedDistrict)
+  } else {districtString <- paste(selectedState, "At Large", sep = " ")}
+  
+  med_rent <- modelData[districtString, ] %>% pull(med_rent)
+  
+  return(as.character(med_rent))
+}
 ```
 
