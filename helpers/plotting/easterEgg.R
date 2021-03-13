@@ -41,7 +41,7 @@ eeText3 <- tags$body(
            Appanouse County in 1880 to Cyrus and Mary Swank. After working in
            the railroad industry in New Mexico for a number of years, he settled
            in the great state of Idaho where he worked as a bookkeeper. It was
-           in Pocatello, Idaho that my grandfather, George Wallace Swank was
+           in Pocatello, Idaho that my grandfather, George Wallace Swank, was
            born. My father, William Clay Swank II, a native of Boise, was named
            after his grandfather.")
   )
