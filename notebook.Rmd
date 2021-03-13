@@ -5,13 +5,13 @@ date: "March 13th, 2021"
 output: html_notebook
 ---
 
-## Background
+# Background
 
 |   This project grew out of [one which I had previously completed in Python](https://github.com/shengjiyang/2016-House-Results) examining how demographic factors were associated with party affiliation in the 2016 House Election. Due to time constraints, the demographic data used in the original project were limited to ethno-racial data. Thanks to the Census Bureau's [My Congressional District app](https://www.census.gov/mycd/) making the relevant data readily available by House district in *.csv* files, I was able to significantly expand the number of different demographic categories used in this project. For a full descriptive list of all the data used in this project see the data dictionary available in the [GitHub repository](https://github.com/shengjiyang/2020-House-Flipped-Seats). Thanks to the [CARES Act](https://home.treasury.gov/policy-issues/cares) providing grant money to local Universities to help individuals transition to more secure jobs, I had access, free of charge, to an *Intermediate R Coding* course where I learned to build a [corresponding shiny app](https://samuelswank.shinyapps.io/2020-House-Results/) to this *RPubs notebook*. For a full list of all the resources and packages used in the app's creation and in this notebook, see the README of the above-mentioned [GitHub repository](https://github.com/shengjiyang/2020-House-Flipped-Seats).
 
 \  
 
-### Research Question
+## Research Question
 
 |   The questions this project set out to answer are **what demographic factors were most strongly associated with a given district's party affiliation**, and **what characterized those districts which had sent a Democratic representative to congress in the previous election, but elected a Republican representative in the 2020 election**. This project was originally intended to include predictive models to address both these questions, but due to statistical issues with the latter, this analysis had been performed in a non-predictive manner in this notebook.
 
@@ -19,17 +19,17 @@ output: html_notebook
 
 |   The answer to the first question is fairly straightforward. As my reader will see, those demographics associated with the metropolitan, urban centers, tend to be characteristic of House districts that elected Democratic candidates; whereas, those demographics associated with suburban and rural America, tend to be characteristic of those districts that chose Republican representatives.
 
-## Model
+# Model
 
-### Methodology
+## Methodology
 
-#### Preprocessing
+### Preprocessing
 
 |   The Census Bureau's estimates were taken, and wherein it was reasonable to do so, the estimates were converted from their raw values to percentages of the estimated population of the district. For the sake of simplicity, the *margin of error* was not taken into account. These data were then standardized to account for those statistics, such as *median rent*, *median household income*, *etc.*, for which no percentage was taken.
 
 \  
 
-#### Model Selection and Performance Metrics
+### Model Selection and Performance Metrics
 
 |   I had initially wanted to replicate [the previous project's use of Logistic Regression](https://medium.com/swlh/democrat-or-republican-politics-and-logistic-regression-7639648be5f0) due to the method's simplicity and ease of interpretation for binary classification problems such as this one, but I later found R's implementations of the algorithm to be less friendly than Python's, so a *Random Forest* model was used instead. The `randomForest` package was used with all of the `randomForest` method's default parameters. Given that this was a classification problem, the relevant parameters were as follows: 
 
@@ -69,4 +69,20 @@ summary(testCM) %>% select(.metric, .estimate) %>% filter(
 )
 ```
 
-|   Considering that this is a fairly balanced classification problem with Democrats controlling `r sprintf("%.2f", (nrow(df %>% filter(party == "D")) / nrow(df)) * 100)`% of all House seats, and Republicans `r sprintf("%.2f", (nrow(df %>% filter(party == "R")) / nrow(df)) * 100)`%, accuracy by itself is a sufficient measure of model performance. That being said, taking Republican as our positive case, as the model does, a precision of `r sprintf("%.4f", summary(testCM) %>% filter(.metric == "precision") %>% pull(.estimate))` indicates that the model is 
+|   Considering that this is a fairly balanced classification problem with Democrats controlling `r sprintf("%.2f", (nrow(df %>% filter(party == "D")) / nrow(df)) * 100)`% of all House seats, and Republicans `r sprintf("%.2f", (nrow(df %>% filter(party == "R")) / nrow(df)) * 100)`%, *accuracy* by itself is a sufficient measure of model performance, beating a **baseline** prediction of `r sprintf("%.4f", (nrow(df %>% filter(party == "D")) / nrow(df)))`, wherein all districts where assumed to vote Democrat, by `r sprintf("%.4f", (summary(testCM) %>% filter(.metric == "precision") %>% pull(.estimate)) - (nrow(df %>% filter(party == "D")) / nrow(df)))`. For the sake of thoroughness, however, taking Republican as our positive case, as the model does, a *precision* of `r sprintf("%.4f", summary(testCM) %>% filter(.metric == "precision") %>% pull(.estimate))` indicates that model does a more than adequate job of not selecting true positives while keeping the false positive count fairly low. A lower *recall* of `r sprintf("%.4f", summary(testCM) %>% filter(.metric == "recall") %>% pull(.estimate))` indicates that there are still a moderate number of Republican districts which have been miss-classified as Democratic districts, an obvious weakness which will be examined herein. Overall, an *F-score* of `r sprintf("%.4f", summary(testCM) %>% filter(.metric == "f_meas") %>% pull(.estimate))` and a [*Matthew's Correlation Coefficient (MCC)*](https://towardsdatascience.com/the-best-classification-metric-youve-never-heard-of-the-matthews-correlation-coefficient-3bf50a2f3e9a) of `r sprintf("%.4f", summary(testCM) %>% filter(.metric == "mcc") %>% pull(.estimate))` indicate sufficient model performance for real-world relationships to be gleaned from the data. It should be noted that the *MCC* is measured on a scale from -1 to +1, so a score of `r sprintf("%.4f", summary(testCM) %>% filter(.metric == "mcc") %>% pull(.estimate))` is by no means poor.
+
+\  
+
+### Statistical Insights
+
+|   Examining the *mean decrease Gini*, a measure which indicates the degree to which a given variable plays a role in classifying the data, we find that the following ten variables contributed the most to the model's final prediction.
+
+```{r include = FALSE}
+top.ten <- topTen
+colnames(top.ten)[1] <- "Mean Decrease in Gini Impurity"
+```
+
+```{r}
+top.ten
+```
+
