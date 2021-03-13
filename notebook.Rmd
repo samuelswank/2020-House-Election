@@ -7,11 +7,51 @@ output: html_notebook
 
 ## Background
 
-|   This project grew out of [one which I had previously completed in Python](https://github.com/shengjiyang/2018-House-Results) examining how demographic factors were associated with party affiliation in the 2018 House Election. Due to time constraints, the demographic data used in the original project were limited to ethno-racial data. Thanks to the Census Bureau's [My Congressional District app](https://www.census.gov/mycd/) making the relevant data readily available by House district in *.csv* files, I was able to significantly expand the number of different demographic categories used in this project. For a full descriptive list of all the data used in this project see the data dictionary available in the [GitHub repository](https://github.com/shengjiyang/2020-House-Flipped-Seats). Thanks to the [CARES Act](https://home.treasury.gov/policy-issues/cares) providing grant money to local Universities to help individuals transition to more secure jobs, I had access, free of charge, to an *Intermediate R Coding* course where I learned to build a [corresponding shiny app](https://samuelswank.shinyapps.io/2020-House-Results/) to this *RPubs notebook*. For a full list of all the resources and packages used in the app and in this notebook, see the README of the above-mentioned [GitHub repository](https://github.com/shengjiyang/2020-House-Flipped-Seats).
+|   This project grew out of [one which I had previously completed in Python](https://github.com/shengjiyang/2018-House-Results) examining how demographic factors were associated with party affiliation in the 2018 House Election. Due to time constraints, the demographic data used in the original project were limited to ethno-racial data. Thanks to the Census Bureau's [My Congressional District app](https://www.census.gov/mycd/) making the relevant data readily available by House district in *.csv* files, I was able to significantly expand the number of different demographic categories used in this project. For a full descriptive list of all the data used in this project see the data dictionary available in the [GitHub repository](https://github.com/shengjiyang/2020-House-Flipped-Seats). Thanks to the [CARES Act](https://home.treasury.gov/policy-issues/cares) providing grant money to local Universities to help individuals transition to more secure jobs, I had access, free of charge, to an *Intermediate R Coding* course where I learned to build a [corresponding shiny app](https://samuelswank.shinyapps.io/2020-House-Results/) to this *RPubs notebook*. For a full list of all the resources and packages used in the app's creation and in this notebook, see the README of the above-mentioned [GitHub repository](https://github.com/shengjiyang/2020-House-Flipped-Seats).
+
+\  
+
+|   This project was originally intended to include predictive models for both **party affiliation** and whether a district which had elected a Democratic candidate in the previous election would **flip Republican** in this election. Due to statistical challenges with the latter. The analysis of what demographics characterized those districts which *flipped red* has been performed in a non-predictive manner in this notebook.
+
+## Model
+
+### Methodology
+
+#### Preprocessing
+
+|   The Census Bureau's estimates were taken, and wherein it was reasonable to do so, the estimates were converted from their raw values to percentages of the estimated population of the district. For the sake of simplicity, the *margin of error* was not taken into account. These data were then standardized to account for those statistics, such as *median rent*, *median household income*, *etc.*, for which no percentage was taken.
+
+\  
+
+#### Model Selection
+
+|   I had initially wanted to replicate [the previous project's use of Logistic Regression](https://medium.com/swlh/democrat-or-republican-politics-and-logistic-regression-7639648be5f0) due to the method's simplicity and ease of interpretation for binary classification problems such as this one, but I later found R's implementations of the algorithm to be less friendly than Python's, so a *Random Forest* model was used instead. The `randomForest` package was used with all of the `randomForest` method's default parameters. Given that this was a classification problem, the relevant parameters were as follows: 
+
+- `ntree = 500` 
+- `replace = TRUE` 
+- `nodesize = 1`
+- `maxnodes = NULL`
+
+|   Essentially the forest was composed of a healthy number of 500 trees, with replacement sampling, and no additional regularization for minimum node size or the maximum number of nodes used in a given tree. The model performance metrics were as follows.
+
+```{r include=FALSE}
+# Used
+# yardstick
+
+# Attached
+# graph
+# igraph
+
+source("helpers/model/modelInfo.R")
+```
 
 ```{r}
-source("helpers/partyModel.R")
-
-
+summary(testCM) %>% select(.metric, .estimate) %>% filter(
+  .metric == "accuracy" |
+  .metric == "bal_accuracy" |
+  .metric == "precision" |
+  .metric == "recall" | 
+  .metric == "f_meas"
+)
 ```
 
