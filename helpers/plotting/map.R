@@ -17,6 +17,10 @@ for (i in 1:nrow(cd117)) {area[i] <- st_area(cd117$geometry[[i]])}
 
 cd117$area <- area
 
+# Accounting for additional seats gained by Democrats in North Carolina
+hr[239, "flipped"] <- TRUE
+hr[242, "flipped"] <- TRUE
+
 # House Results dataframe
 # Fixing flipped column so that it conveys information better
 flipped <- c()
