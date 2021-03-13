@@ -1,7 +1,7 @@
 library(tidyverse)
 library(sf)
 library(ggrepel)
-source("helpers/partyModel.R")
+source("helpers/model/partyModel.R")
 source("dataWrangling/houseResults.R")
 
 '%!in%' <- function(x,y){!('%in%'(x,y))}

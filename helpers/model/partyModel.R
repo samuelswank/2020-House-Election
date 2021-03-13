@@ -56,23 +56,13 @@ train.preds <- data.frame(
   predicted = model$predicted, actual = train$party
 )
 
+# NOTE: see helpers/model/modelInfo.R for model test metrics
+
 test.preds <- model %>% predict(test %>% select(1:65))
 
 test.preds <- data.frame(
   predicted = test.preds, actual = test$party
 )
-
-# testCM <- yardstick::conf_mat(
-#   test.preds, truth = actual, estimate = predicted
-# )
-# 
-# summary(testCM)
-
-# accuracy     <- 0.826
-# bal_accuracy <- 0.827
-# precision    <- 0.787
-# recall       <- 0.881
-# f_meas       <- 0.831
 
 preds <- bind_rows(train.preds, test.preds) %>%
   select(predicted, actual)
