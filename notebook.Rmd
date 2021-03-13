@@ -1,0 +1,17 @@
+---
+title: "2020 House Elections - Party Affiliation Analysis"
+author: "Samuel Swank"
+date: "TODO"
+output: html_notebook
+---
+
+## Background
+
+|   This project grew out of [one which I had previously completed in Python](https://github.com/shengjiyang/2018-House-Results) examining how demographic factors were associated with party affiliation in the 2018 House Election. Due to time constraints, the demographic data used in the original project were limited to ethno-racial data. Thanks to the Census Bureau's [My Congressional District app](https://www.census.gov/mycd/) making the relevant data readily available by House district in *.csv* files, I was able to significantly expand the number of different demographic categories used in this project. For a full descriptive list of all the data used in this project see the data dictionary available in the [GitHub repository](https://github.com/shengjiyang/2020-House-Flipped-Seats). Thanks to the [CARES Act](https://home.treasury.gov/policy-issues/cares) providing grant money to local Universities to help individuals transition to more secure jobs, I had access, free of charge, to an *Intermediate R Coding* course where I learned to build a [corresponding shiny app](https://samuelswank.shinyapps.io/2020-House-Results/) to this *RPubs notebook*. For a full list of all the resources and packages used in the app and in this notebook, see the README of the above-mentioned [GitHub repository](https://github.com/shengjiyang/2020-House-Flipped-Seats).
+
+```{r}
+source("helpers/partyModel.R")
+
+
+```
+
