@@ -32,16 +32,23 @@ output: html_notebook
 - `nodesize = 1`
 - `maxnodes = NULL`
 
-|   Essentially the forest was composed of a healthy number of 500 trees, with replacement sampling, and no additional regularization for minimum node size or the maximum number of nodes used in a given tree. The model performance metrics were as follows.
+|   Essentially the forest was composed of a healthy number of 500 trees with replacement sampling and no additional regularization for minimum node size or the maximum number of nodes used in a given tree. The model performance metrics were as follows.
 
 ```{r include=FALSE}
 # Used
+# randomForest
 # yardstick
+
+# tidyverse
+
+# - tidyr
+# - dplyr
 
 # Attached
 # graph
 # igraph
 
+library(knitr)
 source("helpers/model/modelInfo.R")
 ```
 
@@ -49,9 +56,11 @@ source("helpers/model/modelInfo.R")
 summary(testCM) %>% select(.metric, .estimate) %>% filter(
   .metric == "accuracy" |
   .metric == "bal_accuracy" |
+  .metric == "mcc" |
   .metric == "precision" |
   .metric == "recall" | 
   .metric == "f_meas"
 )
 ```
 
+|   Considering that this is a fairly balanced classification problem with Democrats controlling `r sprintf("%.2f", (nrow(df %>% filter(party == "D")) / nrow(df)) * 100)`% of all House seats, and Republicans `r sprintf("%.2f", (nrow(df %>% filter(party == "R")) / nrow(df)) * 100)`%, accuracy by itself is a sufficient measure of model performance. That being said, taking Republican as our positive case, as the model does, 
