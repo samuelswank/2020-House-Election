@@ -18,6 +18,9 @@ df <- df[
   , !names(df) %in% c("med_smoc_mort", "med_smoc_no_mort"), drop = F
 ]
 
+# Accounting for Claudia Tenney's victory in New York's 22nd District
+df[272, ]$party <- "R"
+
 # scale.many function - standardizes whole columns
 scale.many <- function(dat, column.nos) {
   nms <- names(dat)
