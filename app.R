@@ -2,10 +2,10 @@ library(shiny)
 library(tidyverse)
 library(gridExtra)
 library(leaflet)
-source("stringManipulator.R")
-source("map.R")
-source("statistics.R")
-source("easterEgg.R")
+source("helpers/stringManipulator.R")
+source("helpers/plotting/map.R")
+source("helpers/plotting/statistics.R")
+source("helpers/plotting/easterEgg.R")
 
 stateChoices <- state.name %>% R.utils::insert(1, c(""))
 '%!in%' <- function(x,y){!('%in%'(x,y))}
@@ -171,7 +171,7 @@ server <- function(input, output, session) {
           output$statPlot   <- NULL
           output$statTitle  <- NULL
           
-        # Race
+        
         } else if (input$selectedChart == "Race") {
           output$statTitle <- renderUI({h3(input$selectedChart)})
           output$statPlot  <- renderPlot(width = 575, height = 475, expr = {
