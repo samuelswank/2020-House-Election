@@ -1,10 +1,5 @@
 library(tidyverse)
 library(randomForest)
-
-# Uncomment for use in tree_func near bottom
-# library(ggraph)
-# library(igraph)
-
 source("helpers/stringManipulator.R")
 
 df <- read.csv("data/census/demographics/preprocessed/modelData.csv")

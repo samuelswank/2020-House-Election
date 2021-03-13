@@ -2,8 +2,6 @@ library(ggraph)
 library(igraph)
 source("helpers/model/partyModel.R")
 
-
-
 testCM <- yardstick::conf_mat(
   test.preds, truth = actual, estimate = predicted
 )
