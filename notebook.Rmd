@@ -50,8 +50,9 @@ output: html_notebook
 # - tidyr
 # - dplyr
 
+# ggrepel
+
 # knitr
-# kable
 
 # Attached
 # graph
@@ -183,9 +184,117 @@ sprintf("Democrat:   %s", d1)
 sprintf("Republican: %s", r1)
 ```
 
-#### Race
+#### **Race**
+```{r include=FALSE}
+races <- c(
+  paste(
+    "American Indians",
+    paste(round(modelData[d1, "amerindian"], 2), "%", sep = ""),
+    sep = ": "
+    ),
+  paste(
+    "Asians", paste(round(modelData[d1, "asian"], 2), "%", sep = ""), sep = ": "
+    ),
+  paste(
+    "Blacks", paste(round(modelData[d1, "black"], 2), "%", sep = ""), sep = ": "
+    ),
+  paste(
+    "Pacific Islanders",
+    paste(round(modelData[d1, "islander"], 2), "%", sep = ""),
+    sep = ": "
+    ),
+  paste(
+    "Multiracial Persons",
+    paste(round(modelData[d1, "multiracial"], 2), "%", sep = ""),
+    sep = ": "
+    ),
+  paste(
+    "Persons of Other Races",
+    paste(round(modelData[d1, "other_race"], 2), "%", sep = ""),
+    sep = ": "
+    ),
+  paste(
+    "Whites", paste(round(modelData[d1, "white"], 2), "%", sep = ""), sep = ": "
+    )
+  )
+```
+
+```{r}
+ggplot(
+  data = chartData(d1, colnames(modelData)[6:12], n_seed = 435),
+  aes(x = "", y = Freq, fill = sampleVec)
+  ) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  theme_minimal() +
+  ggtitle(d1) +
+  scale_fill_discrete(name = "", labels = races) +
+  theme(
+    plot.title = element_text(
+      size = 24, hjust = 0.5, family = "NewCenturySchoolbook"
+      ),
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank()
+  )
+```
+
+```{r include=FALSE}
+races <- c(
+  paste(
+    "American Indians",
+    paste(round(modelData[r1, "amerindian"], 2), "%", sep = ""),
+    sep = ": "
+    ),
+  paste(
+    "Asians", paste(round(modelData[r1, "asian"], 2), "%", sep = ""), sep = ": "
+    ),
+  paste(
+    "Blacks", paste(round(modelData[r1, "black"], 2), "%", sep = ""), sep = ": "
+    ),
+  paste(
+    "Pacific Islanders",
+    paste(round(modelData[r1, "islander"], 2), "%", sep = ""),
+    sep = ": "
+    ),
+  paste(
+    "Multiracial Persons",
+    paste(round(modelData[r1, "multiracial"], 2), "%", sep = ""),
+    sep = ": "
+    ),
+  paste(
+    "Persons of Other Races",
+    paste(round(modelData[r1, "other_race"], 2), "%", sep = ""),
+    sep = ": "
+    ),
+  paste(
+    "Whites", paste(round(modelData[r1, "white"], 2), "%", sep = ""), sep = ": "
+    )
+  )
+```
 
 ```{r}
 
+
+ggplot(
+  data = chartData(r1, colnames(modelData)[6:12], n_seed = 435),
+  aes(x = "", y = Freq, fill = sampleVec)
+  ) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  theme_minimal() +
+  ggtitle(r1) +
+  scale_fill_discrete(name = "", labels = races) +
+  theme(
+    plot.title = element_text(
+      size = 24, hjust = 0.5, family = "NewCenturySchoolbook"
+      ),
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank()
+  )
 ```
 
+| From
