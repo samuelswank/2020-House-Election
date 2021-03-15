@@ -175,7 +175,7 @@ sprintf("(D: %d, R: %d)", nrow(democrat), nrow(republican))
 ```
 
 ```{r}
-set.seed(435)  
+set.seed(50)  
 
 d1 <- rownames(democrat) %>% sample(1) 
 r1 <- rownames(republican) %>% sample(1)
@@ -186,7 +186,7 @@ sprintf("Republican: %s", r1)
 
 #### **Race**
 ```{r include=FALSE}
-races <- c(
+racesd1 <- c(
   paste(
     "American Indians",
     paste(round(modelData[d1, "amerindian"], 2), "%", sep = ""),
@@ -228,7 +228,7 @@ ggplot(
   coord_polar("y", start = 0) +
   theme_minimal() +
   ggtitle(d1) +
-  scale_fill_discrete(name = "", labels = races) +
+  scale_fill_discrete(name = "", labels = racesd1) +
   theme(
     plot.title = element_text(
       size = 24, hjust = 0.5, family = "NewCenturySchoolbook"
@@ -241,7 +241,7 @@ ggplot(
 ```
 
 ```{r include=FALSE}
-races <- c(
+racesr1 <- c(
   paste(
     "American Indians",
     paste(round(modelData[r1, "amerindian"], 2), "%", sep = ""),
@@ -275,8 +275,6 @@ races <- c(
 ```
 
 ```{r}
-
-
 ggplot(
   data = chartData(r1, colnames(modelData)[6:12], n_seed = 435),
   aes(x = "", y = Freq, fill = sampleVec)
@@ -285,7 +283,7 @@ ggplot(
   coord_polar("y", start = 0) +
   theme_minimal() +
   ggtitle(r1) +
-  scale_fill_discrete(name = "", labels = races) +
+  scale_fill_discrete(name = "", labels = racesr1) +
   theme(
     plot.title = element_text(
       size = 24, hjust = 0.5, family = "NewCenturySchoolbook"
@@ -297,4 +295,4 @@ ggplot(
   )
 ```
 
-| From
+|   From the two districts sampled above **`r sprintf("%s District %s", strsplit(d1, split = " ")[[1]][1], strsplit(d1, split = " ")[[1]][2])`** and **`r sprintf("%s District %s", strsplit(r1, split = " ")[[1]][1], strsplit(r1, split = " ")[[1]][2])`**, we can see clearly that the former, a Democratic district has a greater degree of racial diversity. In the former whites make up only `r strsplit(racesd1[length(racesd1)], split = " ")[[1]][2]` of the population compared with the latter, a Republican district's, `r strsplit(racesr1[length(racesr1)], split = " ")[[1]][2]`, a `r abs(modelData[d1, "white"] - modelData[r1, "white"]) %>% round(2)`% difference. Asians also make up around more `r round(modelData[d1, "asian"] / modelData[r1, "asian"], 0)` times the percentage of total population in the `r strsplit(d1, split = " ")[[1]][1]` district, compared to that of the `r strsplit(r1, split = " ")[[1]][1]` district.
