@@ -17,7 +17,7 @@ output: html_notebook
 
 \  
 
-|   The answer to the first question is fairly straightforward. As my reader will see, those demographics associated with the metropolitan, urban centers, tend to be characteristic of House districts that elected Democratic candidates; whereas, those demographics associated with suburban and rural America, tend to be characteristic of those districts that chose Republican representatives.
+|   The answer to the first question is fairly straightforward: those demographics associated with the metropolitan, urban centers, tend to be characteristic of House districts that elected Democratic candidates; whereas, those demographics associated with suburban and rural America, tend to be characteristic of those districts that chose Republican representatives.
 
 # Model
 
@@ -25,7 +25,7 @@ output: html_notebook
 
 ### Preprocessing
 
-|   The Census Bureau's estimates were taken, and wherein it was reasonable to do so, the estimates were converted from their raw values to percentages of the estimated population of the district. For the sake of simplicity, the *margin of error* was not taken into account. These data were then standardized to account for those statistics, such as *median rent*, *median household income*, *etc.*, for which no percentage was taken.
+|   The Census Bureau's estimates from the *2019 American Community Survey* were taken, and wherein it was reasonable to do so, these estimates were converted from their raw values to percentages of the estimated population of the district. For the sake of simplicity, the *margin of error* was not taken into account. These data were then standardized to account for those statistics, such as *median rent*, *median household income*, *etc.*, for which no percentage was taken.
 
 \  
 
@@ -93,7 +93,17 @@ top.ten
 
 \  
 
-|   In order to do so, we will need to use our model's data prior to standardization, coupled with appropriate helper functions to aid in extracting the appropriate data.
+|   Given the demographics with the highest *mean decrease in Gini impurity*, the graphs below will represent the following categories:
+
+- Race
+- Place of Birth
+- Commuter Method
+- Residential Occupancy
+- Rental Data
+
+\  
+
+|   In order to display this information, we will need to use our model's data prior to standardization, coupled with appropriate helper functions to aid in extracting the appropriate data.
 
 ```{r include=FALSE}
 modelData <- read_csv("data/census/demographics/preprocessed/modelData.csv")
@@ -102,6 +112,8 @@ colnames(modelData)[1] <- "district"
 modelData <- as.data.frame(modelData)
 rownames(modelData) <- modelData$district
 modelData <- modelData[, 2:(ncol(modelData) - 1)]
+
+modelData[272, "party"] <- "R"
 ```
 
 ```{r}
@@ -117,16 +129,12 @@ modelData
 #              below
 
 chartData <- function(
-  selectedState, selectedDistrict, categories, grouping = NULL, n_seed = NULL
-) {
-  
-  if (selectedState %!in% atLarge) {
-    districtString <- reverseDistrict(selectedState, selectedDistrict)
-  } else {districtString <- paste(selectedState, "At Large", sep = " ")}
+  selectedDistrict, categories, grouping = NULL, n_seed = NULL
+  ) {
   
   c <- c()
   for (i in 1:length(categories)) {
-    c[i] <- (modelData[districtString, ] %>%
+    c[i] <- (modelData[selectedDistrict, ] %>%
                select(categories) %>%
                .[[categories[i]]]) / 100
   }
@@ -142,20 +150,42 @@ chartData <- function(
     counts$group <- grouping
   }
   
-  return(counts)
+  return(as.data.frame(counts))
 }
 
 # getRent <- function for extracting med_rent from modelData for use in density
 #            plot
 
-getRent <- function(selectedState, selectedDistrict) {
-  if (selectedState %!in% atLarge) {
-    districtString <- reverseDistrict(selectedState, selectedDistrict)
-  } else {districtString <- paste(selectedState, "At Large", sep = " ")}
+getRent <- function(selectedDistrict) {
   
-  med_rent <- modelData[districtString, ] %>% pull(med_rent)
+  med_rent <- modelData[selectedDistrict, ] %>% pull(med_rent)
   
   return(as.character(med_rent))
 }
+```
+
+**Democrat and Republican district subsets** for use in randomly selecting districts from each party.
+
+```{r}
+democrat   <- modelData %>% filter(party == "D")
+republican <- modelData %>% filter(party == "R")
+
+sprintf("(D: %d, R: %d)", nrow(democrat), nrow(republican))
+```
+
+```{r}
+set.seed(435)  
+
+d1 <- rownames(democrat) %>% sample(1) 
+r1 <- rownames(republican) %>% sample(1)
+
+sprintf("Democrat:   %s", d1)
+sprintf("Republican: %s", r1)
+```
+
+#### Race
+
+```{r}
+
 ```
 
