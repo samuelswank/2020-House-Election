@@ -393,4 +393,63 @@ r2Percentages
 source("dataWrangling/ballotpediaScraper.R")
 ```
 
-|   Continuing our analysis with two different sampled districts, **`r sprintf("%s District %s", strsplit(d2, split = " ")[[1]][1], strsplit(d2, split = " ")[[1]][2])`**, a Democratic district, and **`r sprintf("%s District %s", strsplit(r2, split = " ")[[1]][1], strsplit(r2, split = " ")[[1]][2])`**, a Republican district, we find that a higher ratio of Foreign-born Citizens to Natural-born Citizens seems to be indicative that a given voting district with vote Democrat. Given that the vast majority of Americans are born with citizenship rather than are born non-citizens and later naturalized. According to the Census Bureau's *American Community Survery*, in 2014, the total population of the United States was estimated at `r floor(totalPop / 1000000)` million people, with `r round((totalNatural / totalPop) * 100, 0)`% natural-born citizens, compared to only `r round((totalNaturalized / totalPop) * 100, 0)`% naturalized citizens, with the remaining `r 100 - round((totalNatural / totalPop) * 100, 0) - round((totalNaturalized / totalPop) * 100, 0)`% non-citizens.
+|   Continuing our analysis with two different sampled districts, **`r sprintf("%s District %s", strsplit(d2, split = " ")[[1]][1], strsplit(d2, split = " ")[[1]][2])`**, a Democratic district, and **`r sprintf("%s District %s", strsplit(r2, split = " ")[[1]][1], strsplit(r2, split = " ")[[1]][2])`**, a Republican district, we find that a higher ratio of Foreign-born Citizens to Natural-born Citizens seems to be indicative that a given voting district with vote Democrat. The vast majority of Americans nationwide are born with citizenship rather than are born non-citizens and later naturalized. According to the Census Bureau's *American Community Survery*, in 2014, the total population of the United States was estimated at `r floor(totalPop / 1000000)` million people, with `r round((totalNatural / totalPop) * 100, 0)`% natural-born citizens, compared to only `r round((totalNaturalized / totalPop) * 100, 0)`% naturalized citizens, with the remaining `r 100 - round((totalNatural / totalPop) * 100, 0) - round((totalNaturalized / totalPop) * 100, 0)`% non-citizens. Given this fact, the magnitude of difference between the ratio of two voting districts' *foreign-born* populations is typically in the single digits or lower. This is the case here where the difference between the ratios of *foreign-born citizens* to the total between the `r strsplit(d2, split = " ")[[1]][1]` district and the `r strsplit(r2, split = " ")[[1]][1]` is only `r round(abs(d2Percentages["Foreign-born Citizen", d2] - r2Percentages["Foreign-born Citizen", r2]), 2)`%. This small magnitude of difference, on the micro-level can translate into a large difference in the political balance of a state on the macro-level. For instance, there may not be a double-digit difference when comparing most individual voting differences with regard to their ratio of *natural-born* to *foreign-born citizens*, but at the state level, these small differences add up. According to the above-mentioned source, California, an overwhelmingly Democratic state, has a population of 27% *naturalized citizens* compared to Republican West Virginia's 1.5%. Understood as a surrogate for population density and by extension the difference in policy preferences between folks who live in urban versus rural and suburban areas, it is very clear, without reference to any statistics, that Los Angeles is more densely populated than Charleston.
+
+\  
+
+#### **Commuter Method**
+```{r}
+set.seed(1776)  
+
+d3 <- rownames(democrat) %>% sample(1) 
+r3 <- rownames(republican) %>% sample(1)
+
+sprintf("Democrat:   %s", d3)
+sprintf("Republican: %s", r3)
+```
+
+
+```{r}
+ggplot(data = chartData(d3, colnames(modelData)[31:32]), aes(x = sampleVec, y = Freq)) +
+        geom_bar(stat = "identity", position = "stack", aes(fill = sampleVec)) +
+        theme_minimal() +
+        scale_fill_discrete(
+          name = "",
+          labels = c("By Car (including carpooling)", "Walking / Public Transit")
+          ) +
+        scale_y_continuous(
+          labels = comma_format(big.mark = ",", decimal.mark = ".")
+        ) +
+        ggtitle(d3) +
+        theme(
+          plot.title = element_text(
+            size = 24, hjust = 0.5, family = "NewCenturySchoolbook"
+            ),
+          axis.text.x = element_blank(),
+          axis.title.x = element_blank(),
+          axis.title.y = element_blank()
+        )
+```
+
+```{r}
+ggplot(data = chartData(r3, colnames(modelData)[31:32]), aes(x = sampleVec, y = Freq)) +
+        geom_bar(stat = "identity", position = "stack", aes(fill = sampleVec)) +
+        theme_minimal() +
+        scale_fill_discrete(
+          name = "",
+          labels = c("By Car (including carpooling)", "Walking / Public Transit")
+          ) +
+        scale_y_continuous(
+          labels = comma_format(big.mark = ",", decimal.mark = ".")
+        ) +
+        ggtitle(r3) +
+        theme(
+          plot.title = element_text(
+            size = 24, hjust = 0.5, family = "NewCenturySchoolbook"
+            ),
+          axis.text.x = element_blank(),
+          axis.title.x = element_blank(),
+          axis.title.y = element_blank()
+        )
+```
+
