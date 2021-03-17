@@ -59,6 +59,8 @@ output: html_notebook
 # igraph
 
 library(knitr)
+library(scales)
+library(gridExtra)
 source("helpers/model/modelInfo.R")
 ```
 
@@ -295,7 +297,7 @@ ggplot(
   )
 ```
 
-|   From the two districts sampled above **`r sprintf("%s District %s", strsplit(d1, split = " ")[[1]][1], strsplit(d1, split = " ")[[1]][2])`** and **`r sprintf("%s District %s", strsplit(r1, split = " ")[[1]][1], strsplit(r1, split = " ")[[1]][2])`**, we can see clearly that the former, a Democratic district has a greater degree of racial diversity compared with the latter. In the former *whites* make up only `r strsplit(racesd1[length(racesd1)], split = " ")[[1]][2]` of the population compared with the latter's `r strsplit(racesr1[length(racesr1)], split = " ")[[1]][2]`, a `r abs(modelData[d1, "white"] - modelData[r1, "white"]) %>% round(2)`% difference. *Asians* also make up around `r round(modelData[d1, "asian"] / modelData[r1, "asian"], 0)` times the percentage of total population in the `r strsplit(d1, split = " ")[[1]][1]` district, compared to that of the `r strsplit(r1, split = " ")[[1]][1]` district. The percentage of *persons of other races* is also higher in the Democratic district compared with that of the Republican. As noted in an [article](https://medium.com/swlh/democrat-or-republican-politics-and-logistic-regression-7639648be5f0) sharing the findings of the original project, this relationship between race and party affiliation should be viewed of as one of correlation rather than causation. Whites don't vote Republican regardless of where they live as the causational interpretation may suggest; rather, those who live in more rural, less racially diverse parts of the country do. As my reader will see below, race along with the other *high importance* factors stated above are simply surrogates for population density.
+|   From the two districts sampled above **`r sprintf("%s District %s", strsplit(d1, split = " ")[[1]][1], strsplit(d1, split = " ")[[1]][2])`** and **`r sprintf("%s District %s", strsplit(r1, split = " ")[[1]][1], strsplit(r1, split = " ")[[1]][2])`**, we can see clearly that the former, a Democratic district has a greater degree of racial diversity compared with the latter. In the former *whites* make up only `r strsplit(racesd1[length(racesd1)], split = " ")[[1]][2]` of the population compared with the latter's `r strsplit(racesr1[length(racesr1)], split = " ")[[1]][2]`, a `r abs(modelData[d1, "white"] - modelData[r1, "white"]) %>% round(2)`% difference. *Asians* also make up around `r round(modelData[d1, "asian"] / modelData[r1, "asian"], 0)` times the percentage of total population in the `r strsplit(d1, split = " ")[[1]][1]` district, compared to that of the `r strsplit(r1, split = " ")[[1]][1]` district. The percentage of *persons of other races* is also higher in the Democratic district compared with that of the Republican. As noted in an [article](https://medium.com/swlh/democrat-or-republican-politics-and-logistic-regression-7639648be5f0) sharing the findings of the original project, this relationship between race and party affiliation should be viewed of as one of correlation rather than causation. Whites do not vote Republican regardless of where they live as the causational interpretation may suggest; rather, those who live in more rural, less racially diverse parts of the country do. As my reader will see below, race along with the other *high importance* factors stated above are simply surrogates for population density.
 
 \  
 
@@ -393,7 +395,7 @@ r2Percentages
 source("dataWrangling/ballotpediaScraper.R")
 ```
 
-|   Continuing our analysis with two different sampled districts, **`r sprintf("%s District %s", strsplit(d2, split = " ")[[1]][1], strsplit(d2, split = " ")[[1]][2])`**, a Democratic district, and **`r sprintf("%s District %s", strsplit(r2, split = " ")[[1]][1], strsplit(r2, split = " ")[[1]][2])`**, a Republican district, we find that a higher ratio of Foreign-born Citizens to Natural-born Citizens seems to be indicative that a given voting district with vote Democrat. The vast majority of Americans nationwide are born with citizenship rather than are born non-citizens and later naturalized. According to the Census Bureau's *American Community Survery*, in 2014, the total population of the United States was estimated at `r floor(totalPop / 1000000)` million people, with `r round((totalNatural / totalPop) * 100, 0)`% natural-born citizens, compared to only `r round((totalNaturalized / totalPop) * 100, 0)`% naturalized citizens, with the remaining `r 100 - round((totalNatural / totalPop) * 100, 0) - round((totalNaturalized / totalPop) * 100, 0)`% non-citizens. Given this fact, the magnitude of difference between the ratio of two voting districts' *foreign-born* populations is typically in the single digits or lower. This is the case here where the difference between the ratios of *foreign-born citizens* to the total between the `r strsplit(d2, split = " ")[[1]][1]` district and the `r strsplit(r2, split = " ")[[1]][1]` is only `r round(abs(d2Percentages["Foreign-born Citizen", d2] - r2Percentages["Foreign-born Citizen", r2]), 2)`%. This small magnitude of difference, on the micro-level can translate into a large difference in the political balance of a state on the macro-level. For instance, there may not be a double-digit difference when comparing most individual voting differences with regard to their ratio of *natural-born* to *foreign-born citizens*, but at the state level, these small differences add up. According to the above-mentioned source, California, an overwhelmingly Democratic state, has a population of 27% *naturalized citizens* compared to Republican West Virginia's 1.5%. Understood as a surrogate for population density and by extension the difference in policy preferences between folks who live in urban versus rural and suburban areas, it is very clear, without reference to any statistics, that Los Angeles is more densely populated than Charleston.
+|   Continuing our analysis with two different sampled districts, **`r sprintf("%s District %s", strsplit(d2, split = " ")[[1]][1], strsplit(d2, split = " ")[[1]][2])`**, a Democratic district, and **`r sprintf("%s District %s", strsplit(r2, split = " ")[[1]][1], strsplit(r2, split = " ")[[1]][2])`**, a Republican district, we find that a higher ratio of Foreign-born Citizens to Natural-born Citizens seems to be indicative that a given voting district with vote Democrat. The vast majority of Americans nationwide are born with citizenship rather than are born non-citizens and later naturalized. According to the Census Bureau's *American Community Survery*, in 2014, the total population of the United States was estimated at `r floor(totalPop / 1000000)` million people, with `r round((totalNatural / totalPop) * 100, 0)`% natural-born citizens, compared to only `r round((totalNaturalized / totalPop) * 100, 0)`% naturalized citizens, with the remaining `r 100 - round((totalNatural / totalPop) * 100, 0) - round((totalNaturalized / totalPop) * 100, 0)`% non-citizens. Given this fact, the magnitude of difference between the ratio of two voting districts' *foreign-born* populations is typically in the single digits or lower. This is the case here where the difference between the ratios of *foreign-born citizens* to the total between the `r strsplit(d2, split = " ")[[1]][1]` district and the `r strsplit(r2, split = " ")[[1]][1]` is only `r round(abs(d2Percentages["Foreign-born Citizen", d2] - r2Percentages["Foreign-born Citizen", r2]), 2)`%. This small magnitude of difference, on the micro-level can translate into a large difference in the political balance of a state on the macro-level. For instance, there may not be a double-digit difference when comparing most individual voting districts with regard to their ratio of *natural-born* to *foreign-born citizens*, but at the state level, these small differences add up. According to the above-mentioned source, California, an overwhelmingly Democratic state, has a population of 27% *naturalized citizens* compared to Republican West Virginia's 1.5%. Given that a great number of immigrants come from overseas or Latin America, the former settling primarily in coastal, urban areas, these differences present further evidence for the population density hypothesis. By extension the difference in policy preferences between folks who live in urban versus rural and suburban areas translate into the differences in party affiliation we find between the above-sampled districts, and between Los Angeles and Charleston.
 
 \  
 
@@ -453,3 +455,69 @@ ggplot(data = chartData(r3, colnames(modelData)[31:32]), aes(x = sampleVec, y = 
         )
 ```
 
+|   The comparison here between Democrat-held **`r sprintf("%s District %s", strsplit(d3, split = " ")[[1]][1], strsplit(d3, split = " ")[[1]][2])`** and Republican-held **`r sprintf("%s District %s", strsplit(r3, split = " ")[[1]][1], strsplit(r3, split = " ")[[1]][2])`** is an even more obvious indicator of the relationship between population density and party affiliation. People who live and work in or near large cities tend to use public transit or simply walk to work more often than those who live in rural and suburban communitites. In this case, **`r sprintf("%s District %s", strsplit(d3, split = " ")[[1]][1], strsplit(d3, split = " ")[[1]][2])`**, being very near to the most populous city in the country, would naturally have a higher ratio of folks who walk or take public transit to those who commute by car, than **`r sprintf("%s District %s", strsplit(r3, split = " ")[[1]][1], strsplit(r3, split = " ")[[1]][2])`**. For reference, as of 2016, the former ranked 110th in population density, with the latter ranked the 351st most densely populated.
+
+#### Housing Occupancy
+```{r}
+set.seed(1865)  
+
+d4 <- rownames(democrat) %>% sample(1) 
+r4 <- rownames(republican) %>% sample(1)
+
+sprintf("Democrat:   %s", d4)
+sprintf("Republican: %s", r4)
+```
+
+```{r}
+ggplot(data = chartData(
+  d4, colnames(modelData)[40:41], n_seed = 42), aes(x = sampleVec, y = Freq)
+  ) +
+  geom_bar(
+    stat = "identity",
+    position = "stack",
+    aes(fill = sampleVec),
+    ) +
+  theme_minimal() +
+  scale_fill_discrete(
+    name = "", labels = c("Owner Occupied Units", "Renter Occupied Units")
+    ) +
+  scale_y_continuous(
+    labels = comma_format(big.mark = ",", decimal.mark = ".")
+    ) +
+  ggtitle(d4) +
+  theme(
+    plot.title = element_text(
+            size = 24, hjust = 0.5, family = "NewCenturySchoolbook"
+            ),
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank() 
+  )
+```
+
+```{r}
+ggplot(data = chartData(
+  r4, colnames(modelData)[40:41], n_seed = 42), aes(x = sampleVec, y = Freq)
+  ) +
+  geom_bar(
+    stat = "identity",
+    position = "stack",
+    aes(fill = sampleVec),
+    ) +
+  theme_minimal() +
+  scale_fill_discrete(
+    name = "", labels = c("Owner Occupied Units", "Renter Occupied Units")
+    ) +
+  scale_y_continuous(
+    labels = comma_format(big.mark = ",", decimal.mark = ".")
+    ) +
+  ggtitle(r4) +
+  theme(
+    plot.title = element_text(
+            size = 24, hjust = 0.5, family = "NewCenturySchoolbook"
+            ),
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank() 
+  )
+```
