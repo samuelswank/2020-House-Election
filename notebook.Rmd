@@ -62,6 +62,7 @@ library(knitr)
 library(scales)
 library(gridExtra)
 source("helpers/model/modelInfo.R")
+source("helpers/plotting/map.R")
 ```
 
 ```{r}
@@ -106,7 +107,7 @@ top.ten
 
 \  
 
-|   In order to display this information, we will need to use our model's data prior to standardization, coupled with appropriate helper functions to aid in extracting the appropriate data.
+|   In order to display this information, we will need to use our model's data prior to standardization, coupled with appropriate helper functions to aid in extracting and plotting the appropriate data.
 
 ```{r include=FALSE}
 modelData <- read_csv("data/census/demographics/preprocessed/modelData.csv")
@@ -166,6 +167,149 @@ getRent <- function(selectedDistrict) {
   return(as.character(med_rent))
 }
 ```
+
+```{r}
+# plotState <- function for plotting party affiliation of state's members in the
+#              nation's House of Representatives;
+#              if predicted = FALSE, the actual results are displayed
+#              else if predicted = TRUE, the model's predictions are displayed
+
+plotState <- function(selectedState, predicted = FALSE) {
+  if (predicted == TRUE) {
+    if (selectedState == "Alaska") {
+    ggplot() + 
+      geom_sf(
+        stateData(selectedState),
+        mapping = aes(fill = predicted),
+        size = 0.75,
+        color = "black"
+      ) +
+      xlim(-180, -120) +
+      scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+      ggtitle("Predicted") +
+      theme(
+        panel.background = element_blank(),
+        plot.title = titleFormat,
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none"
+      )
+  } else if (selectedState %in% atLarge | selectedState == "Hawaii") {
+    ggplot() + 
+      geom_sf(
+        stateData(selectedState),
+        mapping = aes(fill = predicted),
+        size = 0.75,
+        color = "black"
+      ) +
+      scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+      ggtitle("Predicted") +
+      theme(
+        panel.background = element_blank(),
+        plot.title = titleFormat,
+        axis.title.y = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none"
+      )
+  } else {
+    ggplot() + 
+      geom_sf(
+        stateData(selectedState),
+        mapping = aes(fill = predicted),
+        size = 0.75,
+        color = "black"
+        ) +
+      geom_text_repel(
+        stateData(selectedState),
+        mapping = aes(X, Y, label = district_label), 
+        fontface = "bold",
+        size = 5,
+        segment.linetype = 1,
+        max.overlaps = 10
+        ) +
+      scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+      ggtitle("Predicted") +
+      theme(
+        panel.background = element_blank(),
+        plot.title = titleFormat,
+        axis.title.y = element_blank(),
+        axis.text = element_blank(),
+        axis.title.x = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none"
+        )
+    }
+  } else if (predicted == FALSE) {
+        if (selectedState == "Alaska") {
+    ggplot() + 
+      geom_sf(
+        stateData(selectedState),
+        mapping = aes(fill = party),
+        size = 0.75,
+        color = "black"
+      ) +
+      xlim(-180, -120) +
+      scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+      ggtitle("Actual") +
+      theme(
+        panel.background = element_blank(),
+        plot.title = titleFormat,
+        axis.title.y = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none"
+      )
+  } else if (selectedState %in% atLarge | selectedState == "Hawaii") {
+    ggplot() + 
+      geom_sf(
+        stateData(selectedState),
+        mapping = aes(fill = party),
+        size = 0.75,
+        color = "black"
+      ) +
+      scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+      ggtitle("Actual") +
+      theme(
+        panel.background = element_blank(),
+        plot.title = titleFormat,
+        axis.title.y = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none"
+      )
+  } else {
+    ggplot() + 
+      geom_sf(
+        stateData(selectedState),
+        mapping = aes(fill = party),
+        size = 0.75,
+        color = "black"
+        ) +
+      geom_text_repel(
+        stateData(selectedState),
+        mapping = aes(X, Y, label = district_label), 
+        fontface = "bold",
+        size = 5,
+        segment.linetype = 1,
+        max.overlaps = 10
+        ) +
+      scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+      ggtitle("Actual") +
+      theme(
+        panel.background = element_blank(),
+        plot.title = titleFormat,
+        axis.title.y = element_blank(),
+        axis.text = element_blank(),
+        axis.title.x = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none"
+        )
+    }
+  }
+}
+```
+
 
 **Democrat and Republican district subsets** for use in randomly selecting districts from each party.
 
@@ -401,7 +545,15 @@ source("dataWrangling/ballotpediaScraper.R")
 
 \   
 
-|   As of the 2016 congressional race, **`r sprintf("%s District %s", strsplit(d2, split = " ")[[1]][1], strsplit(d2, split = " ")[[1]][2])`** ranked 335 highest in population density, with **`r sprintf("%s District %s", strsplit(r2, split = " ")[[1]][1], strsplit(r2, split = " ")[[1]][2])`** slightly lower, in the 342th place. The reader should note that the relatively low population density of the Democratic voting district presents something of a problem for population density hypothesis, given that **`r sprintf("%s District %s", strsplit(d2, split = " ")[[1]][1], strsplit(d2, split = " ")[[1]][2])`**.
+|   **`r sprintf("%s District %s", strsplit(d2, split = " ")[[1]][1], strsplit(d2, split = " ")[[1]][2])`** ranked **335 highest in population density**, with **`r sprintf("%s District %s", strsplit(r2, split = " ")[[1]][1], strsplit(r2, split = " ")[[1]][2])`** slightly lower, in the **342th** place. The reader should note that the relatively low population density of the Democratic voting district presents something of a problem for population density hypothesis. It seems that geography and diversity itself also play roles in voter behavior independent of population density. We can speculate that the district's location on the West Coast coupled with the fact that it contains an Indian reservation both play a factor in the Democratic party's influence in the district. This same trend can be seen in Arizona, where the model predicted that the district containing the Navajo Nation would vote Republican when the district actually voted Democrat.
+
+```{r}
+actualArizona    <- plotState("Arizona")
+predictedArizona <- plotState("Arizona", predicted = TRUE)
+
+grid.arrange(predictedArizona, actualArizona, ncol = 2)
+```
+
 
 \  
 
@@ -461,7 +613,7 @@ ggplot(data = chartData(r3, colnames(modelData)[31:32]), aes(x = sampleVec, y = 
         )
 ```
 
-|   The comparison here between Democrat-held **`r sprintf("%s %s District %s", strsplit(d3, split = " ")[[1]][1], strsplit(d3, split = " ")[[1]][2], strsplit(d3, split = " ")[[1]][3])`** and Republican-held **`r sprintf("%s District %s", strsplit(r3, split = " ")[[1]][1], strsplit(r3, split = " ")[[1]][2])`** is an even more obvious indicator of the relationship between population density and party affiliation. People who live and work in or near large cities tend to use public transit or simply walk to work more often than those who live in rural and suburban communitites. In this case, **`r sprintf("%s %s District %s", strsplit(d3, split = " ")[[1]][1], strsplit(d3, split = " ")[[1]][2], strsplit(d3, split = " ")[[1]][3])`**, being very near to the most populous city in the country, would naturally have a higher ratio of folks who walk or take public transit to those who commute by car, than **`r sprintf("%s District %s", strsplit(r3, split = " ")[[1]][1], strsplit(r3, split = " ")[[1]][2])`**. The difference in the percentage of pedestrians and those who take public transit to work the total number of commuters between these two districts is `r round(abs(modelData[d3, "walking_public_transit"] - modelData[r3, "walking_public_transit"]), 2)`% With reference to the population density hypothesis, as of 2016, the former ranked 110th in population density, with the latter ranked the 351st most densely populated.
+|   The comparison here between Democrat-held **`r sprintf("%s %s District %s", strsplit(d3, split = " ")[[1]][1], strsplit(d3, split = " ")[[1]][2], strsplit(d3, split = " ")[[1]][3])`** and Republican-held **`r sprintf("%s District %s", strsplit(r3, split = " ")[[1]][1], strsplit(r3, split = " ")[[1]][2])`** is an even more obvious indicator of the relationship between population density and party affiliation. People who live and work in or near large cities tend to use public transit or simply walk to work more often than those who live in rural and suburban communitites. In this case, **`r sprintf("%s %s District %s", strsplit(d3, split = " ")[[1]][1], strsplit(d3, split = " ")[[1]][2], strsplit(d3, split = " ")[[1]][3])`**, being very near to the most populous city in the country, would naturally have a higher ratio of folks who walk or take public transit to those who commute by car, than **`r sprintf("%s District %s", strsplit(r3, split = " ")[[1]][1], strsplit(r3, split = " ")[[1]][2])`**. The difference in the percentage of pedestrians and those who take public transit to work the total number of commuters between these two districts is `r round(abs(modelData[d3, "walking_public_transit"] - modelData[r3, "walking_public_transit"]), 2)`% The former ranked **110th in population density**, with the latter ranked **the 351st most densely populated.**
 
 #### Housing
 ```{r}
@@ -528,7 +680,7 @@ ggplot(data = chartData(
   )
 ```
 
-|   Another obvious stand-in for population density can be found in the ratios of *owner-occupied units* to total housing units and of *renter-occupied units*. Echoing advice to attributed to **Mark Twain** *"buy land, they aren't making any more of it,"* the comparative scarcity of land in and immediately around urban parts of the country drives the price of land up. This makes homeownership a less attractive option for those living in these areas. This case is demonstrated here, with **`r sprintf("%s District %s", strsplit(d4, split = " ")[[1]][1], strsplit(d4, split = " ")[[1]][2])`**'s percentage of Owner-occupied Units to the total being `r round(modelData[d4, "owner_occupied"], 2)`%, `r round(abs(modelData[d4, "owner_occupied"] - modelData[r4, "owner_occupied"]), 2)`% lower than that of **`r sprintf("%s District %s", strsplit(r4, split = " ")[[1]][1], strsplit(r4, split = " ")[[1]][2])`**.
+|   Another obvious stand-in for population density can be found in the ratios of *owner-occupied units* to total housing units and of *renter-occupied units*. Echoing advice to attributed to **Mark Twain** *"buy land, they aren't making any more of it,"* the comparative scarcity of land in and immediately around urban parts of the country drives the price of land up. This makes homeownership a less attractive option for those living in these areas. This case is demonstrated here, with **`r sprintf("%s District %s", strsplit(d4, split = " ")[[1]][1], strsplit(d4, split = " ")[[1]][2])`**'s percentage of Owner-occupied Units to the total being `r round(modelData[d4, "owner_occupied"], 2)`%, `r round(abs(modelData[d4, "owner_occupied"] - modelData[r4, "owner_occupied"]), 2)`% lower than that of **`r sprintf("%s District %s", strsplit(r4, split = " ")[[1]][1], strsplit(r4, split = " ")[[1]][2])`**. The former ranked **31st in population density**, with the latter ranked **the 350th most densely populated.**
 
 ```{r}
 set.seed(1980)  
@@ -569,4 +721,4 @@ gm <- mrDensity.frame %>% subset(y == max(y)) %>% .[1, "x"] %>% round(.)
 ```
 
 
-|   Expanding on the relationship between homeownership and rental ratios and party affiliation, here we see that the value of land also pushes rental prices up. Here **`r sprintf("%s District %s", strsplit(r5, split = " ")[[1]][1], strsplit(r5, split = " ")[[1]][2])`**'s *median monthly rent*, $`r getRent(r5)` is only marginally lower than above-shown distribution plot's global maximum, $`r gm`. Compare this to **`r sprintf("%s District %s", strsplit(d5, split = " ")[[1]][1], strsplit(d5, split = " ")[[1]][2])`**'s *median monthly rent* $`r getRent(d5)`. The absolute difference between Democratic district's median monthly rent and the global maximum is over `r floor(abs(as.numeric(getRent(d5)) - gm) / abs(as.numeric(getRent(r5)) - gm))` times that of the Republican district. These greater rent prices are a strong indicator of one of the primary reasons
+|   Expanding on the relationship between homeownership and rental ratios and party affiliation, here we see that the value of land also pushes rental prices up. Here **`r sprintf("%s District %s", strsplit(r5, split = " ")[[1]][1], strsplit(r5, split = " ")[[1]][2])`**'s *median monthly rent*, $`r getRent(r5)` is only marginally lower than above-shown distribution plot's global maximum, $`r gm`. Compare this to **`r sprintf("%s District %s", strsplit(d5, split = " ")[[1]][1], strsplit(d5, split = " ")[[1]][2])`**'s *median monthly rent* $`r getRent(d5)`. The absolute difference between Democratic district's median monthly rent and the global maximum is over `r floor(abs(as.numeric(getRent(d5)) - gm) / abs(as.numeric(getRent(r5)) - gm))` times that of the Republican district. These greater rent prices are a strong indicator of one of the primary reasons people who live in more densely populated areas would choose Democratic representation over Republican representation. The former party's rhetoric likely appeals to many who feel that [*rent is too damn high!*](https://www.youtube.com/watch?v=79KzZ0YqLvo)
