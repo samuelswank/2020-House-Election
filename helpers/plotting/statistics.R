@@ -168,7 +168,7 @@ barChart <- function(
 
 densityPlot <- function(selectedState, selectedDistrict) {
   ggplot(data = modelData, aes(x = med_rent)) +
-    geom_density(alpha = .2, fill="#FF6655") +
+    geom_density(alpha = .2) +
     geom_vline(
       aes(xintercept = as.integer(getRent(selectedState, selectedDistrict))),
       colour = "red",
