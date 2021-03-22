@@ -547,7 +547,7 @@ source("dataWrangling/ballotpediaScraper.R")
 
 \   
 
-|   **`r sprintf("%s District %s", strsplit(d2, split = " ")[[1]][1], strsplit(d2, split = " ")[[1]][2])`** ranked **335 highest in population density**, with **`r sprintf("%s District %s", strsplit(r2, split = " ")[[1]][1], strsplit(r2, split = " ")[[1]][2])`** slightly lower, in the **342th** place. The Democratic voting district's lower population density presents something of a problem for our hypothesis. It seems that geography and diversity itself also play roles in voter behavior independent of population density. We can speculate that the district's location on the West Coast coupled with the fact that it contains an Indian reservation both play a factor in the Democratic party's influence in the district. This latter trend can be seen in Arizona, where the model predicted that **Arizona District 1**, containing part of the Navajo Nation, would vote Republican when the district actually voted Democrat. It should also be noted that the **`r sprintf("%s District %s", strsplit(d2, split = " ")[[1]][1], strsplit(d2, split = " ")[[1]][2])`** also contains *Olympic National Park* which may artificially lower the district's population density.
+|   **`r sprintf("%s District %s", strsplit(d2, split = " ")[[1]][1], strsplit(d2, split = " ")[[1]][2])`** ranked **335 highest in population density**, with **`r sprintf("%s District %s", strsplit(r2, split = " ")[[1]][1], strsplit(r2, split = " ")[[1]][2])`** slightly lower, in the **342th** place. The Democratic voting district's lower population density presents something of a problem for our hypothesis. It seems that geography and diversity itself also play roles in voter behavior independent of population density. We can speculate that the district's location on the West Coast coupled with the fact that it contains an Indian reservation both play a factor in the Democratic party's influence in the district. This latter trend can be seen in Arizona, where the model predicted that **Arizona District 1** containing part of the Navajo Nation would vote Republican when the district actually voted Democrat. It should also be noted that the **`r sprintf("%s District %s", strsplit(d2, split = " ")[[1]][1], strsplit(d2, split = " ")[[1]][2])`** also contains *Olympic National Park* which may artificially lower the district's population density.
 
 ```{r}
 actualArizona    <- plotState("Arizona")
@@ -737,31 +737,31 @@ gm <- mrDensity.frame %>% subset(y == max(y)) %>% .[1, "x"] %>% round(.)
 
 # Flipped Districts
 
-|   Now we turn our attention to those seats which the Republicans and Democrats gained over each other in the 2020 House Election.
-
-## Republican Gains
-
-| District                  | Representative           |
-| ------------------------- | ------------------------ |
-| California District 21    | David G. Valadao         |
-| California District 39    | Young Kim                |
-| California District 39    | Michelle Steele          |
-| Florida District 26       | Carlos Giminez           |
-| Florida District 27       | Maria Elvira Salazar     |
-| Iowa District 1           | Ashley Hinson            |
-| Iowa District 2           | Mariannette Miller-Meeks |
-| Minnesota District 7      | Michelle Fishback        |
-| New Mexico District 2     | Yvette Herrell           |
-| New York District 11      | Nicole Malliotakis       |
-| New York District 22      | Claudia Tenney           |
-| Oklahoma District 5       | Steaphanie Bice          |
-| South Carolina District 1 | Nancy Mace               |
-| Utah District 4           | Burgess Owens            |
+|   Now we turn our attention to those seats which the Democrats and Republicans gained over each other in the 2020 House Election.
 
 ## Democratic Gains
 
 | District                  | Representative    |
 | ------------------------- | ----------------- |
-| Georgia District 7        | Carolyn Bourdeaux |
-| North Carolina District 2 | Deborah Ross      |
-| North Carolina District 6 | Cathy Manning     | 
+| Georgia District 7        | [Carolyn Bourdeaux](https://www.congress.gov/member/carolyn-bourdeaux/B001312?searchResultViewType=expanded) |
+| North Carolina District 2 | [Deborah Ross](https://www.congress.gov/member/deborah-ross/R000305?s=7&r=1904&searchResultViewType=expanded) |
+| North Carolina District 6 | [Kathy Manning](https://www.congress.gov/member/kathy-manning/M001135?s=8&r=1424&searchResultViewType=expanded) | 
+
+## Republican Gains
+
+| District                  | Representative           |
+| ------------------------- | ------------------------ |
+| California District 21    | [David G. Valadao](https://www.congress.gov/member/david-valadao/V000129?s=5&r=2264&searchResultViewType=expanded) |
+| California District 39    | [Young Kim](https://www.congress.gov/member/young-kim/K000397?s=6&r=1241&searchResultViewType=expanded) |
+| California District 39    | [Michelle Steele](https://www.congress.gov/member/michelle-steel/S001135?s=9&r=2125&searchResultViewType=expanded) |
+| Florida District 26       | [Carlos Giminez](https://www.congress.gov/member/carlos-gimenez/G000593?s=4&r=845&searchResultViewType=expanded) |
+| Florida District 27       | [Maria Elvira Salazar](https://www.congress.gov/member/maria-salazar/S000168?s=7&r=1948&searchResultViewType=expanded) |
+| Iowa District 1           | [Ashley Hinson](https://www.congress.gov/member/ashley-hinson/H001091?s=6&r=1053&searchResultViewType=expanded) |
+| Iowa District 2           | [Mariannette Miller-Meeks](https://www.congress.gov/member/mariannette-miller-meeks/M001215?s=10&r=1564&searchResultViewType=expanded) |
+| Minnesota District 7      | [Michelle Fischback](https://www.congress.gov/member/michelle-fischbach/F000470?s=2&r=736&searchResultViewType=expanded) |
+| New Mexico District 2     | [Yvette Herrell](https://www.congress.gov/member/yvette-herrell/H001084?s=6&r=1031&searchResultViewType=expanded) |
+| New York District 11      | [Nicole Malliotakis](https://www.congress.gov/member/nicole-malliotakis/M000317?s=8&r=1416&searchResultViewType=expanded) |
+| New York District 22      | [Claudia Tenney](https://www.congress.gov/member/claudia-tenney/T000478?s=9&r=2200&searchResultViewType=expanded) |
+| Oklahoma District 5       | [Steaphanie Bice](https://www.congress.gov/member/stephanie-bice/B000740?s=3&r=161&searchResultViewType=expanded) |
+| South Carolina District 1 | [Nancy Mace](https://www.congress.gov/member/nancy-mace/M000194?s=8&r=1400&searchResultViewType=expanded) |
+| Utah District 4           | [Burgess Owens](https://www.congress.gov/member/burgess-owens/O000086?s=10&r=1703&searchResultViewType=expanded) |
