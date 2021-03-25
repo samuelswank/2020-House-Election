@@ -189,15 +189,58 @@ gmDistance <- gmDistance[
 gdScaled <- gmDistance %>%
   mutate_at(1:(ncol(gmDistance) - 1), ~(scale(.) %>% as.vector))
 
+gdScaled$flipped <- gdScaled$flipped %>%
+  factor(
+    levels = c("Flipped", "Republican - Not Flipped", "Democrat - Not Flipped")
+    )
+
 # Lower side of average
-# ggplot(gdScaled, aes(x = flipped, y = seniors)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
+ggplot(gdScaled, aes(y = flipped, x = seniors)) +
+  geom_boxplot(mapping = aes(fill = flipped)) +
+  stat_summary(geom = "point", fun = "mean") +
+  scale_fill_manual(
+    values = c(
+      "Flipped" = "#853DCC",
+      "Democrat - Not Flipped" = "#1B4E81",
+      "Republican - Not Flipped" = "#D20F26"
+        )
+    ) +
+  labs(fill = "") +
+  ggtitle("Seniors") +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 18, family = "Canonical"),
+    legend.position = "none",
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  )
+
+plotBox <- function(statistic, title_) {
+  ggplot(gdScaled, aes(y = flipped, x = statistic)) +
+    geom_boxplot(mapping = aes(fill = flipped)) +
+    stat_summary(geom = "point", fun = "mean") +
+    scale_fill_manual(
+      values = c(
+        "Flipped" = "#853DCC",
+        "Democrat - Not Flipped" = "#1B4E81",
+        "Republican - Not Flipped" = "#D20F26"
+      )
+    ) +
+    labs(fill = "") +
+    ggtitle(title_) +
+    theme(
+      plot.title = element_text(hjust = 0.5, size = 18, family = "Canonical"),
+      legend.position = "none",
+      axis.title.x = element_blank(),
+      axis.title.y = element_blank(),
+      axis.text.y = element_blank(),
+      axis.ticks.y = element_blank()
+    )
+}
 
 # Confirms senior finding, but nothing unusual
-# ggplot(gdScaled, aes(x = flipped, y = med_age)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
+plotBox()
 
 # Matches Republican, but with slightly lower average and median
 # ggplot(gdScaled, aes(x = flipped, y = white)) +
