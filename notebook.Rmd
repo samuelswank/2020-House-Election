@@ -797,7 +797,7 @@ plotBox <- function(statistic, title_) {
 ```
 
 ## Findings
-
+### Age
 ```{r}
 seniors <- plotBox(gdScaled$seniors, "Seniors")
 med_age <- plotBox(gdScaled$med_age, "Median Age")
@@ -805,4 +805,50 @@ med_age <- plotBox(gdScaled$med_age, "Median Age")
 grid.arrange(seniors, med_age, nrow = 2)
 ```
 
-|   The *flipped* districts have a lower average and median percentage of senior citizens compared to their *non-flipped Republican* counterparts. These percentages are not unusual, given that they still lie within 2 standard deviations below and 1 standard deviation above the mean. Overall, however, most *flipped* districts were not characterized by this. The left-skewing observed here is due largely to the fact that California's 21st District and Utah's 4th District are the districts with the 6th and 16th lowest percentage of senior citizens in the country respectively. `r gmDistance[order(gmDistance$seniors), c("seniors", "med_age", "flipped")] %>% head(25) %>% .$flipped %>% table() %>% as.data.frame() %>% .[2, "Freq"]` out of the bottom `r gmDistance[order(gmDistance$seniors), c("seniors", "med_age", "flipped")] %>% head(25) %>% nrow()` districts ranked by percentage of senior citizens voted Democrat, compared to `r gmDistance[order(gmDistance$senior, decreasing = TRUE), c("seniors", "med_age", "flipped")] %>% head(25) %>% .$flipped %>% table() %>% as.data.frame() %>% .[1, "Freq"]` out of the top `r gmDistance[order(gmDistance$senior, decreasing = TRUE), c("seniors", "med_age", "flipped")] %>% head(25) %>% nrow()` districts in this category which voted Republican. Looking at median age, California's 21st District and Utah's 4th District ranked in the 2nd and 11th lowest places respectively. Out of the 15 states with the lowest median ages, `r gmDistance[order(gmDistance$med_age), c("seniors", "med_age", "flipped")] %>% head(15) %>% .$flipped %>% table() %>% as.data.frame() %>% .[2, "Freq"]` voted Democrat compared to `r (gmDistance[order(gmDistance$med_age), c("seniors", "med_age", "flipped")] %>% head(15) %>% .$flipped %>% table() %>% as.data.frame() %>% .[1, "Freq"]) + (gmDistance[order(gmDistance$med_age), c("seniors", "med_age", "flipped")] %>% head(15) %>% .$flipped %>% table() %>% as.data.frame() %>% .[3, "Freq"])` voting Republican. The opposite trend can be noted with `r gmDistance[order(gmDistance$med_age, decreasing = TRUE), c("seniors", "med_age", "flipped")] %>% head(15) %>% .$flipped %>% table() %>% as.data.frame() %>% .[1, "Freq"]` out of the top `r gmDistance[order(gmDistance$med_age, decreasing = TRUE), c("seniors", "med_age", "flipped")] %>% head(15) %>% nrow()` oldest districts voting Republican.
+|   The *flipped* districts have a lower average and median percentage of senior citizens compared to their *non-flipped Republican* counterparts. These percentages are not unusual, given that they still lie within 2 standard deviations below and 1 standard deviation above the mean. Overall, however, most *flipped* districts were not characterized by this. The left-skewing observed here is due largely to the fact that California's 21st District and Utah's 4th District are the districts with the 6th and 16th lowest percentage of senior citizens in the country respectively. `r gmDistance[order(gmDistance$seniors), c("seniors", "med_age", "flipped")] %>% head(25) %>% .$flipped %>% table() %>% as.data.frame() %>% .[2, "Freq"]` out of the bottom 25 districts ranked by percentage of senior citizens voted Democrat, compared to `r gmDistance[order(gmDistance$senior, decreasing = TRUE), c("seniors", "med_age", "flipped")] %>% head(25) %>% .$flipped %>% table() %>% as.data.frame() %>% .[1, "Freq"]` out of the top 25 districts in this category which voted Republican. Looking at median age, California's 21st District and Utah's 4th District ranked in the 2nd and 11th lowest places respectively. Out of the 15 states with the lowest median ages, `r gmDistance[order(gmDistance$med_age), c("seniors", "med_age", "flipped")] %>% head(15) %>% .$flipped %>% table() %>% as.data.frame() %>% .[2, "Freq"]` voted Democrat compared to `r (gmDistance[order(gmDistance$med_age), c("seniors", "med_age", "flipped")] %>% head(15) %>% .$flipped %>% table() %>% as.data.frame() %>% .[1, "Freq"]) + (gmDistance[order(gmDistance$med_age), c("seniors", "med_age", "flipped")] %>% head(15) %>% .$flipped %>% table() %>% as.data.frame() %>% .[3, "Freq"])` voting Republican. The opposite trend can be noted with `r gmDistance[order(gmDistance$med_age, decreasing = TRUE), c("seniors", "med_age", "flipped")] %>% head(15) %>% .$flipped %>% table() %>% as.data.frame() %>% .[1, "Freq"]` out of the top 15 oldest districts voting Republican. In the context of this general pattern, these two may have *flipped Republican in spite of their younger populations*.
+
+\ 
+
+|   These two districts allow for an interesting comparison. The California District's current boundaries were redrawn, and the Utah District was created for the 113th congress. This allows us to examine voters' choice of party in the same geographic 
+
+```{r echo=FALSE}
+cali20 <- c(
+  "104" = "D", "105" = "D", "106" = "D", "107" = "D", "108" = "D", "109" = "D",
+  "110" = "D", "111" = "D", "112" = "D", "113" = "D", "114" = "D", "115" = "D",
+  "116" = "D", "117" = "D"
+)
+
+cali21 <- c(
+  "104" = "R", "105" = "R", "106" = "R", "107" = "R", "108" = "R", "109" = "R",
+  "110" = "R", "111" = "R", "112" = "R", "113" = "R", "114" = "R", "115" = "R",
+  "116" = "D", "117" = "R"
+)
+
+cali <- data.frame(`California 20` = cali20, `California 21` = cali21)
+cali$California.21[1:9] <- cali$California.20[1:9]
+cali$Congress <- rownames(cali)
+
+utah2 <- c(
+  "104" = "R", "105" = "R", "106" = "R", "107" = "D", "108" = "D", "109" = "D",
+  "110" = "D", "111" = "D", "112" = "D", "113" = "R", "114" = "R", "115" = "R",
+  "116" = "R", "117" = "R"
+)
+
+utah4 <- c(
+  "104" = NA, "105" = NA, "106" = NA, "107" = NA, "108" = NA, "109" = NA,
+  "110" = NA, "111" = NA, "112" = NA, "113" = "D", "114" = "R", "115" = "R",
+  "116" = "D", "117" = "R"
+)
+
+utah <- data.frame(`Utah 2` = utah2, `Utah 4` = utah4)
+utah$Utah.4[1:9] <- utah$Utah.2[1:9]
+utah$Congress <- rownames(utah)
+
+caliUtah <- merge(
+  utah[, c("Congress", "Utah.4")],
+  cali[, c("Congress", "California.21")],
+  by = "Congress"
+  )
+rownames(caliUtah) <- NULL
+caliUtah
+```
