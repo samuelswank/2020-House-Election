@@ -809,7 +809,7 @@ grid.arrange(seniors, med_age, nrow = 2)
 
 \ 
 
-|   These two districts allow for an interesting comparison. The California District's current boundaries were redrawn, and the Utah District was created for the 113th congress. This allows us to examine voters' choice of party in the same geographic 
+|   These two districts allow for an interesting comparison. The California District's current boundaries were redrawn, and the Utah District was created for the 113th congress. Accounting for redistricting, this allows us to observe partisan voting trends in the geographic areas now covered by these two districts since and immediately prior to redistricting. For the purposes of this examination, I have chosen to begin with the 104th congress elected at the end of 1994. This cutoff point is significant in that it marks the transition of   
 
 ```{r echo=FALSE}
 cali20 <- c(
@@ -852,3 +852,5 @@ caliUtah <- merge(
 rownames(caliUtah) <- NULL
 caliUtah
 ```
+
+|   Examining the above chart the reader can see that the Utah district has been held by a roughly equal number of times by Democrat and Republican c
