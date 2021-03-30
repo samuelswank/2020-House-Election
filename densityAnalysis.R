@@ -239,33 +239,28 @@ plotBox <- function(statistic, title_) {
     )
 }
 
-# Confirms senior finding, but nothing unusual - Begun
-# plotBox(gdScaled$med_age, "Median Age")
-
-# Matches Republican, but with slightly lower average and median
-# ggplot(gdScaled, aes(x = flipped, y = white)) +
+# Natural-born Citizen
+# ggplot(gdScaled, aes(x = flipped, y = natural_born_citizen)) +
 #   geom_boxplot() +
 #   stat_summary(geom = "point", fun = "mean")
 
-# Matches Republican
-# ggplot(gdScaled, aes(x = flipped, y = black)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
-
-# Greater than Republican, fewer than the Democrat
-# ggplot(gdScaled, aes(x = flipped, y = other_race)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
-
-# Wider, but most greater than Republican and Democrat
+# Hispanic
 # ggplot(gdScaled, aes(x = flipped, y = hispanic)) +
 #   geom_boxplot() +
 #   stat_summary(geom = "point", fun = "mean")
 
-# Higher median, but lower mean than Democrat
-# ggplot(gdScaled, aes(x = flipped, y = natural_born_citizen)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
+# Matches Republican, but with slightly lower average and median
+ggplot(gdScaled, aes(x = flipped, y = white)) +
+  geom_boxplot() +
+  stat_summary(geom = "point", fun = "mean")
+
+# Matches Republican
+ggplot(gdScaled, aes(x = flipped, y = black)) +
+  geom_boxplot() +
+  stat_summary(geom = "point", fun = "mean")
+
+
+
 
 distanceSummary <- data.frame(
   Min = rep(NA, ncol(gmDistance) - 1),
