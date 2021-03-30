@@ -239,8 +239,8 @@ plotBox <- function(statistic, title_) {
     )
 }
 
-# Confirms senior finding, but nothing unusual
-plotBox()
+# Confirms senior finding, but nothing unusual - Begun
+# plotBox(gdScaled$med_age, "Median Age")
 
 # Matches Republican, but with slightly lower average and median
 # ggplot(gdScaled, aes(x = flipped, y = white)) +
