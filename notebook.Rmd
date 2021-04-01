@@ -797,6 +797,17 @@ plotBox <- function(statistic, title_) {
 ```
 
 ## Findings
+### Ethnicity
+```{r}
+plotBox(gdScaled$hispanic, "Hispanic Population")
+```
+
+|   Examining the above-shown boxplot, we a number of *flipped districts* with statistically significant Hispanic populations, California's 21st District, Florida's 26th and 27 Districts, and New Mexico's 2nd District. In addition to these, New York's 11th and 22nd Districts also had substantial Puerto Rican populations. Discussing the former group, Mexicans were over-represented among Hispanics in California's 21st District at `r round(modelData["California 21", "mexican"], 2)`%. The Florida 26th and 27th Districts
+
+### Place of Birth
+```{r}
+plotBox(gdScaled$natural_born_citizen, "Natural Born Citizens")
+```
 ### Age
 ```{r}
 seniors <- plotBox(gdScaled$seniors, "Seniors")
@@ -854,3 +865,8 @@ caliUtah
 ```
 
 |   Examining the above chart the reader can see that the Utah district has been held by a roughly equal number of times by Democrat and Republican c
+
+### Race
+```{r}
+plotBox(gdScaled$white, "White")
+```
