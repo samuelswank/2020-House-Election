@@ -1,0 +1,6 @@
+---
+title: "draft paper"
+output: html_notebook
+---
+
+The key difference between these two voting districts is population density, with `r sprintf("%s District %s", strsplit(d1, split = " ")[[1]][1], strsplit(d1, split = " ")[[1]][2])` being the 17th most densely populated congressional district, compared to `r sprintf("%s District %s", strsplit(r1, split = " ")[[1]][1], strsplit(r1, split = " ")[[1]][2])`, coming in at the 130th place. As of the 2016 House race, only 11 out of the top 100 most densesly populated voting districts sent Republican representatives to the House.^[Chase, “Each Congressional District, Ranked by Population Density, Colored by Political Party of the Representative,” Overflow Data, June 15, 2017, https://overflow.solutions/special-projects/each-congressional-district-ranked-by-population-density-colored-by-political-party-of-the-representative/.]
