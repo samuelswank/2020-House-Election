@@ -17,7 +17,7 @@ output: html_notebook
 
 \  
 
-|   The answer to the first question is fairly straightforward: higher ratios of those demographics correlated with a high population density were characteristic of Democratic districts; whereas, those demographics correlated with a lower population density were characteristic of Republican districts.
+|   The answer to the first question is fairly straightforward: higher ratios of those demographics correlated with a high population density were characteristic of Democratic districts; whereas, those demographics correlated with a lower population density were characteristic of Republican districts. The answer to the second question is more varied, with differences *ethnicity*, *place of birth*, *age*, and *race* being potential indicators that some districts might *flip party*.
 
 # Model
 
@@ -63,7 +63,7 @@ library(scales)
 library(gridExtra)
 source("helpers/model/modelInfo.R")
 source("helpers/plotting/map.R")
-source("densityAnalysis.R")
+source("notebook/densityAnalysis.R")
 ```
 
 ```{r}
@@ -90,7 +90,7 @@ top.ten <- topTen
 colnames(top.ten)[1] <- "Mean Decrease in Gini Impurity"
 ```
 
-```{r}
+```{r echo=FALSE}
 top.ten
 ```
 
@@ -768,7 +768,9 @@ gm <- mrDensity.frame %>% subset(y == max(y)) %>% .[1, "x"] %>% round(.)
 
 ## Methodology  
 
-|   Before digging into individual districts, we will first examine what characterizes them as a group. In an effort to best compare these **flipped districts** as a group to **non-flipped Republican and Democratic districts**, the un-scaled form of the data used in the model above has been converted into distances from the peak of each feature's density distribution. Due to the often-skewed nature of these density distributions, The data were then scaled, further aiding in our comparison. Below is a helper function to aid in visualizing these scaled comparisons with boxplots. Note that in each boxplot, the *blue* indicates *non-flipped Democratic districts*, *red* plot indicates *non-flipped Republican districts*, and *purple* indicated *flipped districts*.
+|   Before digging into individual districts, we will first examine what characterizes them as a group. In an effort to best compare these **flipped districts** as a group to **non-flipped Republican and Democratic districts**, the un-scaled form of the data used in the model above has been converted into distances from the peak of each feature's density distribution. Due to the often-skewed nature of these density distributions, The data were then scaled, further aiding in our comparison. Below is a helper function to aid in visualizing these scaled comparisons with box-plots. Note that in each box-plot, the *blue* indicates *non-flipped Democratic districts*, *red* plot indicates *non-flipped Republican districts*, and *purple* indicated *flipped districts*.
+
+\  
 
 ```{r}
 plotBox <- function(statistic, title_) {
@@ -802,12 +804,50 @@ plotBox <- function(statistic, title_) {
 plotBox(gdScaled$hispanic, "Hispanic Population")
 ```
 
-|   Examining the above-shown boxplot, we a number of *flipped districts* with statistically significant Hispanic populations, California's 21st District, Florida's 26th and 27 Districts, and New Mexico's 2nd District. In addition to these, New York's 11th and 22nd Districts also had substantial Puerto Rican populations. Discussing the former group, Mexicans were over-represented among Hispanics in California's 21st District at `r round(modelData["California 21", "mexican"], 2)`%. The Florida 26th and 27th Districts
+```{r include=FALSE}
+hispanicBreakdown <- read_csv("data/census/demographics/preprocessed/hispanicBreakdown.csv")
+```
+
+\  
+
+|   Examining the above-shown box-plot, we a number of *flipped districts* with statistically significant Hispanic populations, **California's 21st District**, **Florida's 26th and 27 Districts**, and **New Mexico's 2nd District**. In addition to these, **New York's 11th and 22nd Districts** also had substantial Puerto Rican populations. Discussing the former group, Mexicans were over-represented among Hispanics in **California's 21st District** at `r round(modelData["California 21", "mexican"], 2)`% and in **New Mexico's 2nd District** at `r round(modelData["New Mexico 2", "mexican"], 2)`%. Hispanics in **Florida's 26th and 27th Districts** comprising Monroe County and sections of Miami-Dade County were more diverse in their origins. Cubans made up a slim majority of Hispanics in both districts comprising `r round(modelData["Florida 26", "cuban"], 2)`% in the former, and `r round(modelData["Florida 27", "cuban"], 2)`% in the latter. The 2018 American Community Survey's breakdown of all Hispanic groups in the Monroe and Miami-Dade Counties is shown in the tables below.
+
+\  
+
+#### **Monroe County**
+```{r echo=FALSE}
+hispanicBreakdown %>% subset(County == "Monroe County, Florida") %>% select(2, 3)
+```
+
+#### **Miami-Dade County**
+```{r echo=FALSE}
+hispanicBreakdown %>% subset(County == "Miami-Dade County, Florida") %>% select(2, 3)
+```
+
+\  
+
+|   Examining the tables above, we find a few potential explanations for the shift from Democratic to Republican candidates. As mentioned above, Cubans form the majority of the Hispanic population in both counties and in both districts. Both victorious Republican candidates, **Carlos Giminéz** and **Maria Elvira Salazar**, are of Cuban origin and ran against opponents of Ecuadorian and Lebanese origins respectively. The Republican Party's anti-socialist rhetoric likely appealed to the Cuban majority, along with the growing Venezuelan population, both groups having fled failed socialist states. The Colombian population, comprising `r round(hispanicBreakdown %>% subset(County == "Miami-Dade County, Florida") %>% select(2, 3) %>% .[17, ] %>% pull(percentage), 2)`% of Miami-Dade County's Hispanic population, were likely also influenced by this rhetoric given that Columbia is currently dealing with the the humanitarian challenge posed by the recent influx Venezuelan refugees.
+
+\  
+
+|   Considering the Puerto Rican question, it is not likely that a Puerto Rican plurality among Hispanics had any substantial effect as to **New York's 11th and 22nd** Districts flip to Republican candidates. `r gmDistance[order(gmDistance$puerto_rican, decreasing = TRUE), c("hispanic", "mexican", "cuban", "puerto_rican", "other_hispanic", "flipped")] %>% head(50) %>% .$flipped %>% table() %>% as.data.frame() %>% .[2, "Freq"]` out of the 50 districts with the highest representation of Puerto Ricans among Hispanics voted Democrat. This ratio is only marginally higher than the balance of Democrat to Republican seats nationwide. A substantial amount of time has elapsed since the most Puerto Ricans came to the continental United States. At this point, most have assimilated into American society, casting of any form of monolithic political identity they may have had upon arrival. Their representation among the Democratic party, therefore, is more of a reflection of where they settled, the East Coast and Hawaii.
+
+\  
+
+|   Though the distributions shown in the above and subsequent box-plots do provide fertile ground for reasonable speculation, it is important to note the small sample of 14 *flipped districts*. Due to this small sample size, fewer extreme values are likely to be classified as outliers when compared to the sample of over 200 districts per party that did not flip. The reader will find that, as with this demographic, the human elements of *who is running for office*, and *what their platform includes* will likely have far more to do with whether *individual voters* in a given district will vote for that candidate on election day.
 
 ### Place of Birth
 ```{r}
-plotBox(gdScaled$natural_born_citizen, "Natural Born Citizens")
+naturalBorn <- plotBox(gdScaled$natural_born_citizen, "Natural-born Citizens")
+naturalized <- plotBox(gdScaled$foreign_born, "Naturalized Citizens")
+
+grid.arrange(naturalBorn, naturalized, nrow = 2)
 ```
+
+\  
+
+|   The opposite distributions in the above-shown box-plot communicate the very same thing that the ethnicity box plot does. Within the sample of *flipped districts*, the two districts with statistically significant immigrant populations of *naturalized citizens* are **Florida's 26th and 27th districts**. These two districts also have statistically significant populations of *natural born citizens* who were *born abroad*. Since this latter category includes individuals born to United States citizens in foreign countries, or in U.S. territories such as Puerto Rico, it is only natural that districts with a high *naturalized immigrant* population would also have a high rate of *natural born citizens born abroad*.
+
 ### Age
 ```{r}
 seniors <- plotBox(gdScaled$seniors, "Seniors")
@@ -816,11 +856,13 @@ med_age <- plotBox(gdScaled$med_age, "Median Age")
 grid.arrange(seniors, med_age, nrow = 2)
 ```
 
-|   The *flipped* districts have a lower average and median percentage of senior citizens compared to their *non-flipped Republican* counterparts. These percentages are not unusual, given that they still lie within 2 standard deviations below and 1 standard deviation above the mean. Overall, however, most *flipped* districts were not characterized by this. The left-skewing observed here is due largely to the fact that California's 21st District and Utah's 4th District are the districts with the 6th and 16th lowest percentage of senior citizens in the country respectively. `r gmDistance[order(gmDistance$seniors), c("seniors", "med_age", "flipped")] %>% head(25) %>% .$flipped %>% table() %>% as.data.frame() %>% .[2, "Freq"]` out of the bottom 25 districts ranked by percentage of senior citizens voted Democrat, compared to `r gmDistance[order(gmDistance$senior, decreasing = TRUE), c("seniors", "med_age", "flipped")] %>% head(25) %>% .$flipped %>% table() %>% as.data.frame() %>% .[1, "Freq"]` out of the top 25 districts in this category which voted Republican. Looking at median age, California's 21st District and Utah's 4th District ranked in the 2nd and 11th lowest places respectively. Out of the 15 states with the lowest median ages, `r gmDistance[order(gmDistance$med_age), c("seniors", "med_age", "flipped")] %>% head(15) %>% .$flipped %>% table() %>% as.data.frame() %>% .[2, "Freq"]` voted Democrat compared to `r (gmDistance[order(gmDistance$med_age), c("seniors", "med_age", "flipped")] %>% head(15) %>% .$flipped %>% table() %>% as.data.frame() %>% .[1, "Freq"]) + (gmDistance[order(gmDistance$med_age), c("seniors", "med_age", "flipped")] %>% head(15) %>% .$flipped %>% table() %>% as.data.frame() %>% .[3, "Freq"])` voting Republican. The opposite trend can be noted with `r gmDistance[order(gmDistance$med_age, decreasing = TRUE), c("seniors", "med_age", "flipped")] %>% head(15) %>% .$flipped %>% table() %>% as.data.frame() %>% .[1, "Freq"]` out of the top 15 oldest districts voting Republican. In the context of this general pattern, these two may have *flipped Republican in spite of their younger populations*.
+|   The *flipped* districts have a lower average and median percentage of senior citizens compared to their *non-flipped Republican* counterparts. These percentages are not unusual, given that they still lie within 2 standard deviations below and 1 standard deviation above the mean. Overall, however, most *flipped* districts were not characterized by this. The left-skewing observed here is due largely to the fact that **California's 21st District and Utah's 4th District** are the districts with the 6th and 16th lowest percentage of senior citizens in the country respectively. `r gmDistance[order(gmDistance$seniors), c("seniors", "med_age", "flipped")] %>% head(25) %>% .$flipped %>% table() %>% as.data.frame() %>% .[2, "Freq"]` out of the bottom 25 districts ranked by percentage of senior citizens voted Democrat, compared to `r gmDistance[order(gmDistance$senior, decreasing = TRUE), c("seniors", "med_age", "flipped")] %>% head(25) %>% .$flipped %>% table() %>% as.data.frame() %>% .[1, "Freq"]` out of the top 25 districts in this category which voted Republican. Looking at median age, California's 21st District and Utah's 4th District ranked in the 2nd and 11th lowest places respectively. Out of the 15 states with the lowest median ages, `r gmDistance[order(gmDistance$med_age), c("seniors", "med_age", "flipped")] %>% head(15) %>% .$flipped %>% table() %>% as.data.frame() %>% .[2, "Freq"]` voted Democrat compared to `r (gmDistance[order(gmDistance$med_age), c("seniors", "med_age", "flipped")] %>% head(15) %>% .$flipped %>% table() %>% as.data.frame() %>% .[1, "Freq"]) + (gmDistance[order(gmDistance$med_age), c("seniors", "med_age", "flipped")] %>% head(15) %>% .$flipped %>% table() %>% as.data.frame() %>% .[3, "Freq"])` voting Republican. The opposite trend can be noted with `r gmDistance[order(gmDistance$med_age, decreasing = TRUE), c("seniors", "med_age", "flipped")] %>% head(15) %>% .$flipped %>% table() %>% as.data.frame() %>% .[1, "Freq"]` out of the top 15 oldest districts voting Republican. In the context of this general pattern, these two may have *flipped Republican in spite of their younger populations*.
 
 \ 
 
-|   These two districts allow for an interesting comparison. The California District's current boundaries were redrawn, and the Utah District was created for the 113th congress. Accounting for redistricting, this allows us to observe partisan voting trends in the geographic areas now covered by these two districts since and immediately prior to redistricting. For the purposes of this examination, I have chosen to begin with the 104th congress elected at the end of 1994. This cutoff point is significant in that it marks the transition of   
+|   These two districts allow for an interesting comparison. The California District's current boundaries were redrawn, and the Utah District was created for the 113th congress. Accounting for redistricting, this allows us to observe partisan voting trends in the geographic areas now covered by these two districts since and immediately prior to redistricting. For the purposes of this examination, I have chosen to begin with the 104th congress elected at the end of 1994. This cutoff point is significant in that it marks the exodus of the South's last Conservative Democrats from the party of Andrew Jackson.
+
+\  
 
 ```{r echo=FALSE}
 cali20 <- c(
@@ -864,7 +906,13 @@ rownames(caliUtah) <- NULL
 caliUtah
 ```
 
-|   Examining the above chart the reader can see that the Utah district has been held by a roughly equal number of times by Democrat and Republican c
+\  
+ 
+|   Examining the above chart the reader can see that the Utah District has been held by a roughly equal number of times by Democrat and Republican candidates. The reader will see that Utah voters, though conservative, have been more pragmatic than ideological regarding their choice of candidate. During the period comprising the 107th through 113th congresses, the Utah 2nd and later 4th congressional district was held by Democrat James Matheson, son of Scott Matheson, Utah's most recent Democratic Governor. As governor, the senior Matheson was known for a number of bipartisan and conservative decisions, including choosing a Republican, David Monson, as his Lieutenant Governor, and upholding state restrictions on abortion. The younger Matheson, likewise, supported a continued American presence in the Iraq war in 2008 when many in his party were calling for withdrawal, and he opposed the Affordable Care Act. This focus on policy would also explain why Ben McAdams, the last Democrat to hold the seat at the time of this writing, lost re-election. A successful campaign by Republicans demonstrating that McAdams had allowed local taxes to go up when he was serving as Salt Lake County Mayor, contributed to McAdams' and the Democrats' loss of Utah's 4th District. This history of Utah's urban district demonstrates. It would seem that the concrete effects a given policy decision has on constituents is the ultimate long-term determinant as to who will be elected. Demographics may influence policy preferences, but experience ultimately wins out in the end.
+
+\  
+
+|   The case of California District 21 is somewhat curious. Even accounting for redistricting, the loss of much of Fresno shifted the district from Democrat to Republican. In fact Democrat James Costa who held the seat at the time of its last redistricting reran for the California District 16 seat and, at the time of this writing, is still the incumbent there. Though Republican **David Valadão**'s views on most issues ranging from the environment, to social welfare, to homosexuality, he was ranked the 42nd most bipartisan member of congress according to the Lugar Center's Bipartisan Index. It would seem a reasonable, albeit unconfirmed, hypothesis that members of congress occupying seats which *flip party* more frequently would be likely to score higher on the Bipartisan Index. From this we can infer that the constituencies of these districts likely have a more varied range of interest groups compared to those districts which tend to consistently vote for candidates from a single party. It would seem that most of these interest groups lie outside of the demographic data used in this analysis.
 
 ### Race
 ```{r}
