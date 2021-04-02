@@ -38,34 +38,34 @@ hispanicBreakdown <- hispanicBreakdown %>%
   filter(NAME %in% counties)
 
 hvarNames <- c(
-  "mexican",
-  "puerto_rican",
-  "cuban",
-  "dominican",
-  "central_american",
-  "costa_rican",
-  "guatemalan",
-  "honduran",
-  "nicaraguan",
-  "panamanian",
-  "salvadoran",
-  "other_central_american",
-  "south_american",
-  "argentinean",
-  "bolivian",
-  "chilean",
-  "colombian",
-  "ecuadorian",
-  "paraguayan",
-  "peruvian",
-  "uruguayan",
-  "venezuelan",
-  "other_south_american",
-  "other_hispanic",
-  "spaniard",
-  "spanish",
-  "spanish_american",
-  "other_hispanic2"
+  "Mexican",
+  "Puerto Rican",
+  "Cuban",
+  "Dominican",
+  "Central American",
+  "Costa Rican",
+  "Guatemalan",
+  "Honduran",
+  "Nicaraguan",
+  "Panamanian",
+  "Salvadoran",
+  "Other Central American",
+  "South American",
+  "Argentinean",
+  "Bolivian",
+  "Chilean",
+  "Colombian",
+  "Ecuadorian",
+  "Paraguayan",
+  "Peruvian",
+  "Uruguayan",
+  "Venezuelan",
+  "Other South American",
+  "Other Hispanic",
+  "Spaniard",
+  "Spanish",
+  "Spanish American",
+  "All Other Hispanic Groups"
 )
 
 hispanicBreakdown <- hispanicBreakdown %>%
@@ -79,7 +79,7 @@ hispanicBreakdown <- hispanicBreakdown %>%
   gather(
     key = "group",
     value = "percentage",
-    mexican:other_hispanic2,
+    Mexican:`All Other Hispanic Groups`,
     factor_key = TRUE
     )
 
