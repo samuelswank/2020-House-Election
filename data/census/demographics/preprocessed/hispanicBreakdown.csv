@@ -1,0 +1,337 @@
+"County","group","percentage"
+"Broome County, New York","Mexican",14.8984198645598
+"Chenango County, New York","Mexican",10.019267822736
+"Cortland County, New York","Mexican",14.3974960876369
+"Herkimer County, New York","Mexican",19.4041252864782
+"Kings County, New York","Mexican",20.3002729936569
+"Madison County, New York","Mexican",25.016160310278
+"Miami-Dade County, Florida","Mexican",3.3731820728352
+"Monroe County, Florida","Mexican",12.896847193233
+"Oneida County, New York","Mexican",8.85044989140552
+"Oswego County, New York","Mexican",15.8597662771285
+"Richmond County, New York","Mexican",20.3067512877116
+"Tioga County, New York","Mexican",25.3505933117584
+"Broome County, New York","Puerto Rican",48.0561825934286
+"Chenango County, New York","Puerto Rican",41.907514450867
+"Cortland County, New York","Puerto Rican",29.3427230046948
+"Herkimer County, New York","Puerto Rican",55.2330022918258
+"Kings County, New York","Puerto Rican",32.4181469679278
+"Madison County, New York","Puerto Rican",29.2824822236587
+"Miami-Dade County, Florida","Puerto Rican",5.43143159630828
+"Monroe County, Florida","Puerto Rican",9.11787322860595
+"Oneida County, New York","Puerto Rican",56.833695314924
+"Oswego County, New York","Puerto Rican",48.914858096828
+"Richmond County, New York","Puerto Rican",47.1900294334069
+"Tioga County, New York","Puerto Rican",47.7885652642934
+"Broome County, New York","Cuban",4.33910208176574
+"Chenango County, New York","Cuban",6.55105973025048
+"Cortland County, New York","Cuban",6.10328638497653
+"Herkimer County, New York","Cuban",5.72956455309396
+"Kings County, New York","Cuban",1.72168266640496
+"Madison County, New York","Cuban",3.2967032967033
+"Miami-Dade County, Florida","Cuban",53.4069913732102
+"Monroe County, Florida","Cuban",51.4390860155993
+"Oneida County, New York","Cuban",1.90816009928638
+"Oswego County, New York","Cuban",1.669449081803
+"Richmond County, New York","Cuban",1.68897167034584
+"Tioga County, New York","Cuban",6.47249190938511
+"Broome County, New York","Dominican",7.23601705543015
+"Chenango County, New York","Dominican",4.52793834296724
+"Cortland County, New York","Dominican",1.79968701095462
+"Herkimer County, New York","Dominican",3.59052711993888
+"Kings County, New York","Dominican",18.814730841874
+"Madison County, New York","Dominican",0
+"Miami-Dade County, Florida","Dominican",3.77352970179547
+"Monroe County, Florida","Dominican",1.96638470833791
+"Oneida County, New York","Dominican",13.3260937015203
+"Oswego County, New York","Dominican",5.4424040066778
+"Richmond County, New York","Dominican",8.47130242825607
+"Tioga County, New York","Dominican",6.04099244875944
+"Broome County, New York","Central American",7.2736393278154
+"Chenango County, New York","Central American",14.8362235067437
+"Cortland County, New York","Central American",1.72143974960876
+"Herkimer County, New York","Central American",10.1604278074866
+"Kings County, New York","Central American",10.3174778029919
+"Madison County, New York","Central American",4.46024563671623
+"Miami-Dade County, Florida","Central American",13.1799380813005
+"Monroe County, Florida","Central American",11.7763374711634
+"Oneida County, New York","Central American",5.36766987278933
+"Oswego County, New York","Central American",3.93989983305509
+"Richmond County, New York","Central American",5.70962104488595
+"Tioga County, New York","Central American",0.431499460625674
+"Broome County, New York","Costa Rican",0.401304238776022
+"Chenango County, New York","Costa Rican",0
+"Cortland County, New York","Costa Rican",0
+"Herkimer County, New York","Costa Rican",6.49350649350649
+"Kings County, New York","Costa Rican",0.635916992302901
+"Madison County, New York","Costa Rican",0
+"Miami-Dade County, Florida","Costa Rican",0.375424106247894
+"Monroe County, Florida","Costa Rican",0.620674502911128
+"Oneida County, New York","Costa Rican",0.170648464163823
+"Oswego County, New York","Costa Rican",0.200333889816361
+"Richmond County, New York","Costa Rican",0.243745401030169
+"Tioga County, New York","Costa Rican",0
+"Broome County, New York","Guatemalan",1.35440180586907
+"Chenango County, New York","Guatemalan",5.97302504816956
+"Cortland County, New York","Guatemalan",1.72143974960876
+"Herkimer County, New York","Guatemalan",1.60427807486631
+"Kings County, New York","Guatemalan",2.24423618858394
+"Madison County, New York","Guatemalan",1.03425985778927
+"Miami-Dade County, Florida","Guatemalan",1.33915171165001
+"Monroe County, Florida","Guatemalan",2.22454135999121
+"Oneida County, New York","Guatemalan",1.36518771331058
+"Oswego County, New York","Guatemalan",1.20200333889816
+"Richmond County, New York","Guatemalan",1.29805923473142
+"Tioga County, New York","Guatemalan",0
+"Broome County, New York","Honduran",0.664660145472787
+"Chenango County, New York","Honduran",0
+"Cortland County, New York","Honduran",0
+"Herkimer County, New York","Honduran",1.75706646294882
+"Kings County, New York","Honduran",2.20397813647279
+"Madison County, New York","Honduran",2.58564964447317
+"Miami-Dade County, Florida","Honduran",3.67486506079714
+"Monroe County, Florida","Honduran",2.80676699989015
+"Oneida County, New York","Honduran",0.605026372944462
+"Oswego County, New York","Honduran",0.333889816360601
+"Richmond County, New York","Honduran",2.51908572479765
+"Tioga County, New York","Honduran",0
+"Broome County, New York","Nicaraguan",2.49561073488839
+"Chenango County, New York","Nicaraguan",2.3121387283237
+"Cortland County, New York","Nicaraguan",0
+"Herkimer County, New York","Nicaraguan",0
+"Kings County, New York","Nicaraguan",0.62570226266276
+"Madison County, New York","Nicaraguan",0
+"Miami-Dade County, Florida","Nicaraguan",6.18444707164863
+"Monroe County, Florida","Nicaraguan",4.94891793914094
+"Oneida County, New York","Nicaraguan",0.511945392491468
+"Oswego County, New York","Nicaraguan",1.76961602671119
+"Richmond County, New York","Nicaraguan",0.213852097130243
+"Tioga County, New York","Nicaraguan",0
+"Broome County, New York","Panamanian",1.27915726109857
+"Chenango County, New York","Panamanian",0
+"Cortland County, New York","Panamanian",0
+"Herkimer County, New York","Panamanian",0
+"Kings County, New York","Panamanian",2.51482637963944
+"Madison County, New York","Panamanian",0.840336134453782
+"Miami-Dade County, Florida","Panamanian",0.511148941888098
+"Monroe County, Florida","Panamanian",0.466879050862353
+"Oneida County, New York","Panamanian",0.620539869686627
+"Oswego County, New York","Panamanian",0
+"Richmond County, New York","Panamanian",0.566823031640912
+"Tioga County, New York","Panamanian",0.431499460625674
+"Broome County, New York","Salvadoran",1.07850514171056
+"Chenango County, New York","Salvadoran",6.55105973025048
+"Cortland County, New York","Salvadoran",0
+"Herkimer County, New York","Salvadoran",0.305576776165011
+"Kings County, New York","Salvadoran",1.9055477999275
+"Madison County, New York","Salvadoran",0
+"Miami-Dade County, Florida","Salvadoran",1.08184343043032
+"Monroe County, Florida","Salvadoran",0.681094144787433
+"Oneida County, New York","Salvadoran",2.09432206019237
+"Oswego County, New York","Salvadoran",0.434056761268781
+"Richmond County, New York","Salvadoran",0.83701250919794
+"Tioga County, New York","Salvadoran",0
+"Broome County, New York","Other Central American",0
+"Chenango County, New York","Other Central American",0
+"Cortland County, New York","Other Central American",0
+"Herkimer County, New York","Other Central American",0
+"Kings County, New York","Other Central American",0.187270043402587
+"Madison County, New York","Other Central American",0
+"Miami-Dade County, Florida","Other Central American",0.0130577586384388
+"Monroe County, Florida","Other Central American",0.0274634735801384
+"Oneida County, New York","Other Central American",0
+"Oswego County, New York","Other Central American",0
+"Richmond County, New York","Other Central American",0.0310430463576159
+"Tioga County, New York","Other Central American",0
+"Broome County, New York","South American",7.31126160020065
+"Chenango County, New York","South American",6.26204238921002
+"Cortland County, New York","South American",19.4053208137715
+"Herkimer County, New York","South American",3.28495034377387
+"Kings County, New York","South American",11.6610151838952
+"Madison County, New York","South American",11.7647058823529
+"Miami-Dade County, Florida","South American",18.3745962118413
+"Monroe County, Florida","South American",6.63517521696144
+"Oneida County, New York","South American",5.59261557555073
+"Oswego County, New York","South American",8.11352253756261
+"Richmond County, New York","South American",11.0754690949227
+"Tioga County, New York","South American",0.862998921251348
+"Broome County, New York","Argentinean",0.36368196639077
+"Chenango County, New York","Argentinean",0.578034682080925
+"Cortland County, New York","Argentinean",0
+"Herkimer County, New York","Argentinean",2.13903743315508
+"Kings County, New York","Argentinean",0.601467315869484
+"Madison County, New York","Argentinean",2.32708468002586
+"Miami-Dade County, Florida","Argentinean",1.97600189852225
+"Monroe County, Florida","Argentinean",0.219707788641107
+"Oneida County, New York","Argentinean",0.16289171579274
+"Oswego County, New York","Argentinean",1.36894824707846
+"Richmond County, New York","Argentinean",0.805969462840324
+"Tioga County, New York","Argentinean",0
+"Broome County, New York","Bolivian",0
+"Chenango County, New York","Bolivian",0
+"Cortland County, New York","Bolivian",0
+"Herkimer County, New York","Bolivian",0
+"Kings County, New York","Bolivian",0.0578834679607995
+"Madison County, New York","Bolivian",0
+"Miami-Dade County, Florida","Bolivian",0.258879546781994
+"Monroe County, Florida","Bolivian",0.274634735801384
+"Oneida County, New York","Bolivian",0.178405212534905
+"Oswego County, New York","Bolivian",1.46911519198664
+"Richmond County, New York","Bolivian",0.0885301692420898
+"Tioga County, New York","Bolivian",0
+"Broome County, New York","Chilean",0.526711813393529
+"Chenango County, New York","Chilean",0
+"Cortland County, New York","Chilean",1.79968701095462
+"Herkimer County, New York","Chilean",0
+"Kings County, New York","Chilean",0.261376905497728
+"Madison County, New York","Chilean",0.711053652230123
+"Miami-Dade County, Florida","Chilean",0.802158160340607
+"Monroe County, Florida","Chilean",0.543776776886741
+"Oneida County, New York","Chilean",0.333540179956562
+"Oswego County, New York","Chilean",0.13355592654424
+"Richmond County, New York","Chilean",0.405859087564386
+"Tioga County, New York","Chilean",0.539374325782093
+"Broome County, New York","Colombian",2.20717331326812
+"Chenango County, New York","Colombian",4.52793834296724
+"Cortland County, New York","Colombian",11.2676056338028
+"Herkimer County, New York","Colombian",0.305576776165011
+"Kings County, New York","Colombian",2.34438059682062
+"Madison County, New York","Colombian",4.46024563671623
+"Miami-Dade County, Florida","Colombian",7.05238165932145
+"Monroe County, Florida","Colombian",2.37284411732396
+"Oneida County, New York","Colombian",1.14799875892026
+"Oswego County, New York","Colombian",1.90317195325543
+"Richmond County, New York","Colombian",3.63433590875644
+"Tioga County, New York","Colombian",0
+"Broome County, New York","Ecuadorian",1.8560321043391
+"Chenango County, New York","Ecuadorian",0
+"Cortland County, New York","Ecuadorian",0
+"Herkimer County, New York","Ecuadorian",0
+"Kings County, New York","Ecuadorian",6.44148862659956
+"Madison County, New York","Ecuadorian",1.42210730446025
+"Miami-Dade County, Florida","Ecuadorian",1.2331183769802
+"Monroe County, Florida","Ecuadorian",0.389981324837965
+"Oneida County, New York","Ecuadorian",3.11045609680422
+"Oswego County, New York","Ecuadorian",1.36894824707846
+"Richmond County, New York","Ecuadorian",4.15976821192053
+"Tioga County, New York","Ecuadorian",0
+"Broome County, New York","Paraguayan",0
+"Chenango County, New York","Paraguayan",1.15606936416185
+"Cortland County, New York","Paraguayan",0
+"Herkimer County, New York","Paraguayan",0
+"Kings County, New York","Paraguayan",0.0672970423350471
+"Madison County, New York","Paraguayan",0
+"Miami-Dade County, Florida","Paraguayan",0.0516350372715028
+"Monroe County, Florida","Paraguayan",0
+"Oneida County, New York","Paraguayan",0
+"Oswego County, New York","Paraguayan",0.0333889816360601
+"Richmond County, New York","Paraguayan",0.0103476821192053
+"Tioga County, New York","Paraguayan",0
+"Broome County, New York","Peruvian",1.34186104840732
+"Chenango County, New York","Peruvian",0
+"Cortland County, New York","Peruvian",5.24256651017214
+"Herkimer County, New York","Peruvian",0.840336134453782
+"Kings County, New York","Peruvian",0.986822998764218
+"Madison County, New York","Peruvian",2.84421460892049
+"Miami-Dade County, Florida","Peruvian",2.29193463968713
+"Monroe County, Florida","Peruvian",2.02131165549819
+"Oneida County, New York","Peruvian",0.193918709277071
+"Oswego County, New York","Peruvian",1.83639398998331
+"Richmond County, New York","Peruvian",1.59469278881531
+"Tioga County, New York","Peruvian",0
+"Broome County, New York","Uruguayan",0.0376222723852521
+"Chenango County, New York","Uruguayan",0
+"Cortland County, New York","Uruguayan",0
+"Herkimer County, New York","Uruguayan",0
+"Kings County, New York","Uruguayan",0.0905305450459563
+"Madison County, New York","Uruguayan",0
+"Miami-Dade County, Florida","Uruguayan",0.357598369351436
+"Monroe County, Florida","Uruguayan",0.285620125233439
+"Oneida County, New York","Uruguayan",0
+"Oswego County, New York","Uruguayan",0
+"Richmond County, New York","Uruguayan",0.0218451066961001
+"Tioga County, New York","Uruguayan",0
+"Broome County, New York","Venezuelan",0.840230749937296
+"Chenango County, New York","Venezuelan",0
+"Cortland County, New York","Venezuelan",0.234741784037559
+"Herkimer County, New York","Venezuelan",0
+"Kings County, New York","Venezuelan",0.660752805545597
+"Madison County, New York","Venezuelan",0
+"Miami-Dade County, Florida","Venezuelan",4.33631368095507
+"Monroe County, Florida","Venezuelan",0.527298692738658
+"Oneida County, New York","Venezuelan",0.465404902264971
+"Oswego County, New York","Venezuelan",0
+"Richmond County, New York","Venezuelan",0.258692052980132
+"Tioga County, New York","Venezuelan",0.323624595469256
+"Broome County, New York","Other South American",0.137948332079258
+"Chenango County, New York","Other South American",0
+"Cortland County, New York","Other South American",0.860719874804382
+"Herkimer County, New York","Other South American",0
+"Kings County, New York","Other South American",0.149014879456176
+"Madison County, New York","Other South American",0
+"Miami-Dade County, Florida","Other South American",0.0145748426296267
+"Monroe County, Florida","Other South American",0
+"Oneida County, New York","Other South American",0
+"Oswego County, New York","Other South American",0
+"Richmond County, New York","Other South American",0.0954286239882266
+"Tioga County, New York","Other South American",0
+"Broome County, New York","Other Hispanic",10.8853774767996
+"Chenango County, New York","Other Hispanic",15.8959537572254
+"Cortland County, New York","Other Hispanic",27.2300469483568
+"Herkimer County, New York","Other Hispanic",2.5974025974026
+"Kings County, New York","Other Hispanic",4.76667354324937
+"Madison County, New York","Other Hispanic",26.1797026502909
+"Miami-Dade County, Florida","Other Hispanic",2.46033096270899
+"Monroe County, Florida","Other Hispanic",6.16829616609909
+"Oneida County, New York","Other Hispanic",8.12131554452374
+"Oswego County, New York","Other Hispanic",16.0601001669449
+"Richmond County, New York","Other Hispanic",5.55785504047094
+"Tioga County, New York","Other Hispanic",13.0528586839266
+"Broome County, New York","Spaniard",3.37346375721094
+"Chenango County, New York","Spaniard",5.58766859344894
+"Cortland County, New York","Spaniard",4.92957746478873
+"Herkimer County, New York","Spaniard",0.152788388082506
+"Kings County, New York","Spaniard",1.14745462957585
+"Madison County, New York","Spaniard",9.95475113122172
+"Miami-Dade County, Florida","Spaniard",0.819875534094837
+"Monroe County, Florida","Spaniard",2.96056245193892
+"Oneida County, New York","Spaniard",1.52807942910332
+"Oswego County, New York","Spaniard",1.43572621035058
+"Richmond County, New York","Spaniard",2.08908204562178
+"Tioga County, New York","Spaniard",11.9741100323625
+"Broome County, New York","Spanish",3.67444193629295
+"Chenango County, New York","Spanish",0.770712909441233
+"Cortland County, New York","Spanish",3.67762128325509
+"Herkimer County, New York","Spanish",0
+"Kings County, New York","Spanish",0.347300807764797
+"Madison County, New York","Spanish",5.30058177117001
+"Miami-Dade County, Florida","Spanish",0.16379088947718
+"Monroe County, Florida","Spanish",1.2303636163902
+"Oneida County, New York","Spanish",0.636053366428793
+"Oswego County, New York","Spanish",2.00333889816361
+"Richmond County, New York","Spanish",0.90254782928624
+"Tioga County, New York","Spanish",0
+"Broome County, New York","Spanish American",0
+"Chenango County, New York","Spanish American",0
+"Cortland County, New York","Spanish American",0
+"Herkimer County, New York","Spanish American",0
+"Kings County, New York","Spanish American",0.0126181954378213
+"Madison County, New York","Spanish American",0
+"Miami-Dade County, Florida","Spanish American",0.00536397554027154
+"Monroe County, Florida","Spanish American",0
+"Oneida County, New York","Spanish American",0
+"Oswego County, New York","Spanish American",0
+"Richmond County, New York","Spanish American",0
+"Tioga County, New York","Spanish American",0
+"Broome County, New York","All Other Hispanic Groups",3.83747178329571
+"Chenango County, New York","All Other Hispanic Groups",9.53757225433526
+"Cortland County, New York","All Other Hispanic Groups",18.622848200313
+"Herkimer County, New York","All Other Hispanic Groups",2.44461420932009
+"Kings County, New York","All Other Hispanic Groups",3.2592999104709
+"Madison County, New York","All Other Hispanic Groups",10.9243697478992
+"Miami-Dade County, Florida","All Other Hispanic Groups",1.4713005635967
+"Monroe County, Florida","All Other Hispanic Groups",1.97737009776997
+"Oneida County, New York","All Other Hispanic Groups",5.95718274899162
+"Oswego County, New York","All Other Hispanic Groups",12.6210350584307
+"Richmond County, New York","All Other Hispanic Groups",2.56622516556291
+"Tioga County, New York","All Other Hispanic Groups",1.07874865156419
