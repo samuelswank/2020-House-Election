@@ -87,7 +87,6 @@ for (col_ in colnames(modelData)[1:(ncol(modelData) - 1)]) {
 }
 
 
-
 gmDistance <- data.frame()
 
 for (col_ in colnames(modelData)[1:(ncol(modelData) - 1)]) {
@@ -103,7 +102,7 @@ flipped <- c()
 for (i in 1:nrow(gmDistance)) {
   if (
     rownames(gmDistance)[i] %in% c(
-      "Georgia 6", "North Carolina 2", "North Carolina 6"
+      "Georgia 7", "North Carolina 2", "North Carolina 6"
       ) |
     rownames(gmDistance)[i] %in% flippedRepublican
     ) {flipped[i] <- "Flipped"}
@@ -121,71 +120,6 @@ gmDistance <- gmDistance[
   , !names(gmDistance) %in% c("med_smoc_mort", "med_smoc_no_mort")
   ]
 
-# Maybe
-# ggplot(gmDistance, aes(x = flipped, y = seniors)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
-
-# Maybe
-# ggplot(gmDistance, aes(x = flipped, y = asian)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
-
-# Seems important
-# ggplot(gmDistance, aes(x = flipped, y = hispanic)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
-
-# Seems important
-# ggplot(gmDistance, aes(x = flipped, y = other_hispanic)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
-
-# Seems important
-# ggplot(gmDistance, aes(x = flipped, y = natural_born_citizen)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
-
-# Seems important
-# ggplot(gmDistance, aes(x = flipped, y = foreign_born)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
-
-# Seems important
-# ggplot(gmDistance, aes(x = flipped, y = abroad)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
-
-# Maybe - fewer housewives?
-# ggplot(gmDistance, aes(x = flipped, y = labor_force_participation)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
-
-# Seems important
-# ggplot(gmDistance, aes(x = flipped, y = unemployment)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
-
-# Seems important
-# ggplot(gmDistance, aes(x = flipped, y = car)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
-
-# Seems important
-# ggplot(gmDistance, aes(x = flipped, y = walking_public_transit)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
-
-# Maybe
-# ggplot(gmDistance, aes(x = flipped, y = pov_mcouples)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
-
-# Somewhat significant
-# ggplot(gmDistance, aes(x = flipped, y = high_school)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
-
 gdScaled <- gmDistance %>%
   mutate_at(1:(ncol(gmDistance) - 1), ~(scale(.) %>% as.vector))
 
@@ -194,73 +128,7 @@ gdScaled$flipped <- gdScaled$flipped %>%
     levels = c("Flipped", "Republican - Not Flipped", "Democrat - Not Flipped")
     )
 
-# Lower side of average
-ggplot(gdScaled, aes(y = flipped, x = seniors)) +
-  geom_boxplot(mapping = aes(fill = flipped)) +
-  stat_summary(geom = "point", fun = "mean") +
-  scale_fill_manual(
-    values = c(
-      "Flipped" = "#853DCC",
-      "Democrat - Not Flipped" = "#1B4E81",
-      "Republican - Not Flipped" = "#D20F26"
-        )
-    ) +
-  labs(fill = "") +
-  ggtitle("Seniors") +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 18, family = "Canonical"),
-    legend.position = "none",
-    axis.title.x = element_blank(),
-    axis.title.y = element_blank(),
-    axis.text.y = element_blank(),
-    axis.ticks.y = element_blank()
-  )
-
-plotBox <- function(statistic, title_) {
-  ggplot(gdScaled, aes(y = flipped, x = statistic)) +
-    geom_boxplot(mapping = aes(fill = flipped)) +
-    stat_summary(geom = "point", fun = "mean") +
-    scale_fill_manual(
-      values = c(
-        "Flipped" = "#853DCC",
-        "Democrat - Not Flipped" = "#1B4E81",
-        "Republican - Not Flipped" = "#D20F26"
-      )
-    ) +
-    labs(fill = "") +
-    ggtitle(title_) +
-    theme(
-      plot.title = element_text(hjust = 0.5, size = 18, family = "Canonical"),
-      legend.position = "none",
-      axis.title.x = element_blank(),
-      axis.title.y = element_blank(),
-      axis.text.y = element_blank(),
-      axis.ticks.y = element_blank()
-    )
-}
-
-# Natural-born Citizen
-# ggplot(gdScaled, aes(x = flipped, y = natural_born_citizen)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
-
-# Hispanic
-# ggplot(gdScaled, aes(x = flipped, y = hispanic)) +
-#   geom_boxplot() +
-#   stat_summary(geom = "point", fun = "mean")
-
-# Matches Republican, but with slightly lower average and median
-ggplot(gdScaled, aes(x = flipped, y = white)) +
-  geom_boxplot() +
-  stat_summary(geom = "point", fun = "mean")
-
-# Matches Republican
-ggplot(gdScaled, aes(x = flipped, y = black)) +
-  geom_boxplot() +
-  stat_summary(geom = "point", fun = "mean")
-
-
-
+rownames(gdScaled) <- rownames(gmDistance)
 
 distanceSummary <- data.frame(
   Min = rep(NA, ncol(gmDistance) - 1),

@@ -1,7 +1,7 @@
 ---
 title: "2020 House Elections - Party Affiliation Analysis"
 author: "Samuel Swank"
-date: "March 13th, 2021"
+date: "April 1st, 2021"
 output: html_notebook
 ---
 
@@ -17,7 +17,7 @@ output: html_notebook
 
 \  
 
-|   The answer to the first question is fairly straightforward: higher ratios of those demographics correlated with a high population density were characteristic of Democratic districts; whereas, those demographics correlated with a lower population density were characteristic of Republican districts. The answer to the second question is more varied, with differences *ethnicity*, *place of birth*, *age*, and *race* being potential indicators that some districts might *flip party*.
+|   The answer to the first question is fairly straightforward: higher ratios of those demographics correlated with a high population density were characteristic of Democratic districts; whereas, those demographics correlated with a lower population density were characteristic of Republican districts. The answer to the second question is more varied, with differences *ethnicity*, *place of birth*, and *age* being potential indicators that some districts might *flip party*.
 
 # Model
 
@@ -768,7 +768,7 @@ gm <- mrDensity.frame %>% subset(y == max(y)) %>% .[1, "x"] %>% round(.)
 
 ## Methodology  
 
-|   Before digging into individual districts, we will first examine what characterizes them as a group. In an effort to best compare these **flipped districts** as a group to **non-flipped Republican and Democratic districts**, the un-scaled form of the data used in the model above has been converted into distances from the peak of each feature's density distribution. Due to the often-skewed nature of these density distributions, The data were then scaled, further aiding in our comparison. Below is a helper function to aid in visualizing these scaled comparisons with box-plots. Note that in each box-plot, the *blue* indicates *non-flipped Democratic districts*, *red* plot indicates *non-flipped Republican districts*, and *purple* indicated *flipped districts*.
+|   For the purpose of brevity, rather than digging into individual districts, we will first examine what characterizes them as a group. In an effort to best compare these **flipped districts** as a group to **non-flipped Republican and Democratic districts**, the un-scaled form of the data used in the model above has been converted into distances from the peak of each feature's density distribution. Due to the often-skewed nature of these density distributions, The data were then scaled, further aiding in our comparison. Below is a helper function to aid in visualizing these scaled comparisons with box-plots. Note that in each box-plot, the *blue* indicates *non-flipped Democratic districts*, *red* plot indicates *non-flipped Republican districts*, and *purple* indicates *flipped districts*.
 
 \  
 
@@ -914,7 +914,3 @@ caliUtah
 
 |   The case of California District 21 is somewhat curious. Even accounting for redistricting, the loss of much of Fresno shifted the district from Democrat to Republican. In fact Democrat James Costa who held the seat at the time of its last redistricting reran for the California District 16 seat and, at the time of this writing, is still the incumbent there. Though Republican **David Valadão**'s views on most issues ranging from the environment, to social welfare, to homosexuality, he was ranked the 42nd most bipartisan member of congress according to the Lugar Center's Bipartisan Index. It would seem a reasonable, albeit unconfirmed, hypothesis that members of congress occupying seats which *flip party* more frequently would be likely to score higher on the Bipartisan Index. From this we can infer that the constituencies of these districts likely have a more varied range of interest groups compared to those districts which tend to consistently vote for candidates from a single party. It would seem that most of these interest groups lie outside of the demographic data used in this analysis.
 
-### Race
-```{r}
-plotBox(gdScaled$white, "White")
-```
