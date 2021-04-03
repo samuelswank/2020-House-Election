@@ -2,11 +2,9 @@
 
 ## Project Overview
 
-| This project includes both a [shiny application](https://samuelswank.shinyapps.io/2020-House-Election/) and corresponding [R Markdown Notebook](https://rpubs.com/shengjiyang/House-2020). These grew out of a [Python project](https://github.com/shengjiyang/2016-House-Election) I completed examining the association of ethno-racial demographics and voter's choice of party in the national House of Representatives. Thanks to the Census Bureau’s [My Congressional District web app](https://www.census.gov/mycd/) making the relevant data readily available by House district in *.csv* files, I was able to significantly expand the number of different demographic categories used in this project.
+This project includes both a [shiny application](https://samuelswank.shinyapps.io/2020-House-Election/) and corresponding [R Markdown Notebook](https://rpubs.com/shengjiyang/House-2020). These grew out of a [Python project](https://github.com/shengjiyang/2016-House-Election) I completed examining the association of ethno-racial demographics and voter's choice of party in the national House of Representatives. Thanks to the Census Bureau’s [My Congressional District web app](https://www.census.gov/mycd/) making the relevant data readily available by House district in *.csv* files, I was able to significantly expand the number of different demographic categories used in this project.
 
-\  
-
-| In addition to exploring the influence of additional demographic factors on voter's choice of party, this notebook expands the inquiry to include the factors that caused certain districts to *flip party* this election.
+In addition to exploring the influence of additional demographic factors on voter's choice of party, this notebook expands the inquiry to include the factors that caused certain districts to *flip party* this election.
 
 ## Directory Structure
 
@@ -54,4 +52,32 @@
 |    └── hispanicBreakdown <- Rscript used to create hispanicBreakdown.csv in data/census/preprocessed directory
 ├── notebook.Rmd <- R Markdown Notebook
 └── README.md  <- You are here! 2020-House-Election Repository README file
+```
+
+## Package and Versions
+
+```
+caTools      1.18.1
+ggraph       2.0.5
+ggrepel      0.9.1
+glue         1.4.1.9000
+gridExtra    2.3
+gtools       3.8.2
+igraph       1.2.6
+leaflet      2.0.3
+R.utils      2.10.1
+randomForest 4.6.14
+rgdal        1.5.18
+rjson        0.2.20
+rvest        0.3.6
+scales       1.1.1
+sf           0.9.6
+shiny        1.5.0
+sjmisc       2.8.5
+tibble       3.0.4
+tidyverse    1.3.0
+tidycensus   0.10.2
+tigris       1.0
+usdata       0.1.0
+yardstick    0.0.7
 ```
