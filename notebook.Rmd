@@ -1,7 +1,7 @@
 ---
 title: "2020 House Elections - Party Affiliation Analysis"
 author: "Samuel Swank"
-date: "April 2st, 2021"
+date: "April 3rd, 2021"
 output: html_notebook
 ---
 
@@ -992,7 +992,7 @@ colnames(georgiaComparison)[2:3] <- c(
   "Asian Population (percent)", "Born Out of State (percent)"
   )
 
-georgiaComparison <- georgiaComparison[gtools::mixedsort(georgiaAsian$District), ]
+georgiaComparison <- georgiaComparison[gtools::mixedsort(georgiaComparison$District), ]
 rownames(georgiaComparison) <- NULL
 
 georgiaComparison
@@ -1061,7 +1061,7 @@ plotState("Utah")
 
 \  
 
-|   **Utah's 4th Congressional District** contains much of Salt Lake County and the state's two most populous cities, Salt Lake City and West Valley City. Salt Lake and Summit Counties are the only two counties where the majority of voters cast their popular ballots against Donald Trump in 2016^[Utah State Lieutenant Govenor, Office of. “2016 General Election - Statewide Canvass 3.pdf.” State of Utah, n.d.] and 2020.^[Utah State Lieutenant Govenor, Office of. “2020-Statewide-General-Election-Canvass.pdf.” State of Utah, n.d.] Fortunately for *Republicans* and the interests of the majority of those born in the state, the latter county has been effectively Gerrymandered out of a candidate in the House of Representatives.
+|   **Utah's 4th Congressional District** contains much of Salt Lake County and the state's two most populous cities, Salt Lake City and West Valley City. Salt Lake and Summit Counties are the only two counties where the majority of voters cast their popular ballots against Donald Trump in 2016^[Utah State Lieutenant Governor, Office of. “2016 General Election - Statewide Canvass 3.pdf.” State of Utah, n.d.] and 2020.^[Utah State Lieutenant Governor, Office of. “2020-Statewide-General-Election-Canvass.pdf.” State of Utah, n.d.] Fortunately for *Republicans* and the interests of the majority of those born in the state, the latter county has been effectively Gerrymandered out of a candidate in the House of Representatives.
 
 
 ### Summary
