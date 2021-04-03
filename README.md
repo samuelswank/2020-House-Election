@@ -85,4 +85,4 @@ yardstick    0.0.7
 ## Data Dictionaries
 
 - [stfipsab.csv](data/DATADICTIONARY.md)
-- [census/preprocessed Directory](data/preprocessed/DATADICTIONARY.md)
+- [census/preprocessed Directory](data/census/demographics/preprocessed/DATADICTIONARY.md)
