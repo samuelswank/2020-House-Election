@@ -521,8 +521,6 @@ rowMaker <- function(congressionalDistrict) {
   
   # Disability Status of the Civilian Noninstitutionalized Population
   
-  
-  
   # disabled
   # (Voting Age) Disabled Population 
   #   (Total civilian noninstitutionalized population With a disability - Under 18 years With a disability) * 100 /
