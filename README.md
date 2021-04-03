@@ -64,6 +64,7 @@ glue         1.4.1.9000
 gridExtra    2.3
 gtools       3.8.2
 igraph       1.2.6
+knitr        1.30
 leaflet      2.0.3
 R.utils      2.10.1
 randomForest 4.6.14
