@@ -1,6 +1,8 @@
 library(shiny)
 library(leaflet)
 
+source("helpers/stringManipulator.R")
+
 eeText <- tags$body(
   tags$div(
     style = "border: 1px solid black; margin: 25px 200px 25px 200px;
@@ -9,8 +11,12 @@ eeText <- tags$body(
     tags$p("This web application was originally intended to explore what
     characteristics made the House districts which flipped from Democrat to
     Republican unique. Due to time constraints and statistical challenges, this
-    analysis has since been perforemed in a non-predictive manner and moved to a
-           notebook on RPubs (TODO - URL)."),
+    analysis has since been perforemed in a non-predictive manner and moved to",
+           a(
+             "an R Markdown Notebook on RPubs.",
+             href = "https://rpubs.com/shengjiyang/House-2020"
+             )
+           ),
     
     tags$p("During the preliminary research into each of the flipped districts,
     however, I discovered that Oklahoma's 5th Congressional District seat, was
