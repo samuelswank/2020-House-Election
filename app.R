@@ -237,29 +237,17 @@ server <- function(input, output, session) {
         } else if (input$selectedChart == "Residential Occupancy") {
           output$statTitle <- renderUI({h3(input$selectedChart)})
           
-          occupancyPlot <- barChart(
-            input$selectedState,
-            input$selectedDistrict,
-            categories = colnames(modelData)[41:42],
-            category_strings = c(
-              "Owner Occupied", "Rental Occupied"
-            ),
-            n_seed = 42
-          )
-          
-          vacancyPlot <- barChart(
-            input$selectedState,
-            input$selectedDistrict,
-            categories = colnames(modelData)[38:39],
-            category_strings = c(
-              "Homeowner vacancy", "Rental vacancy"
-            ),
-            n_seed = 42
-          )
-          
           output$statPlot <- renderPlot(width = 575, height = 475, {
-            grid.arrange(occupancyPlot, vacancyPlot, ncol = 2)
-          })
+            barChart(
+              input$selectedState,
+              input$selectedDistrict,
+              categories = colnames(modelData)[41:42],
+              category_strings = c(
+                "Owner Occupied", "Rental Occupied"
+              ),
+              n_seed = 42
+            )
+          }) 
           
         # Median Rental Price Distribution
         } else if (input$selectedChart == "Rental Data") {
