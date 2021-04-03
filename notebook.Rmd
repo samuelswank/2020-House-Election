@@ -17,7 +17,7 @@ output: html_notebook
 
 \  
 
-|   The answer to the first question is fairly straightforward: higher ratios of those demographics correlated with a high population density were characteristic of Democratic districts; whereas, those demographics correlated with a lower population density were characteristic of Republican districts. The answer to the second question is more varied, with differences in *ethnicity*, *place of birth*, *age*, and *race* being potential indicators that some districts might *flip party*. Ultimately, though demographics did influence voters' policy preferences, individual which party's candidate won out in those *flipped districts* was ultimately determined by those candidates character and voting records.
+|   The answer to the first question is fairly straightforward: higher ratios of those demographics correlated with a high population density were characteristic of Democratic districts; whereas, those demographics correlated with a lower population density were characteristic of Republican districts. The answer to the second question is more varied, with differences in *ethnicity*, *place of birth*, *age*, and *race* being potential indicators that some districts might *flip party*. Some *flipped districts* were characterized as being the *urban centers* of *Republican* states. Ultimately, though demographics and geography did influence voters' policy preferences, individual which party's candidate won out in those *flipped districts* was ultimately determined by those candidates character and voting records.
 
 # Model
 
@@ -306,6 +306,34 @@ plotState <- function(selectedState, predicted = FALSE) {
         legend.position = "none"
         )
     }
+  }
+}
+
+# plotDistrict <- function for plotting party affiliation of a district's 
+#                 representative
+#                 nation's House of Representatives;
+
+plotDistrict <- function(selectedState, selectedDistrict) {
+  if (selectedDistrict == "") {return(NULL)}
+  else {
+    ggplot() + 
+      geom_sf(
+        districtData(selectedState, selectedDistrict),
+        mapping = aes(fill = party), 
+        size = 0.75, 
+        color = "black"
+      ) +
+      scale_fill_manual(values = c("R" = "#D20F26", "D" = "#1B4E81")) +
+      labs(title = selectedDistrict) +
+      theme(
+        panel.background = element_blank(),
+        plot.title = element_text(
+          hjust = 0.5, size = 18, family = "NewCenturySchoolbook"
+        ),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none"
+      )
   }
 }
 ```
@@ -846,7 +874,7 @@ grid.arrange(naturalBorn, naturalized, nrow = 2)
 
 \  
 
-|   The opposite distributions in the above-shown box-plot communicate the very same thing that the ethnicity box plot does. Within the sample of *flipped districts*, the two districts with statistically significant immigrant populations of *naturalized citizens* are **Florida's 26th and 27th districts**. These two districts also have statistically significant populations of *natural born citizens* who were *born abroad*. Since this latter category includes individuals born to United States citizens in foreign countries, or in U.S. territories such as Puerto Rico, it is only natural that districts with a high *naturalized immigrant* population would also have a high rate of *natural born citizens born abroad*.
+|   The opposite distributions in the above-shown box-plot communicate the very same thing that the ethnicity box plot does. Within the sample of *flipped districts*, the two districts with statistically significant immigrant populations of *naturalized citizens* are **Florida's 26th and 27th districts**. These two districts also have statistically significant populations of *natural born citizens* who were *born abroad*. Since this latter category includes individuals born to United States citizens in foreign countries, or in U.S. territories such as Puerto Rico, it is only natural that districts with a high *naturalized immigrant* population would also have a high rate of *natural-born citizens born abroad*. *Place of birth* within the United States among *natural-born citizens* also seems to be an indicator of whether a district would flip or not. This is discussed further in the race section.
 
 ### Age
 ```{r}
@@ -912,7 +940,7 @@ caliUtah
 
 \  
 
-|   The case of California District 21 is somewhat curious. Even accounting for redistricting, the loss of much of Fresno shifted the district from Democrat to Republican. In fact Democrat James Costa who held the seat at the time of its last redistricting reran for the California District 16 seat and, at the time of this writing, is still the incumbent there. Though Republican **David Valadão**'s views on most issues ranging from the environment, to social welfare, to homosexuality, he was ranked the 42nd most bipartisan member of congress according to the Lugar Center's Bipartisan Index. It would seem a reasonable, albeit unconfirmed, hypothesis that members of congress occupying seats which *flip party* more frequently would be likely to score higher on the Bipartisan Index. From this we can infer that the constituencies of these districts likely have a more varied range of interest groups compared to those districts which tend to consistently vote for candidates from a single party. It would seem that most of these interest groups lie outside of the demographic data used in this analysis.
+|   The case of California District 21 is somewhat curious. Even accounting for redistricting, the loss of much of Fresno shifted the district from Democrat to Republican. In fact Democrat James Costa who held the seat at the time of its last redistricting reran for the California District 16 seat and, at the time of this writing, is still the incumbent there. Though Republican **David Valadão**'s views on most issues ranging from the environment, to social welfare, to homosexuality, he was ranked the 42nd most bipartisan member of congress according to the Lugar Center's Bipartisan Index. It would seem a reasonable, albeit unconfirmed, hypothesis that members of congress occupying seats which *flip party* more frequently would be likely to score higher on the Bipartisan Index. From this we can infer that the constituencies of these districts likely have a more varied range of interest groups compared to those districts which tend to consistently vote for candidates from a single party. Many of these interest groups lie outside of the realm of the demographics discussed here. Investigation of which interest groups do contribute to the flipped districts presents a fertile fild for further study.
 
 ### Race
 ```{r}
@@ -922,3 +950,97 @@ black <- plotBox(gdScaled$black, "Blacks")
 grid.arrange(white, black, nrow = 2)
 ```
 
+\  
+
+```{r include=FALSE}
+asianBreakdown <- read_csv("data/census/demographics/preprocessed/asianBreakdown.csv")
+```
+
+|   From the above box-plot showing the standardized percentage of *Whites*, the reader can see that the *flipped districts'* distribution roughly matches that of the *non-flipped Republcan districts*, but is somewhat more racially diverse. This greater degree of *groups of non-European origin* are found in a number of the *flipped districts*. **California's 21 District** has a rather high population of *persons of other race*, comprising `r round(modelData["California 21", "other_race"], 2)`% of the total. **California's 39th and 48th Districts** both have high *Asian populations* `r round(modelData["California 39", "asian"], 2)`%, `r round(modelData["California 48", "asian"], 2)`% of their respective totals. Both these districts Republican victors are *Korean* women, not surprising given that *Los Angeles and Orange counties* have relatively high *Korean* populations. *Koreans* make up roughly 15% of the Asian population of both counties, or roughly 3.75 - 5.00% of the total population of both districts. Though *Korean Americans* living in these two counties do not constitute a large enough group to single-handedly decide the an election, in situations such as the elections in these two districts where the margin of victory was less than *2.5%*, it may have helped tip the scale in *Kim and Park*'s favor.
+
+\  
+
+|   Though the *Asian* population of **Georgia's 7th District** is not as great as the that of the **California Districts**, it is worth noting. *Asians* make up an estimated `r round(modelData["Georgia 7", "asian"], 2)`%. Comparing the relative size of this district's *Asian* population compared to other districts in the state reveals something about not just the Georgia district, but most of the *flipped districts* not yet discussed in this paper.
+
+\  
+
+```{r echo=FALSE}
+georgiaComparison <- data.frame(
+  District = rownames(modelData[grepl("Georgia", rownames(modelData)), ]),
+  app = modelData[grepl("Georgia", rownames(modelData)), "asian"],
+  born_out_of_state = modelData[
+    grepl("Georgia", rownames(modelData)), "born_out_of_state"
+    ],
+  Party = modelData[grepl("Georgia", rownames(modelData)), "party"]
+  )
+
+rownames(georgiaComparison) <- georgiaComparison$District
+
+colnames(georgiaComparison)[2:3] <- c(
+  "Asian Population (percent)", "Born Out of State (percent)"
+  )
+
+georgiaComparison <- georgiaComparison[gtools::mixedsort(georgiaAsian$District), ]
+rownames(georgiaComparison) <- NULL
+
+georgiaComparison
+```
+
+\  
+
+|   As the reader can see, **Georgia's 6th and 7th** districts have much higher *Asian* populations compared to the rest of the state. It should be noted here that **Georgia's 6th District** flipped from *Republican* to *Democrat* in the 2018 House Election. The average of both district's percentage of *Asians* is `r round(mean(georgiaComparison[6:7, 2]) - mean(georgiaComparison[, 2]), 2)` greater than the percentage of *Asians* in the state as a whole. As with *Whites*, this is not an indication that *Asians* tend to vote *Democrat* any more than *Whites* tend to vote *Republican*. Rather, when viewed in the context provided by the the slightly higher percentage of *out-of-staters* found in these districts, this is an indication that the two districts in question are more *urban* than the rest of the state. 
+
+\  
+
+### Urban Center of Red State Hypothesis
+|   In the context of the Population Density hypothesis outlined above, it becomes clear that some of the *flipped districts* are to be found in states which send a *Republican* majority to the House of Representatives. These urban centers, find themselves in a tug-of-war between the state's *Republican* majority, and the smaller but influential *Democratic Party establishment* at the county level. As outlined above, **Georgia's 6th and 7th Districts** are two examples. Even a cursory examination of the maps of the states maps hints at this finding.
+
+
+#### **North Carolina**
+```{r}
+plotState("North Carolina")
+```
+```{r}
+nc2   <- plotDistrict("North Carolina", "Congressional District 2")
+nc6   <- plotDistrict("North Carolina", "Congressional District 6")
+
+grid.arrange(nc2, nc6, ncol = 2)
+```
+
+\ 
+
+|   Examining the maps of **North Carolina** and these two districts, we find that they are geographically smaller than many other districts. This is due to the fact that they contain the 1st, 3rd, and 4th most populous and most urban counties in the state.
+
+\  
+
+#### **South Carolina**
+```{r}
+sc  <- plotState("South Carolina")
+sc1 <- plotDistrict("South Carolina", "Congressional District 1")
+
+grid.arrange(sc, sc1, ncol = 2)
+```
+
+\  
+
+|   Observing the map of **South Carolina**, we find yet another district which fits the bill. Only the part containing Charleston is urban, a possible indication as to why the Republicans have had an easier time holding the seat compared to other places discussed herein. It should also be noted that the state's **6th Congressional District** contains **Richland**, the states most populous county and has been *Democrat-held* since before the 1994 exodus of the South's Conservative Democrats.
+
+\  
+
+#### **Oklahoma**
+```{r}
+plotState("Oklahoma")
+```
+
+|   Here we see that **Oklahoma's** 5th district, contains most of **Oklahoma County**, the most populous part of the state. As a personal note, this seat was once filled by my paternal great-grandfather's cousin, one [**Fletcher B. Swank**](https://www.okhistory.org/publications/enc/entry.php?entry=SW001) from 1921 - 1929 and 1931 - 1935.
+
+\  
+
+#### **Utah**
+```{r}
+plotState("Utah")
+```
+
+\  
+
+|   **Utah's 4th Congressional District** contains much of Salt Lake County and the state's two most populous cities, Salt Lake City and West Valley City. Salt Lake and Summit Counties are the only two counties in the where the majority of voters cast their popular ballots against Donald Trump in 2015 and 2019. Fortunately for *Republicans* and those born in the state, the latter county has been effectively Gerrymandered out of a candidate in the House of Representatives.
