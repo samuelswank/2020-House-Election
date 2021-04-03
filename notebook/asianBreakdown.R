@@ -14,14 +14,16 @@ asianBreakdown <- get_acs(
   geography = "county",
   variables = asianVars,
   year = 2018,
-  state = "California",
+  state = c("California", "Georgia"),
   summary_var = "B02015_001"
 )
 
 counties <- c(
   "Los Angeles County, California",
   "Orange County, California",
-  "San Bernardino County, California"
+  "San Bernardino County, California",
+  "Gwinnett County, Georgia",
+  "Forsyth County, Georgia"
 )
 
 asianBreakdown <- asianBreakdown %>%
