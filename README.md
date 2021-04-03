@@ -1,32 +1,9 @@
-# Flipped Seats
+# 2020 House Election
 
-## States With Flipped Seats
+## Project Overview
 
-- California
-- Florida
-- Iowa
-- Minnesota
-- New Mexico
-- South Carolina
-- Utah
+| This project includes both a [shiny application](https://samuelswank.shinyapps.io/2020-House-Election/) and corresponding [R Markdown Notebook](https://rpubs.com/shengjiyang/House-2020). These grew out of a [Python project](https://github.com/shengjiyang/2016-House-Election) I completed examining the association of ethno-racial demographics and voter's choice of party in the national House of Representatives. Thanks to the Census Bureau’s [My Congressional District web app](https://www.census.gov/mycd/) making the relevant data readily available by House district in *.csv* files, I was able to significantly expand the number of different demographic categories used in this project.
 
-## Republican Victories
+\  
 
-- David G. Valadao (R) vs. TJ Cox (D) - California District 21
-- Young Kim (R) vs. Gil Cisneros (D) - California District 39
-- Michelle Steel (R) vs. Harley Rouda (D) - California District 48
-- Carlos Giminéz (R) vs. Debbie Mucarsel-Powell (D) - Florida District 26
-- Maria Elvira Salazar (R) vs. Donna Shalala (D) - Flordia District 27
-- Ashley Hinson (R) vs. Abby Finkenauer (D) - Iowa District 1
-- Mariannette Miller-Meeks (R) vs. Rita Hart (D) - Iowa District 2
-- Michelle Fischbach (R) vs. Collin Peterson (D) - Minnesota District 7
-- Yvette Herrell (R) vs. Xochitl Torres Small (D) - New Mexico District 2
-- Nicole Malliotakis (R) vs. Max Rose (D) - New York District 11
-- Stephanie Bice (R) vs. Kendra Horn (D) - Oklahoma District 5 <- *[Fletcher B. Swank](https://en.wikipedia.org/wiki/Fletcher_B._Swank)'s (D) District*
-- Nancy Mace (R) vs. Joe Cunningham (D) - South Carolina District 1
-- Burgess Owens (R) vs. Ben MacAdamas (D) - Utah District 4
-
-
-## Democratic Victory
-
-- Carolyn Bourdeaux (D) vs. Rich McCormick (R) - Georgia District 7
+| In addition to exploring the influence of additional demographic factors on voter's choice of party, the inquiry of 
