@@ -54,7 +54,7 @@ In addition to exploring the influence of additional demographic factors on vote
 └── README.md  <- You are here! 2020-House-Election Repository README file
 ```
 
-## Package and Versions
+## Packages and Versions
 
 ```
 caTools      1.18.1
