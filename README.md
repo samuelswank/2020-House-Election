@@ -15,9 +15,9 @@ In addition to exploring the influence of additional demographic factors on vote
 ├── data
 |    ├── census <- directory containing census data
 |         ├── preprocessed <- directory containing preprocessed census data
-|              ├── asianBreakdown.csv <- file containing proportions of different Asiatic nationalities in the counties comprising California's 39th and 48th district and Georgia's 7th district
+|              ├── asianBreakdown.csv <- file containing proportions of different Asiatic nationalities in the counties comprising California's 39th and 48th district and Georgia's 7th district, from ACS 2018
 |              ├── censusTidy.csv <- file containing modelData prior to feature engineering, standardization, and conversion to wide format
-|              ├── hispanicBreakdown.csv <- file containing proportions of differenct Hispanic and Latino nationalities in counties comprising Florida's 26th and 27th Districts and New York's 11th and 22nd Districts
+|              ├── hispanicBreakdown.csv <- file containing proportions of differenct Hispanic and Latino nationalities in counties comprising Florida's 26th and 27th Districts and New York's 11th and 22nd Districts, from ACS 2018
 |              └── modelData.csv <- file containing preprocessed but unstandardized demographics used in partyModel.R file found in the helpers/model directory
 |         └── raw <- directory containing raw census data in separate .csv files for each state from My Congressional District website
 |    ├── houseResults.json <- .json file containing election results saved from Politico's map and balance of power page, NOTE: this file has been modified locally for ease in building the app and the margins of victory have not been updatated; therefore, its should not be used for research purposes
@@ -47,7 +47,7 @@ In addition to exploring the influence of additional demographic factors on vote
 |    ├── stringManipulator.R <- helper file used in manipulating strings, used in various Rscripts throughout this repository
 ├── notebook <- directory of dataWrangling scripts solely in notebook.Rmd
 |    ├── asianBreakdown.R <- Rscript used to create asianBreakdown.csv in data/census/preprocessed directory
-|    ├── ballotpediaScraper.R <- Rscript used to process place of birth data
+|    ├── ballotpediaScraper.R <- Rscript used to process place of birthplace data, ACS 2014
 |    ├── densityAnalysis.R <- Rscript used to explore density distributions of flipped districts
 |    └── hispanicBreakdown <- Rscript used to create hispanicBreakdown.csv in data/census/preprocessed directory
 ├── notebook.Rmd <- R Markdown Notebook
@@ -81,3 +81,8 @@ tigris       1.0
 usdata       0.1.0
 yardstick    0.0.7
 ```
+
+## Data Dictionaries
+
+- [stfipsab.csv](data/DATADICTIONARY.md)
+- [census/preprocessed Directory](data/preprocessed/DATADICTIONARY.md)
