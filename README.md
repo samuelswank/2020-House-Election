@@ -16,21 +16,18 @@
 ├── app.R <- shiny app file containing both ui and server
 ├── data
 |    ├── census <- directory containing census data
-|         ├──
+|         ├── preprocessed <- directory containing preprocessed census data
+|              ├── asianBreakdown.csv <- file containing proportions of different Asiatic nationalities in the counties comprising California's 39th and 48th district and Georgia's 7th district
+|              ├── censusTidy.csv <- file containing modelData prior to feature engineering, standardization, and conversion to wide format
+|              ├── hispanicBreakdown.csv <- file containing proportions of differenct Hispanic and Latino nationalities in counties comprising Florida's 26th and 27th Districts and New York's 11th and 22nd Districts
+|              ├── modelData.csv <- file containing preprocessed but unstandardized demographics used in partyModel.R file found in the helpers/model directory
+|         ├── raw <- directory containing raw census data from My Congressional District website
 |    ├── houseResults.json <- .json file containing election results saved from Politico's map and balance of power page, NOTE: this file has been modified locally for ease in building the app and the margins of victory have not been updatated; therefore, its should not be used for research purposes
 |    ├── images <- directory containing images and saved plots
 |         ├──
 |    ├── Oklahoma_64_to_72.geojson <- file containing historic Oklahoma Congressional District boundaries from the 64th through 72 congresses, used in easterEgg.R file found in the helpers/plotting directory
 |    ├── Oklahoma_73_to_77.geojson <- file containing historic Oklahoma Congressional District boundaries from the 73rd through 77th congresses 
-|    ├── predictions <- directory containing images and saved plots
-|         ├──
-|    ├── index2015_data.xls <- Heritage Foundation's Index of Economic Freedom Data for Year 2015
-|    ├── index2016_data.xls <- Heritage Foundation's Index of Economic Freedom Data for Year 2016
-|    ├── index2017_data.xls <- Heritage Foundation's Index of Economic Freedom Data for Year 2017
-|    ├── index2018_data.xls <- Heritage Foundation's Index of Economic Freedom Data for Year 2018
-|    ├── index2019_data.xls <- Heritage Foundation's Index of Economic Freedom Data for Year 2019
-|    ├── index2020_data.xls <- Heritage Foundation's Index of Economic Freedom Data for Year 2020
-|    └── sample.csv <- file containing sample countries and territory data used in creating adjusted.csv
+|    └── stfipsab.csv <- file containing state names, abbreviations and fips codes
 ├── plots
 |    ├── TariffGDPGrowth.png <- ggplot2 visualization of GDP Growth Rate's relationship to the previous year's tariff rate for sample countries in 2017
 |    └── TariffGDPperCapita.png <- ggplot2 visualization of Per Capita GDP's relationship to the previous year's tariff rate for sample countries from 2013-2017
