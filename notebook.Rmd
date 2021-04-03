@@ -17,7 +17,7 @@ output: html_notebook
 
 \  
 
-|   The answer to the first question is fairly straightforward: higher ratios of those demographics correlated with a high population density were characteristic of Democratic districts; whereas, those demographics correlated with a lower population density were characteristic of Republican districts. The answer to the second question is more varied, with differences *ethnicity*, *place of birth*, and *age* being potential indicators that some districts might *flip party*.
+|   The answer to the first question is fairly straightforward: higher ratios of those demographics correlated with a high population density were characteristic of Democratic districts; whereas, those demographics correlated with a lower population density were characteristic of Republican districts. The answer to the second question is more varied, with differences in *ethnicity*, *place of birth*, *age*, and *race* being potential indicators that some districts might *flip party*. Ultimately, though demographics did influence voters' policy preferences, individual which party's candidate won out in those *flipped districts* was ultimately determined by those candidates character and voting records.
 
 # Model
 
@@ -913,4 +913,12 @@ caliUtah
 \  
 
 |   The case of California District 21 is somewhat curious. Even accounting for redistricting, the loss of much of Fresno shifted the district from Democrat to Republican. In fact Democrat James Costa who held the seat at the time of its last redistricting reran for the California District 16 seat and, at the time of this writing, is still the incumbent there. Though Republican **David Valadão**'s views on most issues ranging from the environment, to social welfare, to homosexuality, he was ranked the 42nd most bipartisan member of congress according to the Lugar Center's Bipartisan Index. It would seem a reasonable, albeit unconfirmed, hypothesis that members of congress occupying seats which *flip party* more frequently would be likely to score higher on the Bipartisan Index. From this we can infer that the constituencies of these districts likely have a more varied range of interest groups compared to those districts which tend to consistently vote for candidates from a single party. It would seem that most of these interest groups lie outside of the demographic data used in this analysis.
+
+### Race
+```{r}
+white <- plotBox(gdScaled$white, "Whites")
+black <- plotBox(gdScaled$black, "Blacks")
+
+grid.arrange(white, black, nrow = 2)
+```
 
