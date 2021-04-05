@@ -97,3 +97,16 @@ The following resources were used in this project's creation. They have been lis
 - [Building Your First R Shiny Application, Charlotte Wickham](https://app.pluralsight.com/library/courses/building-first-r-shiny-application/) -> The clearest introduction I have found to date for those looking to build a shiny app, walks students through replicating a shiny app displaying data on United States national parks. 
 - [Analysing US Cenus Data in R; Kyle Walker](https://campus.datacamp.com/courses/analyzing-us-census-data-in-r/) -> Walker demystifies extracting United States Census Bureau Data via his `tidycensus` package. This course was essential in making much of the analysis found in the notebook of this project possible.
 - [Extracting Data from HTML with R; Jesse Harris](https://app.pluralsight.com/library/courses/extracting-data-from-html-with-r/) -> Clear explanation for anyone new to web-scraping in R with the `rvest` package.
+
+## Potential Improvements
+
+### shiny Application
+
+- Redoing maps.R script using the `leaflet` package.
+- Add *hover* functionality over [`leaflet`] map with relevant information, including candidate information, for each district.
+- Replicate project, retaining R back-end in JavaScript, allowing for more and improved reactive elements.
+
+### RPubs Notebook
+
+- Perform in-state comparison of flipped districts to whole states for each flipped district.
+- Take districts which flipped in the previous election into account.
