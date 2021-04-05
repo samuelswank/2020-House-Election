@@ -87,3 +87,13 @@ yardstick    0.0.7
 
 - [stfipsab.csv](data/DATADICTIONARY.md)
 - [census/preprocessed Directory](data/census/demographics/preprocessed/DATADICTIONARY.md)
+
+## Resources
+
+The following resources were used in this project's creation. They have been listed here to aid those looking to replicate any element of this project in their own work, to provide materials for those interested in learning data science and machine learning or web development in R, and as a thank you to those whose work made this project possible.
+
+- [Data Science and Machine Learning Bootcamp with R; Jose Portilla](https://www.udemy.com/course/data-science-and-machine-learning-bootcamp-with-r/) -> Provides a hands-on approach to learning basic to intermediate statistical programming in R. This course provides students with both the theoretical framework and example of practical applications for data science and machine learning concepts in R. Portilla provides some of the clearest explanations of data science and machine learning concepts available anywhere online. This course provides plenty of chances for students to familiarize themselves with base R and the various packages used in machine learning and data science via lectures and practice problems. I highly recommend [Portilla's other data science and machine learning courses available on Udemy](https://www.udemy.com/user/joseportilla/)
+- [An Introduction to Statistical Learning with Applications in R; James, Witten, Hastie, Tibshirani](https://www.statlearning.com/) -> Optional textbook used in the above course. Explains statistical concepts in a straightforward manner without reference to linear algebra or concepts deeper than those that aid in data analysis.
+- [Building Your First R Shiny Application, Charlotte Wickham](https://app.pluralsight.com/library/courses/building-first-r-shiny-application/) -> The clearest introduction I have found to date for those looking to build a shiny app, walks students through replicating a shiny app displaying data on United States national parks. 
+- [Analysing US Cenus Data in R; Kyle Walker](https://campus.datacamp.com/courses/analyzing-us-census-data-in-r/) -> Walker demystifies extracting United States Census Bureau Data via his `tidycensus` package. This course was essential in making much of the analysis found in the notebook of this project possible.
+- [Extracting Data from HTML with R; Jesse Harris](https://app.pluralsight.com/library/courses/extracting-data-from-html-with-r/) -> Clear explanation for anyone new to web-scraping in R with the `rvest` package.
