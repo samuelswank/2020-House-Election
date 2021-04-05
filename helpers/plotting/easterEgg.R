@@ -11,7 +11,7 @@ eeText <- tags$body(
     tags$p("This web application was originally intended to explore what
     characteristics made the House districts which flipped from Democrat to
     Republican unique. Due to time constraints and statistical challenges, this
-    analysis has since been perforemed in a non-predictive manner and moved to",
+    analysis has since been performed in a non-predictive manner and moved to",
            a(
              "an R Markdown Notebook on RPubs.",
              href = "https://rpubs.com/shengjiyang/House-2020"
@@ -46,10 +46,9 @@ eeText3 <- tags$body(
     tags$p("My great-grandfather, William Clay Swank I, was born in neighboring
            Appanouse County in 1880 to Cyrus and Mary Swank. After working in
            the railroad industry in New Mexico for a number of years, he settled
-           in the great state of Idaho where he worked as a bookkeeper. It was
-           in Pocatello, Idaho that my grandfather, George Wallace Swank, was
-           born. My father, William Clay Swank II, a native of Boise, was named
-           after his grandfather.")
+           in the great state of Idaho where he worked as a bookkeeper. My
+           father, William Clay Swank II, a native of Boise, was named after his
+           grandfather.")
   )
 )
 
