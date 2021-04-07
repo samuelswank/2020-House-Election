@@ -102,11 +102,12 @@ The following resources were used in this project's creation. They have been lis
 
 ### shiny Application
 
+- Rewrite various scripts with an *Object-Oriented paradigm*, simplifying code in many places. 
 - Redoing maps.R script using the `leaflet` package.
 - Add *hover* functionality over [`leaflet`] map with relevant information, including candidate information, for each district.
-- Replicate project, retaining R back-end in JavaScript, allowing for more and improved reactive elements.
+- Replicate projected in JavaScript, maintaining back-end in R, or replicating it in Python. This would allow for more and improved reactive elements.
 
 ### RPubs Notebook
 
-- Perform in-state comparison of flipped districts to whole states for each flipped district.
-- Take districts which flipped in the previous election into account.
+- Perform in-state comparison of flipped districts to whole states for each flipped district with each relevant variable.
+- Take districts which flipped in the previous or recent elections into account.
