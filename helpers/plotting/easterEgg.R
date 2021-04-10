@@ -10,13 +10,9 @@ eeText <- tags$body(
     centerText(h1("A Note From the Creator")),
     tags$p("This web application was originally intended to explore what
     characteristics made the House districts which flipped from Democrat to
-    Republican unique. Due to time constraints and statistical challenges, this
-    analysis has since been performed in a non-predictive manner and moved to",
-           a(
-             "an R Markdown Notebook on RPubs.",
-             href = "https://rpubs.com/shengjiyang/House-2020"
-             )
-           ),
+    Republican unique. Due to time constraints and statistical challenges, the
+    preliminary analysis has since been performed in a non-predictive manner and
+    moved to the notebookOld.Rmd file in the notebook directory.",
     
     tags$p("During the preliminary research into each of the flipped districts,
     however, I discovered that Oklahoma's 5th Congressional District seat, was
