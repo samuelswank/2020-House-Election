@@ -105,7 +105,7 @@ The following resources were used in this project's creation. They have been lis
 - Rewrite various scripts with an *Object-Oriented paradigm*, simplifying code in many places. 
 - Redoing maps.R script using the `leaflet` package.
 - Add *hover* functionality over [`leaflet`] map with relevant information, including candidate information, for each district.
-- Replicate projected in JavaScript, maintaining back-end in R, or replicating it in Python. This would allow for more and improved reactive elements.
+- Replicate project in JavaScript, maintaining back-end in R, or replicating it in Python. This would allow for more and improved reactive elements.
 
 ### RPubs Notebook
 
