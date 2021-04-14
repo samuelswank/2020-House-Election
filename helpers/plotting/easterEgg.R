@@ -12,7 +12,12 @@ eeText <- tags$body(
     characteristics made the House districts which flipped from Democrat to
     Republican unique. Due to time constraints and statistical challenges, the
     preliminary analysis has since been performed in a non-predictive manner and
-    moved to the notebookOld.Rmd file in the notebook directory.",
+    moved to the notebookOld.Rmd file in the notebook directory of this project's",
+           tags$a(
+             href = "https://github.com/shengjiyang/2020-House-Election",
+             "GitHub Repository"),
+           "."
+           ),
     
     tags$p("During the preliminary research into each of the flipped districts,
     however, I discovered that Oklahoma's 5th Congressional District seat, was
